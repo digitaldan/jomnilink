@@ -808,7 +808,7 @@ public class Connection extends Thread {
 		public void run(){
 			while(alive){
 				try{
-					Message message = notifications.poll();
+					Message message = notifications.take();
 					if( message == POISON ){
 						alive = false;
 					}
