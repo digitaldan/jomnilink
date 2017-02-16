@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII;
 
 /**
- *  Copyright (C) 2009  Dan Cunningham                                         
- *                                                                             
+ *  Copyright (C) 2009  Dan Cunningham
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, version 2
@@ -30,7 +30,11 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.security.AccessController;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ActivateKeypadEmergency;
 import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
@@ -106,27 +110,26 @@ public class Connection extends Thread {
 	private int tx;
 	private int rx;
 	private Aes aes;
-	private LinkedList<Message> notifications;
 	private OmniPacket response;
 	private Object readLock = new Object();
 	private Object writeLock = new Object();
-	private Object notifyLock = new Object();
 	private Exception lastException;
-	private Vector<NotificationListener> notificationListeners;
-	private Vector<DisconnectListener> disconnectListeners;
-	private NotificationHandler notificationHandler;
+	private final BlockingQueue<Message> notifications;
+	private final List<NotificationListener> notificationListeners;
+	private final List<DisconnectListener> disconnectListeners;
 	private ConnectionWatchdog watchdog;
-	public Connection(String address, int port, String key) 
+	public Connection(String address, int port, String key)
 	throws Exception,IOException,UnknownHostException {
 
 		ping = true;
-		notifications = new LinkedList<Message>();
+		notifications = new LinkedBlockingQueue<Message>();
 		response = null;
 		lastException = null;
-		notificationListeners = new Vector();
-		disconnectListeners = new Vector();
+		//Neither of these should be modified very often - good fit for COW
+		notificationListeners = new CopyOnWriteArrayList();
+		disconnectListeners = new CopyOnWriteArrayList();
 
-		byte[] _key = hexStringToByteArray(key.replaceAll("\\W", ""));		
+		byte[] _key = hexStringToByteArray(key.replaceAll("\\W", ""));
 
 		socket = new Socket(address,port);
 		is = socket.getInputStream();
@@ -173,16 +176,14 @@ public class Connection extends Thread {
 		}
 		connected = true;
 		lastTXMessageTime = System.currentTimeMillis();
-		
-		notificationListeners = new Vector<NotificationListener>();
-		
+
 		this.setName("OmniReaderThread");
 		this.start();
-		
-		notificationHandler = new NotificationHandler();
-		notificationHandler.setName("NotificationHandlerThread");
-		notificationHandler.start();
-		
+
+		Thread notificationHandlerThread = new Thread(new NotificationHandler(notifications, notificationListeners));
+		notificationHandlerThread.setName("NotificationHandlerThread");
+		notificationHandlerThread.start();
+
 		ConnectionWatchdog watchdog = new ConnectionWatchdog();
 		watchdog.setName("ConnectionWatchdogThread");
 		watchdog.start();
@@ -193,10 +194,9 @@ public class Connection extends Thread {
 		if(socket != null){
 			try {
 				socket.close();
-			} catch (Exception e){
-
-			}
+			} catch (Exception e){ }
 		}
+		notifications.offer(NotificationHandler.POISON);
 	}
 
 	public boolean connected(){
@@ -216,29 +216,19 @@ public class Connection extends Thread {
 	}
 
 	public void addNotificationListener(NotificationListener listener){
-		synchronized (notificationListeners) {
-			notificationListeners.add(listener);
-		}
+	  notificationListeners.add(listener);
 	}
 
 	public void removeNotificationListener(NotificationListener listener){
-		synchronized (notificationListeners) {
-			if(notificationListeners.contains(listener))
-				notificationListeners.remove(listener);
-		}
+		notificationListeners.remove(listener);
 	}
 
 	public void addDisconnectListener(DisconnectListener listener){
-		synchronized (disconnectListeners) {
-			disconnectListeners.add(listener);
-		}
+		disconnectListeners.add(listener);
 	}
 
 	public void removeDisconnecListener(DisconnectListener listener){
-		synchronized (disconnectListeners) {
-			if(disconnectListeners.contains(listener))
-				disconnectListeners.remove(listener);
-		}
+		disconnectListeners.remove(listener);
 	}
 
 	public Message sendAndReceive(Message message) throws IOException, OmniNotConnectedException, OmniUnknownMessageTypeException{
@@ -248,7 +238,7 @@ public class Connection extends Thread {
 				throw new OmniNotConnectedException(lastError());
 
 			OmniPacket ret;
-			sendBytesEncrypted(new OmniPacket(PACKET_TYPE_OMNI_LINK_MESSAGE, 
+			sendBytesEncrypted(new OmniPacket(PACKET_TYPE_OMNI_LINK_MESSAGE,
 					MessageFactory.toBytes(message)));
 			synchronized(readLock){
 				//wait for notfiy when response comes in on thread
@@ -284,12 +274,9 @@ public class Connection extends Thread {
 				try {
 					if((ret = readBytesEncrypted2()).seq() == 0 &&
 							ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE){
-						notifications.add(MessageFactory.fromBytes(ret.data()));
+						notifications.put(MessageFactory.fromBytes(ret.data()));
 						if(debug)
 							System.out.println("run: NOTIFICATION: Added message with type " + ret.type);
-						synchronized (notifyLock) {
-							notifyLock.notifyAll();
-						}
 					} else if(ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
 						response = ret;
 						//notify calling request lock
@@ -312,7 +299,7 @@ public class Connection extends Thread {
 //						System.out.println("Ignoring SocketTimeoutException, will try and send omni a ping if needed");
 //					}
 				}catch(Exception e){
-					connected = false;
+					disconnect();
 					lastException = e;
 					//tell listeners about exception
 					notifyDisconnectHandlers(lastException);
@@ -326,7 +313,7 @@ public class Connection extends Thread {
 //						System.out.println("Pinging Server");
 //					}
 //					pingServer();
-//				}					
+//				}
 			}
 		}
 		if(debug)
@@ -375,7 +362,7 @@ public class Connection extends Thread {
 			paddedData[1 + (16 * i)] ^= (tx) & 0xFF;
 		}
 		/*3*/
-		byte []encData; 
+		byte []encData;
 		try {
 			encData = aes.encrypt(paddedData);
 		} catch (Exception e){
@@ -422,7 +409,7 @@ public class Connection extends Thread {
 		//two packets on the wire, but because the length of the packet
 		//is encrypted we have to peek into the first 16 bytes, decrypt those
 		//bytes and get the length, this makes the following code tricky and
-		//unattractive, 
+		//unattractive,
 		DataInputStream dis = new DataInputStream(is);
 
 		if(debug)
@@ -456,7 +443,7 @@ public class Connection extends Thread {
 		if(start != Message.MESG_START)
 			System.out.println("invalid start char (" + start + ")");
 		//throw new IOException("invalid start char (" + start + ")");
-		if(length < 0) 
+		if(length < 0)
 			throw new IOException("invalid message length (" + length + ")");
 
 
@@ -473,7 +460,7 @@ public class Connection extends Thread {
 			encData = new byte[readLength];
 			//copy the data we already have from decData to decData2
 			System.arraycopy(decData, 0,decData2,0,decData.length);
-			//read the rest 
+			//read the rest
 			dis.readFully(encData);
 			//add decrypted data to the buffer
 			aes.decrypt(encData,0,readLength,decData2,decData.length);
@@ -561,7 +548,7 @@ public class Connection extends Thread {
 			int filter1, int filter2, int filter3) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqObjectProperties(objectType, objectNum, direction,
 				filter1, filter2, filter3));
-		if(msg.getMessageType() != Message.MESG_TYPE_OBJ_PROP && msg.getMessageType() 
+		if(msg.getMessageType() != Message.MESG_TYPE_OBJ_PROP && msg.getMessageType()
 				!= Message.MESG_TYPE_END_OF_DATA)
 			throw new OmniInvalidResponseException(msg);
 		return msg;
@@ -775,13 +762,11 @@ public class Connection extends Thread {
 	}
 
 	private void notifyDisconnectHandlers(Exception e){
-		synchronized (disconnectListeners) {	
-			for (DisconnectListener l : disconnectListeners) {
-				l.notConnectedEvent(e);
-			}
+		for (DisconnectListener l : disconnectListeners) {
+			l.notConnectedEvent(e);
 		}
 	}
-	
+
 	private class ConnectionWatchdog extends Thread {
 		public void run(){
 			this.setName("ConnectionWatchdog");
@@ -794,43 +779,55 @@ public class Connection extends Thread {
 					try {
 					reqSystemStatus();
 					} catch(Exception ignored){};
-				}					
+				}
 				try {
 					sleep(1000);
 				} catch (InterruptedException e) {}
-			}	
+			}
 		}
 	}
-	
-	private class NotificationHandler extends Thread{
+
+	private static class NotificationHandler implements Runnable{
+
+		public static final Message POISON = new Message(){
+			@Override
+			public int getMessageType(){
+				return 0;
+			}
+		};
+
+		private final BlockingQueue<Message> notifications;
+		private final List<NotificationListener> listeners;
+		private boolean alive = true;
+
+		private NotificationHandler(BlockingQueue<Message> notifications, List<NotificationListener> listeners){
+			this.notifications = notifications;
+			this.listeners = listeners;
+		}
+
 		public void run(){
-			while(connected){
-				synchronized (notifyLock) {
-					while(notifications.size() == 0 && connected){
-						try { notifyLock.wait(1000);} catch (InterruptedException ignored){}
+			while(alive){
+				try{
+					Message message = notifications.take();
+					if( message == POISON ){
+						alive = false;
 					}
-				}
-				if(connected){
-					LinkedList<Message> messages;
-					synchronized (notifications) {
-						messages = (LinkedList<Message>)notifications.clone();
-						notifications.clear();
-					}
-					synchronized (notificationListeners) {
-						for(Message m : messages){
-							for (NotificationListener l : notificationListeners) {
-								if(m instanceof ObjectStatus){
-									l.objectStausNotification((ObjectStatus)m);
-								} else {
-									l.otherEventNotification((OtherEventNotifications)m);
-								}
+					else{
+						for (NotificationListener listener : listeners) {
+							if(message instanceof ObjectStatus){
+								listener.objectStausNotification((ObjectStatus)message);
+							} else {
+								listener.otherEventNotification((OtherEventNotifications)message);
 							}
 						}
 					}
+				}catch(Throwable t){
+					//Catch all exceptions to prevent notification thread from dying.
+					System.out.println("Notifcation Handler Caught Exception: " + t.getMessage());
+					t.printStackTrace();
 				}
 			}
 		}
 	}
 
 }
-
