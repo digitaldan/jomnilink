@@ -1,9 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
-
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -24,41 +23,41 @@ import com.digitaldan.jomnilinkII.Message;
 public class ReqObjectTypeCapacities implements Message {
 
 	private int objType;
-	
+
 	/*
 	 *This message requests the HAI controller to report the number of objects of the specified type that the controller
-supports.
-         Start character          0x21
-         Message length           0x02
-         Message type             0x1E
-         Data 1                   object type
-         CRC 1                    varies
-         CRC 2                    varies
-         Expected reply:          OBJECT TYPE CAPACITIES
-
-	 */
+	supports.
+	     Start character          0x21
+	     Message length           0x02
+	     Message type             0x1E
+	     Data 1                   object type
+	     CRC 1                    varies
+	     CRC 2                    varies
+	     Expected reply:          OBJECT TYPE CAPACITIES
 	
-	public ReqObjectTypeCapacities(int objectType){
+	 */
+
+	public ReqObjectTypeCapacities(int objectType) {
 		objType = objectType;
 	}
-	
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_OBJ_CAPACITY;
 	}
-	
-	public int objectType(){
+
+	public int objectType() {
 		return objType;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqObjectTypeCapacities ( "
-	        + "objType = " + this.objType + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ReqObjectTypeCapacities ( " + "objType = " + this.objType + TAB + " )";
+
+		return retValue;
 	}
 
 }

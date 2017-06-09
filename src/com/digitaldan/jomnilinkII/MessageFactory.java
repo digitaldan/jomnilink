@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -18,13 +18,11 @@ package com.digitaldan.jomnilinkII;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.security.AccessController;
 import java.util.HashMap;
 
 import com.digitaldan.jomnilinkII.MessageTypes.Acknowledge;
@@ -85,25 +83,20 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
 
 public class MessageFactory {
 
-	public static Message fromBytes(byte [] bytes) throws IOException, OmniUnknownMessageTypeException{
+	public static Message fromBytes(byte[] bytes) throws IOException, OmniUnknownMessageTypeException {
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 		DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes));
-		
+
 		int start = in.readUnsignedByte();
 		int length = in.readUnsignedByte();
 		int type = in.readUnsignedByte();
-		//System.out.println("Start " + start + " length " + length + " type " + type);
-		
-		int len = length -1;
-		byte [] data = new byte[len];
+
+		int len = length - 1;
+		byte[] data = new byte[len];
 		in.readFully(data);
-		
-		//int crc1 = in.readUnsignedByte();
-		//int crc2 = in.readUnsignedByte();
-		
 		bis = new ByteArrayInputStream(data);
 		in = new DataInputStream(bis);
-		
+
 		switch (type) {
 		case Message.MESG_TYPE_ACK:
 			return acknowledge();
@@ -118,40 +111,39 @@ public class MessageFactory {
 		case Message.MESG_TYPE_SYS_TROUBLES:
 			return systemTroubles(in, len);
 		case Message.MESG_TYPE_SYS_FEATURES:
-			return systemFeatures(in,len);
+			return systemFeatures(in, len);
 		case Message.MESG_TYPE_SYS_FORMATS:
 			return systemFormats(in, len);
 		case Message.MESG_TYPE_OBJ_CAPACITY:
 			return objectTypeCapacities(in, len);
 		case Message.MESG_TYPE_OBJ_PROP:
-			return objectProperties(in,len);
+			return objectProperties(in, len);
 		case Message.MESG_TYPE_OBJ_STATUS:
-			return objectStatus(in,len,false);
+			return objectStatus(in, len, false);
 		case Message.MESG_TYPE_EXT_OBJ_STATUS:
-			return (ExtendedObjectStatus)objectStatus(in,len,true);
+			return objectStatus(in, len, true);
 		case Message.MESG_TYPE_AUDIO_SOURCE_STATUS:
-			return audioSourceStatus(in,len);
+			return audioSourceStatus(in, len);
 		case Message.MESG_TYPE_ZONE_READY:
-			return zoneReadyStatus(in,len);
+			return zoneReadyStatus(in, len);
 		case Message.MESG_TYPE_OTHER_EVENT_NOTIFY:
-			return otherEventNOtification(in,len);
+			return otherEventNOtification(in, len);
 		case Message.MESG_TYPE_EVENT_LOG_DATA:
-			return eventLogData(in,len);
+			return eventLogData(in, len);
 		case Message.MESG_TYPE_NAME_DATA:
-			return nameData(in,len);
+			return nameData(in, len);
 		case Message.MESG_TYPE_SEC_CODE_VALID:
-			return securityCodeValidation(in,len);
+			return securityCodeValidation(in, len);
 		default:
 			throw new OmniUnknownMessageTypeException(type);
 		}
 	}
-	
-	public static byte[] toBytes(Message msg) throws IOException, OmniUnknownMessageTypeException{
+
+	public static byte[] toBytes(Message msg) throws IOException, OmniUnknownMessageTypeException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream os = new DataOutputStream(bos);
-		
 		os.writeByte(msg.getMessageType());
-		
+
 		switch (msg.getMessageType()) {
 		case Message.MESG_TYPE_REQ_SYS_INFO:
 		case Message.MESG_TYPE_REQ_SYS_STATUS:
@@ -161,17 +153,17 @@ public class MessageFactory {
 		case Message.MESG_TYPE_CLEAR_NAMES:
 		case Message.MESG_TYPE_CLEAR_VOICES:
 			break;
-		case Message.MESG_TYPE_ENABLE_NOTIFICATIONS:{
-			os.writeBoolean(((EnableNotifications)msg).isEnabled());
+		case Message.MESG_TYPE_ENABLE_NOTIFICATIONS: {
+			os.writeBoolean(((EnableNotifications) msg).isEnabled());
 		}
 			break;
-		case Message.MESG_TYPE_REQ_OBJ_CAPACITY:{
-			ReqObjectTypeCapacities m = (ReqObjectTypeCapacities)msg;
+		case Message.MESG_TYPE_REQ_OBJ_CAPACITY: {
+			ReqObjectTypeCapacities m = (ReqObjectTypeCapacities) msg;
 			os.writeByte(m.objectType());
 		}
 			break;
-		case Message.MESG_TYPE_REQ_OBJ_PROP:{
-			ReqObjectProperties m = (ReqObjectProperties)msg;
+		case Message.MESG_TYPE_REQ_OBJ_PROP: {
+			ReqObjectProperties m = (ReqObjectProperties) msg;
 			os.writeByte(m.objectType());
 			os.writeShort(m.objectNum());
 			os.writeByte(m.direction());
@@ -181,15 +173,15 @@ public class MessageFactory {
 		}
 			break;
 		case Message.MESG_TYPE_REQ_EXT_OBJ_STATUS:
-		case Message.MESG_TYPE_REQ_OBJ_STATUS:{
-			ReqObjectStatus m = (ReqObjectStatus)msg;
+		case Message.MESG_TYPE_REQ_OBJ_STATUS: {
+			ReqObjectStatus m = (ReqObjectStatus) msg;
 			os.writeByte(m.objectType());
 			os.writeShort(m.objectStart());
 			os.writeShort(m.objectEnd());
 		}
 			break;
-		case Message.MESG_TYPE_REQ_AUDIO_SOURCE_STATUS:{
-			ReqAudioSourceStatus m = (ReqAudioSourceStatus)msg;
+		case Message.MESG_TYPE_REQ_AUDIO_SOURCE_STATUS: {
+			ReqAudioSourceStatus m = (ReqAudioSourceStatus) msg;
 			os.writeShort(m.source());
 			os.writeByte(m.position());
 		}
@@ -197,27 +189,27 @@ public class MessageFactory {
 		case Message.MESG_TYPE_REQ_ZONE_READY:
 		case Message.MESG_TYPE_REQ_CONN_SEC_STATUS:
 			break;
-		case Message.MESG_TYPE_COMMAND:{
-			CommandMessage m = (CommandMessage)msg;
+		case Message.MESG_TYPE_COMMAND: {
+			CommandMessage m = (CommandMessage) msg;
 			os.writeByte(m.getCommand());
 			os.writeByte(m.getParameter1());
 			os.writeShort(m.getParameter2());
 		}
 			break;
-		case Message.MESG_TYPE_UPLOAD_EVENT_LOG:{
-			UploadEventRecord m = (UploadEventRecord)msg;
+		case Message.MESG_TYPE_UPLOAD_EVENT_LOG: {
+			UploadEventRecord m = (UploadEventRecord) msg;
 			os.writeShort(m.getEventNumber());
 			os.writeByte(m.getDirection());
 		}
 			break;
-		case Message.MESG_TYPE_UPLOAD_NAMES:{
-			UploadNames m = (UploadNames)msg;
+		case Message.MESG_TYPE_UPLOAD_NAMES: {
+			UploadNames m = (UploadNames) msg;
 			os.writeByte(m.getObjectType());
 			os.writeShort(m.getObjectNumber());
 		}
 			break;
-		case Message.MESG_TYPE_CONN_SEC_COMMAND:{
-			ConnectedSecurityCommand m = (ConnectedSecurityCommand)msg;
+		case Message.MESG_TYPE_CONN_SEC_COMMAND: {
+			ConnectedSecurityCommand m = (ConnectedSecurityCommand) msg;
 			os.writeByte(m.getCommand());
 			os.writeByte(m.getPartition());
 			os.writeByte(m.getDigit1());
@@ -228,8 +220,8 @@ public class MessageFactory {
 			os.writeByte(m.getDigit6());
 		}
 			break;
-		case Message.MESG_TYPE_SET_TIME:{
-			SetTimeCommand m = (SetTimeCommand)msg;
+		case Message.MESG_TYPE_SET_TIME: {
+			SetTimeCommand m = (SetTimeCommand) msg;
 			os.writeByte(m.getYear());
 			os.writeByte(m.getMonth());
 			os.writeByte(m.getDay());
@@ -239,14 +231,14 @@ public class MessageFactory {
 			os.writeBoolean(m.isDaylightSavings());
 		}
 			break;
-		case Message.MESG_TYPE_ACT_KEYPAD_EMERGENCY:{
-			ActivateKeypadEmergency m = (ActivateKeypadEmergency)msg;
+		case Message.MESG_TYPE_ACT_KEYPAD_EMERGENCY: {
+			ActivateKeypadEmergency m = (ActivateKeypadEmergency) msg;
 			os.writeByte(m.getArea());
 			os.writeByte(m.getEmergencyType());
 		}
 			break;
-		case Message.MESG_TYPE_REQ_SEC_CODE_VALID:{
-			ReqSecurityCodeValidation m = (ReqSecurityCodeValidation)msg;
+		case Message.MESG_TYPE_REQ_SEC_CODE_VALID: {
+			ReqSecurityCodeValidation m = (ReqSecurityCodeValidation) msg;
 			os.writeByte(m.getArea());
 			os.writeByte(m.getDigit1());
 			os.writeByte(m.getDigit2());
@@ -254,21 +246,22 @@ public class MessageFactory {
 			os.writeByte(m.getDigit4());
 		}
 			break;
-		case Message.MESG_TYPE_DOWNLOAD_NAMES:{
-			DownloadNames m = (DownloadNames)msg;
+		case Message.MESG_TYPE_DOWNLOAD_NAMES: {
+			DownloadNames m = (DownloadNames) msg;
 			int t = m.getObjectType();
 			os.writeByte(t);
 			os.writeShort(m.getObjectNumber());
 			byte[] d;
-			if(t == Message.OBJ_TYPE_ZONE || t == Message.OBJ_TYPE_MESG ||
-					t == Message.OBJ_TYPE_AUX_SENSOR)
+			if (t == Message.OBJ_TYPE_ZONE || t == Message.OBJ_TYPE_MESG || t == Message.OBJ_TYPE_AUX_SENSOR) {
 				d = new byte[15];
-			else
+			} else {
 				d = new byte[12];
+			}
 			byte[] s = m.getName().getBytes();
 			int cnt = s.length;
-			if(s.length > d.length)
+			if (s.length > d.length) {
 				cnt = d.length;
+			}
 			System.arraycopy(s, 0, d, 0, cnt);
 			os.write(d);
 		}
@@ -276,47 +269,50 @@ public class MessageFactory {
 		default:
 			throw new OmniUnknownMessageTypeException(msg.getMessageType());
 		}
-		byte [] data = bos.toByteArray();
+		byte[] data = bos.toByteArray();
 		bos.reset();
-		
+
 		os.writeByte(Message.MESG_START);
 		os.writeByte(data.length);
 		os.write(data);
-		
+
 		//calc crc bytes of data, type and length
-		byte [] crcBytes = new byte[data.length + 1];
+		byte[] crcBytes = new byte[data.length + 1];
 		System.arraycopy(data, 0, crcBytes, 1, data.length);
-		crcBytes[0] = (byte)data.length;
+		crcBytes[0] = (byte) data.length;
 		int crc = MessageUtils.crc16(crcBytes);
-		
+
 		//LSB then MSB
-		os.writeByte(( byte )crc);
-		os.writeByte(( byte ) ( crc >> 8 ));
-		
+		os.writeByte((byte) crc);
+		os.writeByte((byte) (crc >> 8));
+
 		return bos.toByteArray();
 	}
-	
-	protected static Acknowledge acknowledge(){
+
+	protected static Acknowledge acknowledge() {
 		return new Acknowledge();
 	}
-	protected static NegativeAcknowledge negativeAcknowledge(){
+
+	protected static NegativeAcknowledge negativeAcknowledge() {
 		return new NegativeAcknowledge();
 	}
-	protected static EndOfData endOfData(){
+
+	protected static EndOfData endOfData() {
 		return new EndOfData();
 	}
-	protected static SystemInformation systemInformation(DataInputStream in) throws IOException{
+
+	protected static SystemInformation systemInformation(DataInputStream in) throws IOException {
 		int model = in.readUnsignedByte();
 		int major = in.readUnsignedByte();
 		int minor = in.readUnsignedByte();
 		int revision = in.readUnsignedByte();
-		byte[] phoneBytes = new  byte[15];
+		byte[] phoneBytes = new byte[15];
 		in.readFully(phoneBytes);
 		String phone = new String(phoneBytes);
-		return new SystemInformation(model,major,minor,revision,phone);
+		return new SystemInformation(model, major, minor, revision, phone);
 	}
-	
-	protected static SystemStatus systemStatus(DataInputStream in, int len) throws IOException{
+
+	protected static SystemStatus systemStatus(DataInputStream in, int len) throws IOException {
 		boolean timeDateValid = in.readBoolean();
 		int year = in.readUnsignedByte();
 		int month = in.readUnsignedByte();
@@ -330,193 +326,181 @@ public class MessageFactory {
 		int sunriseMinute = in.readUnsignedByte();
 		int sunsetHour = in.readUnsignedByte();
 		int sunsetMinute = in.readUnsignedByte();
-		int batteryReading =in.readUnsignedByte();
-		HashMap<Integer,Integer> alarms = new HashMap<Integer, Integer>();
-		for(int i=16; i < len; i = i + 2){
+		int batteryReading = in.readUnsignedByte();
+		HashMap<Integer, Integer> alarms = new HashMap<>();
+		for (int i = 16; i < len; i = i + 2) {
 			alarms.put(new Integer(in.readUnsignedByte()), new Integer(in.readUnsignedByte()));
 		}
-		return new SystemStatus(timeDateValid,year,month,day,dayOfWeek,hour,
-				minute,second,daylightSavings,sunriseHour,sunriseMinute,
-				sunsetHour,sunsetMinute,batteryReading,alarms);
+		return new SystemStatus(timeDateValid, year, month, day, dayOfWeek, hour, minute, second, daylightSavings,
+				sunriseHour, sunriseMinute, sunsetHour, sunsetMinute, batteryReading, alarms);
 	}
-	
-	protected static SystemTroubles systemTroubles(DataInputStream in, int length) throws IOException{
-		int [] troubles = new int[length];
-		for(int i=0;i<length;i++){
+
+	protected static SystemTroubles systemTroubles(DataInputStream in, int length) throws IOException {
+		int[] troubles = new int[length];
+		for (int i = 0; i < length; i++) {
 			troubles[i] = in.readUnsignedByte();
 		}
 		return new SystemTroubles(troubles);
 	}
-	
-	
-	protected static SystemFeatures systemFeatures(DataInputStream in, int length) throws IOException{
-		int [] features = new int[length];
-		for(int i=0;i<length;i++){
+
+	protected static SystemFeatures systemFeatures(DataInputStream in, int length) throws IOException {
+		int[] features = new int[length];
+		for (int i = 0; i < length; i++) {
 			features[i] = in.readUnsignedByte();
 		}
 		return new SystemFeatures(features);
 	}
-	
-	protected static SystemFormats systemFormats(DataInputStream in, int length) throws IOException{
+
+	protected static SystemFormats systemFormats(DataInputStream in, int length) throws IOException {
 		int tempFormat = in.readUnsignedByte();
 		int timeformat = in.readUnsignedByte();
 		int dateFormat = in.readUnsignedByte();
-		return new SystemFormats(tempFormat,timeformat,dateFormat);
+		return new SystemFormats(tempFormat, timeformat, dateFormat);
 	}
-	
-	protected static ObjectTypeCapacities objectTypeCapacities(DataInputStream in, int length) throws IOException{
+
+	protected static ObjectTypeCapacities objectTypeCapacities(DataInputStream in, int length) throws IOException {
 		int objectType = in.readUnsignedByte();
 		int capacity = in.readUnsignedShort();
-		return new ObjectTypeCapacities(objectType,capacity);
+		return new ObjectTypeCapacities(objectType, capacity);
 	}
-	
-	protected static ObjectStatus objectStatus(DataInputStream in, int length, boolean extended) throws IOException{
+
+	protected static ObjectStatus objectStatus(DataInputStream in, int length, boolean extended) throws IOException {
 		int statusType = in.readUnsignedByte();
-		
+
 		int recordLength = 0;
-		if(extended)
+		if (extended) {
 			recordLength = in.readUnsignedByte();
-		
+		}
+
 		Status[] status;
 		switch (statusType) {
-		case Message.OBJ_TYPE_ZONE:{
-			status = new ZoneStatus[(length -1)/4];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new ZoneStatus(in.readUnsignedShort(),
-						in.readUnsignedByte(),in.readUnsignedByte());
+		case Message.OBJ_TYPE_ZONE: {
+			status = new ZoneStatus[(length - 1) / 4];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new ZoneStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_UNIT:{
-			status = new UnitStatus[(length-1)/5];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new UnitStatus(in.readUnsignedShort(),
-						in.readUnsignedByte(),in.readUnsignedShort());
+			break;
+		case Message.OBJ_TYPE_UNIT: {
+			status = new UnitStatus[(length - 1) / 5];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new UnitStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedShort());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_AREA:{
-			status = new AreaStatus[(length-1)/6];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new AreaStatus(in.readUnsignedShort(),
-						in.readUnsignedByte(),in.readUnsignedByte(),
-						in.readUnsignedByte(),in.readUnsignedByte());
+			break;
+		case Message.OBJ_TYPE_AREA: {
+			status = new AreaStatus[(length - 1) / 6];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new AreaStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte(),
+						in.readUnsignedByte(), in.readUnsignedByte());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_THERMO:{
-			if(!extended){
-				status = new ThermostatStatus[(length-1)/9];
-				for(int i=0;i<status.length;i++){
-					status[i] =  new ThermostatStatus(in.readUnsignedShort(),
-							in.readUnsignedByte(),in.readUnsignedByte(),
-							in.readUnsignedByte(),in.readUnsignedByte(),
-							in.readUnsignedByte(),in.readBoolean(),
-							in.readBoolean());
+			break;
+		case Message.OBJ_TYPE_THERMO: {
+			if (!extended) {
+				status = new ThermostatStatus[(length - 1) / 9];
+				for (int i = 0; i < status.length; i++) {
+					status[i] = new ThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
+							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
+							in.readBoolean(), in.readBoolean());
 				}
 			} else {
-				status = new ExtendedThermostatStatus [(length-1)/14];
-				for(int i=0;i<status.length;i++){
-					status[i] =  new ExtendedThermostatStatus(in.readUnsignedShort(),
-							in.readUnsignedByte(),in.readUnsignedByte(),
-							in.readUnsignedByte(),in.readUnsignedByte(),
-							in.readUnsignedByte(),in.readBoolean(),
-							in.readBoolean(),in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(),in.readUnsignedByte());
+				status = new ExtendedThermostatStatus[(length - 1) / 14];
+				for (int i = 0; i < status.length; i++) {
+					status[i] = new ExtendedThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
+							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
+							in.readBoolean(), in.readBoolean(), in.readUnsignedByte(), in.readUnsignedByte(),
+							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte());
 				}
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_MESG:{
-			status = new MessageStatus[(length-1)/3];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new MessageStatus(in.readUnsignedShort(),
-						in.readUnsignedByte());
+			break;
+		case Message.OBJ_TYPE_MESG: {
+			status = new MessageStatus[(length - 1) / 3];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new MessageStatus(in.readUnsignedShort(), in.readUnsignedByte());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_AUX_SENSOR:{
-			status = new AuxSensorStatus[(length-1)/6];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new AuxSensorStatus(in.readUnsignedShort(),
-						in.readUnsignedByte(),in.readUnsignedByte(),
-						in.readUnsignedByte(),in.readUnsignedByte());
+			break;
+		case Message.OBJ_TYPE_AUX_SENSOR: {
+			status = new AuxSensorStatus[(length - 1) / 6];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new AuxSensorStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte(),
+						in.readUnsignedByte(), in.readUnsignedByte());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_AUDIO_ZONE:{
-			status = new AudioZoneStatus[(length-1)/6];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new AudioZoneStatus(in.readUnsignedShort(),
-						in.readBoolean(),in.readUnsignedByte(),
-						in.readUnsignedByte(),in.readBoolean());
+			break;
+		case Message.OBJ_TYPE_AUDIO_ZONE: {
+			status = new AudioZoneStatus[(length - 1) / 6];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new AudioZoneStatus(in.readUnsignedShort(), in.readBoolean(), in.readUnsignedByte(),
+						in.readUnsignedByte(), in.readBoolean());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_EXP:{
-			status = new ExpansionStatus[(length -1)/4];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new ExpansionStatus(in.readUnsignedShort(),
-						in.readUnsignedByte(),in.readUnsignedByte());
+			break;
+		case Message.OBJ_TYPE_EXP: {
+			status = new ExpansionStatus[(length - 1) / 4];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new ExpansionStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_USER_SETTING:{
-			status = new UserSettingStatus[(length -1)/4];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new UserSettingStatus(in.readUnsignedShort(),
-						in.readUnsignedByte(),in.readUnsignedByte());
+			break;
+		case Message.OBJ_TYPE_USER_SETTING: {
+			status = new UserSettingStatus[(length - 1) / 4];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new UserSettingStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_CONTROL_READER:{
-			status = new AccessControlReaderStatus[(length -1)/5];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new AccessControlReaderStatus(in.readUnsignedShort(),
-						in.readBoolean(),in.readUnsignedShort());
+			break;
+		case Message.OBJ_TYPE_CONTROL_READER: {
+			status = new AccessControlReaderStatus[(length - 1) / 5];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new AccessControlReaderStatus(in.readUnsignedShort(), in.readBoolean(),
+						in.readUnsignedShort());
 			}
 		}
-		break;
-		case Message.OBJ_TYPE_CONTROL_LOCK:{
-			status = new AccessControlReaderLockStatus [(length -1)/5];
-			for(int i=0;i<status.length;i++){
-				status[i] =  new AccessControlReaderLockStatus(in.readUnsignedShort(),
-						in.readBoolean(),in.readUnsignedShort());
+			break;
+		case Message.OBJ_TYPE_CONTROL_LOCK: {
+			status = new AccessControlReaderLockStatus[(length - 1) / 5];
+			for (int i = 0; i < status.length; i++) {
+				status[i] = new AccessControlReaderLockStatus(in.readUnsignedShort(), in.readBoolean(),
+						in.readUnsignedShort());
 			}
 		}
-		break;
+			break;
 		default:
 			throw new IOException("Unknown status type " + statusType);
 		}
-		if(extended)
-			return new ExtendedObjectStatus(statusType,recordLength,status);
-		else
-			return new ObjectStatus(statusType,status);
+		if (extended) {
+			return new ExtendedObjectStatus(statusType, recordLength, status);
+		} else {
+			return new ObjectStatus(statusType, status);
+		}
 	}
-	
-	private static String readName(byte [] nameBytes){
+
+	private static String readName(byte[] nameBytes) {
 		String name = new String(nameBytes);
-		if(name.indexOf('\0') >=0){
-			name = name.substring(0,name.indexOf('\0'));
+		if (name.indexOf('\0') >= 0) {
+			name = name.substring(0, name.indexOf('\0'));
 		}
 		return name;
 	}
-	protected static ObjectProperties objectProperties(DataInputStream in, int length) throws IOException{
+
+	protected static ObjectProperties objectProperties(DataInputStream in, int length) throws IOException {
 		int objectType = in.readUnsignedByte();
 		int number = in.readUnsignedShort();
 		byte[] nameShort = new byte[12];
 		byte[] nameLong = new byte[15];
 		switch (objectType) {
-		case Message.OBJ_TYPE_ZONE:{
-			 int status = in.readUnsignedByte();
-			 int loop = in.readUnsignedByte();
-			 int type = in.readUnsignedByte();
-			 int area = in.readUnsignedByte();
-			 int options = in.readUnsignedByte();
-			 in.readFully(nameLong);
-			 String name = readName(nameLong);
-			 return new ZoneProperties(number,status,loop,type,area,options,name);
+		case Message.OBJ_TYPE_ZONE: {
+			int status = in.readUnsignedByte();
+			int loop = in.readUnsignedByte();
+			int type = in.readUnsignedByte();
+			int area = in.readUnsignedByte();
+			int options = in.readUnsignedByte();
+			in.readFully(nameLong);
+			String name = readName(nameLong);
+			return new ZoneProperties(number, status, loop, type, area, options, name);
 		}
 		case Message.OBJ_TYPE_UNIT: {
 			int state = in.readUnsignedByte();
@@ -524,19 +508,19 @@ public class MessageFactory {
 			int type = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new UnitProperties(number,state,time,type,name);
+			return new UnitProperties(number, state, time, type, name);
 		}
-		case Message.OBJ_TYPE_BUTTON:{
+		case Message.OBJ_TYPE_BUTTON: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new ButtonProperties(number,name);
+			return new ButtonProperties(number, name);
 		}
-		case Message.OBJ_TYPE_CODE:{
+		case Message.OBJ_TYPE_CODE: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new CodeProperties(number,name);
+			return new CodeProperties(number, name);
 		}
-		case Message.OBJ_TYPE_AREA:{
+		case Message.OBJ_TYPE_AREA: {
 			int mode = in.readUnsignedByte();
 			int alarms = in.readUnsignedByte();
 			int entryTimer = in.readUnsignedByte();
@@ -546,9 +530,10 @@ public class MessageFactory {
 			int entryDelay = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AreaProperties(number,mode,alarms,entryTimer,exitTimer,enabled,exitDelay,entryDelay,name);
+			return new AreaProperties(number, mode, alarms, entryTimer, exitTimer, enabled, exitDelay, entryDelay,
+					name);
 		}
-		case Message.OBJ_TYPE_THERMO:{
+		case Message.OBJ_TYPE_THERMO: {
 			int status = in.readUnsignedByte();
 			int temperature = in.readUnsignedByte();
 			int heatSetpoint = in.readUnsignedByte();
@@ -559,14 +544,15 @@ public class MessageFactory {
 			int thermostatType = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new ThermostatProperties(number,status,temperature,heatSetpoint,coolSetpoint,mode,fan,hold,thermostatType,name);
+			return new ThermostatProperties(number, status, temperature, heatSetpoint, coolSetpoint, mode, fan, hold,
+					thermostatType, name);
 		}
-		case Message.OBJ_TYPE_MESG:{
+		case Message.OBJ_TYPE_MESG: {
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new MessageProperties(number,name);
-		}	
-		case Message.OBJ_TYPE_AUX_SENSOR:{
+			return new MessageProperties(number, name);
+		}
+		case Message.OBJ_TYPE_AUX_SENSOR: {
 			int status = in.readUnsignedByte();
 			int current = in.readUnsignedByte();
 			int lowSetpoint = in.readUnsignedByte();
@@ -574,64 +560,64 @@ public class MessageFactory {
 			int sensorType = in.readUnsignedByte();
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new AuxSensorProperties(number,status,current,lowSetpoint,highSetpoint,sensorType,name);
+			return new AuxSensorProperties(number, status, current, lowSetpoint, highSetpoint, sensorType, name);
 		}
-		case Message.OBJ_TYPE_AUDIO_SOURCE:{
+		case Message.OBJ_TYPE_AUDIO_SOURCE: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AudioSourceProperties(number,name);
+			return new AudioSourceProperties(number, name);
 		}
-		case Message.OBJ_TYPE_AUDIO_ZONE:{
+		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			boolean on = in.readBoolean();
 			int source = in.readUnsignedByte();
 			int volume = in.readUnsignedByte();
 			boolean mute = in.readBoolean();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AudioZoneProperties(number,on,source,volume,mute,name);
-		}			
+			return new AudioZoneProperties(number, on, source, volume, mute, name);
+		}
 		default:
 			throw new IOException("Unknown property type " + objectType);
 		}
 	}
-	
-	protected static AudioSourceStatus audioSourceStatus(DataInputStream in, int length) throws IOException{
-		
+
+	protected static AudioSourceStatus audioSourceStatus(DataInputStream in, int length) throws IOException {
 		int srcNumber = in.readUnsignedShort();
 		int seqNumber = in.readUnsignedByte();
 		int pos = in.readUnsignedByte();
 		int fieldId = in.readUnsignedByte();
-		byte [] data = new byte[length - 5];
+		byte[] data = new byte[length - 5];
 		in.readFully(data);
 		String sourceData = new String(data);
-		return new AudioSourceStatus(srcNumber,seqNumber,pos,fieldId,sourceData);
+		return new AudioSourceStatus(srcNumber, seqNumber, pos, fieldId, sourceData);
 	}
-	
-	protected static ZoneReadyStatus zoneReadyStatus(DataInputStream in, int length) throws IOException{
+
+	protected static ZoneReadyStatus zoneReadyStatus(DataInputStream in, int length) throws IOException {
 		int[] zones = new int[length];
-		for(int i=0;i<length;i++){
+		for (int i = 0; i < length; i++) {
 			zones[i] = in.readUnsignedByte();
 		}
 		return new ZoneReadyStatus(zones);
 	}
-	
-	protected static ConnectedSecurityStatus connectedSecurityStatus(DataInputStream in, int length) throws IOException{
-		int[]parts = new int[length];
-		for(int i=0;i<length;i++){
+
+	protected static ConnectedSecurityStatus connectedSecurityStatus(DataInputStream in, int length)
+			throws IOException {
+		int[] parts = new int[length];
+		for (int i = 0; i < length; i++) {
 			parts[i] = in.readUnsignedByte();
 		}
 		return new ConnectedSecurityStatus(parts);
 	}
-	
-	protected static OtherEventNotifications otherEventNOtification(DataInputStream in, int length) throws IOException{
-		int[]notifications = new int[length/2];
-		for(int i=0;i<notifications.length;i++){
+
+	protected static OtherEventNotifications otherEventNOtification(DataInputStream in, int length) throws IOException {
+		int[] notifications = new int[length / 2];
+		for (int i = 0; i < notifications.length; i++) {
 			notifications[i] = in.readUnsignedShort();
 		}
 		return new OtherEventNotifications(notifications);
 	}
-	
-	protected static EventLogData eventLogData(DataInputStream in, int length) throws IOException{
+
+	protected static EventLogData eventLogData(DataInputStream in, int length) throws IOException {
 		int eventNumber = in.readUnsignedShort();
 		boolean timeDataValid = in.readBoolean();
 		int month = in.readUnsignedByte();
@@ -641,22 +627,23 @@ public class MessageFactory {
 		int eventType = in.readUnsignedByte();
 		int parameter1 = in.readUnsignedByte();
 		int parameter2 = in.readUnsignedShort();
-		return new EventLogData(eventNumber,timeDataValid,month,day,hour,minute,eventType,parameter1,parameter2);
+		return new EventLogData(eventNumber, timeDataValid, month, day, hour, minute, eventType, parameter1,
+				parameter2);
 	}
-	
-	protected static NameData nameData(DataInputStream in, int length) throws IOException{
-		
+
+	protected static NameData nameData(DataInputStream in, int length) throws IOException {
+
 		int objectType = in.readUnsignedByte();
 		int objectNumber = in.readUnsignedShort();
-		byte [] data = new byte[length - 3];
+		byte[] data = new byte[length - 3];
 		in.readFully(data);
 		String name = new String(data);
-		return new NameData(objectType,objectNumber, name);
+		return new NameData(objectType, objectNumber, name);
 	}
-	
-	protected static SecurityCodeValidation securityCodeValidation(DataInputStream in, int length) throws IOException{
+
+	protected static SecurityCodeValidation securityCodeValidation(DataInputStream in, int length) throws IOException {
 		int code = in.readUnsignedByte();
 		int level = in.readUnsignedByte();
-		return new SecurityCodeValidation(code,level);
+		return new SecurityCodeValidation(code, level);
 	}
 }

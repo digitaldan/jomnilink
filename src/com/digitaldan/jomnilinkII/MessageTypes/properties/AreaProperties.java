@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -29,10 +29,10 @@ public class AreaProperties extends ObjectProperties {
 	private boolean enabled;
 	private int exitDelay;
 	private int entryDelay;
-	public AreaProperties(int number, int mode, int alarms,
-			int entryTimer, int exitTimer, boolean enabled, int exitDelay,
-			int entryDelay, String name) {
-		super(OBJ_TYPE_AREA, number,name);
+
+	public AreaProperties(int number, int mode, int alarms, int entryTimer, int exitTimer, boolean enabled,
+			int exitDelay, int entryDelay, String name) {
+		super(OBJ_TYPE_AREA, number, name);
 		this.mode = mode;
 		this.alarms = alarms;
 		this.entryTimer = entryTimer;
@@ -41,71 +41,81 @@ public class AreaProperties extends ObjectProperties {
 		this.exitDelay = exitDelay;
 		this.entryDelay = entryDelay;
 	}
+
 	public int getMode() {
 		return mode;
 	}
+
 	public int getAlarms() {
 		return alarms;
 	}
+
 	public int getEntryTimer() {
 		return entryTimer;
 	}
+
 	public int getExitTimer() {
 		return exitTimer;
 	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
+
 	public int getExitDelay() {
 		return exitDelay;
 	}
+
 	public int getEntryDelay() {
 		return entryDelay;
 	}
+
 	public void setMode(int mode) {
-      this.mode = mode;
-   }
-   public void setAlarms(int alarms) {
-      this.alarms = alarms;
-   }
-   public void setEntryTimer(int entryTimer) {
-      this.entryTimer = entryTimer;
-   }
-   public void setExitTimer(int exitTimer) {
-      this.exitTimer = exitTimer;
-   }
-   public void setEnabled(boolean enabled) {
-      this.enabled = enabled;
-   }
-   public void setExitDelay(int exitDelay) {
-      this.exitDelay = exitDelay;
-   }
-   public void setEntryDelay(int entryDelay) {
-      this.entryDelay = entryDelay;
-   }
-   public void updateArea(AreaStatus areaStatus) {
-      setAlarms(areaStatus.getAlarms());
-      setEntryTimer(areaStatus.getEntryTimer());
-      setExitTimer(areaStatus.getExitTimer());
-      setMode(areaStatus.getMode());
-   }
-   public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "AreaProperties ( "
-	    	+ "number = " + this.number + TAB
-	        + "mode = " + this.mode + TAB
-	        + "alarms = " + this.alarms + TAB
-	        + "entryTimer = " + this.entryTimer + TAB
-	        + "exitTimer = " + this.exitTimer + TAB
-	        + "enabled = " + this.enabled + TAB
-	        + "exitDelay = " + this.exitDelay + TAB
-	        + "entryDelay = " + this.entryDelay + TAB
-	        + "name = " + this.name + TAB
-	        + " )";
-	
-	    return retValue;
+		this.mode = mode;
 	}
-	
+
+	public void setAlarms(int alarms) {
+		this.alarms = alarms;
+	}
+
+	public void setEntryTimer(int entryTimer) {
+		this.entryTimer = entryTimer;
+	}
+
+	public void setExitTimer(int exitTimer) {
+		this.exitTimer = exitTimer;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void setExitDelay(int exitDelay) {
+		this.exitDelay = exitDelay;
+	}
+
+	public void setEntryDelay(int entryDelay) {
+		this.entryDelay = entryDelay;
+	}
+
+	public void updateArea(AreaStatus areaStatus) {
+		setAlarms(areaStatus.getAlarms());
+		setEntryTimer(areaStatus.getEntryTimer());
+		setExitTimer(areaStatus.getExitTimer());
+		setMode(areaStatus.getMode());
+	}
+
+	@Override
+	public String toString() {
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "AreaProperties ( " + "number = " + this.number + TAB + "mode = " + this.mode + TAB + "alarms = "
+				+ this.alarms + TAB + "entryTimer = " + this.entryTimer + TAB + "exitTimer = " + this.exitTimer + TAB
+				+ "enabled = " + this.enabled + TAB + "exitDelay = " + this.exitDelay + TAB + "entryDelay = "
+				+ this.entryDelay + TAB + "name = " + this.name + TAB + " )";
+
+		return retValue;
+	}
+
 }

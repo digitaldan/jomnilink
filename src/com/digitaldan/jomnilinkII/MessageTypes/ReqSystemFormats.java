@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -22,31 +22,32 @@ import com.digitaldan.jomnilinkII.Message;
 
 public class ReqSystemFormats implements Message {
 
-	
 	/*
 	 *This message requests the HAI controller to report the configured temperature format, time format, and date format.
-        Start character           0x21
-        Message length            0x01
-        Message type              0x28
-        Data                      none
-        CRC 1                     0x01
-        CRC 2                     0x8E
-        Expected reply:           SYSTEM FORMATS
- 
-	 */
+	    Start character           0x21
+	    Message length            0x01
+	    Message type              0x28
+	    Data                      none
+	    CRC 1                     0x01
+	    CRC 2                     0x8E
+	    Expected reply:           SYSTEM FORMATS
 	
+	 */
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_FORMATS;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqSystemFormats ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ReqSystemFormats ( "
+
+				+ " )";
+
+		return retValue;
 	}
 }

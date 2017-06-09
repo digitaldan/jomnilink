@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -30,19 +30,18 @@ public class Status {
 	public int getNumber() {
 		return number;
 	}
-	
-	public void setNumber(int number) {
-      this.number = number;
-   }
 
-   public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "Status ( "
-	        + "number = " + this.number + TAB
-	        + " )";
-	
-	    return retValue;
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	@Override
+	public String toString() {
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "Status ( " + "number = " + this.number + TAB + " )";
+
+		return retValue;
 	}
 }

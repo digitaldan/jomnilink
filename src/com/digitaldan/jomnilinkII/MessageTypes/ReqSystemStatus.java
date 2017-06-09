@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -24,30 +24,32 @@ public class ReqSystemStatus implements Message {
 
 	/*
 	 * This message requests the HAI controller to report its time, date, calculated time of sunrise and sunset, battery
-reading, alarm status for any area that is in alarm.
-         Start character             0x21
-         Message length              0x01
-         Message type                0x18
-         Data                        none
-         CRC 1                       0x01
-         CRC 2                       0x9A
-         Expected reply              SYSTEM STATUS
-
-	 */
+	reading, alarm status for any area that is in alarm.
+	     Start character             0x21
+	     Message length              0x01
+	     Message type                0x18
+	     Data                        none
+	     CRC 1                       0x01
+	     CRC 2                       0x9A
+	     Expected reply              SYSTEM STATUS
 	
+	 */
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_STATUS;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqSystemStatus ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ReqSystemStatus ( "
+
+				+ " )";
+
+		return retValue;
 	}
 
 }

@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -25,28 +25,27 @@ public class ConnectedSecurityStatus implements Message {
 	private Partition[] partitions;
 	/*
 	 *CONNECTED SECURITY SYSTEM STATUS
-This message is sent in response to a REQUEST CONNECTED SECURITY SYSTEM STATUS message.
-        Start character             0x21
-        Message length              number of data bytes + 1
-        Message Type                0x2E
-        Data 1                      mode in partition 1
-        Data 2                      status of partition 1
-        Data 3                      mode in partition 2
-        Data 4                      status of partition 2
-        ...
-        Data 15                     mode in partition 8
-        Data 16                     status of partition 8
-        CRC 1                       varies
-        CRC 2                       varies
-
-	 */
+	This message is sent in response to a REQUEST CONNECTED SECURITY SYSTEM STATUS message.
+	    Start character             0x21
+	    Message length              number of data bytes + 1
+	    Message Type                0x2E
+	    Data 1                      mode in partition 1
+	    Data 2                      status of partition 1
+	    Data 3                      mode in partition 2
+	    Data 4                      status of partition 2
+	    ...
+	    Data 15                     mode in partition 8
+	    Data 16                     status of partition 8
+	    CRC 1                       varies
+	    CRC 2                       varies
 	
+	 */
+
 	public ConnectedSecurityStatus(int[] partsModeStatus) {
 		super();
-		Partition[]parts = new Partition[partsModeStatus.length/2];
-		for(int i=0;i<partsModeStatus.length;i++){
-			parts[i] = new ConnectedSecurityStatus.Partition(
-					partsModeStatus[i],partsModeStatus[i++]);
+		Partition[] parts = new Partition[partsModeStatus.length / 2];
+		for (int i = 0; i < partsModeStatus.length; i++) {
+			parts[i] = new ConnectedSecurityStatus.Partition(partsModeStatus[i], partsModeStatus[i++]);
 		}
 		this.partitions = parts;
 	}
@@ -54,39 +53,37 @@ This message is sent in response to a REQUEST CONNECTED SECURITY SYSTEM STATUS m
 	public Partition[] getPartitions() {
 		return partitions;
 	}
-	
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_STATUS;
 	}
 
-
-	public class Partition{
+	public class Partition {
 		int _mode;
 		int _status;
-		
-		public Partition(int mode, int status){
+
+		public Partition(int mode, int status) {
 			_mode = mode;
 			_status = status;
 		}
-		
-		public int status(){
+
+		public int status() {
 			return _status;
 		}
-		
-		public int mode(){
+
+		public int mode() {
 			return _mode;
 		}
 	}
 
-
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ConnectedSecurityStatus ( "
-	        + "partitions = " + this.partitions + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ConnectedSecurityStatus ( " + "partitions = " + this.partitions + TAB + " )";
+
+		return retValue;
 	}
 }

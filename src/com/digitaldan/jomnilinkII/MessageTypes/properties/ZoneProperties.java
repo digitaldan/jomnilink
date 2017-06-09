@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -27,69 +27,71 @@ public class ZoneProperties extends ObjectProperties {
 	private int zoneType;
 	private int area;
 	private int options;
-	
-	public ZoneProperties(int number, int status, int loop,
-			int zoneType, int area, int options, String name) {
-		super(OBJ_TYPE_ZONE, number,name);
+
+	public ZoneProperties(int number, int status, int loop, int zoneType, int area, int options, String name) {
+		super(OBJ_TYPE_ZONE, number, name);
 		this.status = status;
 		this.loop = loop;
 		this.zoneType = zoneType;
 		this.area = area;
 		this.options = options;
 	}
+
 	public int getStatus() {
 		return status;
 	}
+
 	public int getLoop() {
 		return loop;
 	}
+
 	public int getZoneType() {
 		return zoneType;
 	}
+
 	public int getArea() {
 		return area;
 	}
+
 	public int getOptions() {
 		return options;
 	}
-	
+
 	public void setStatus(int status) {
-      this.status = status;
-   }
-   public void setLoop(int loop) {
-      this.loop = loop;
-   }
-   public void setZoneType(int zoneType) {
-      this.zoneType = zoneType;
-   }
-   public void setArea(int area) {
-      this.area = area;
-   }
-   public void setOptions(int options) {
-      this.options = options;
-   }
-   
-   public void updateZone(ZoneStatus zoneStatus) {
-      setLoop(zoneStatus.getLoop());
-      setStatus(zoneStatus.getStatus());
-   }
-   
-   public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ZoneProperties ( "
-	    	+ "number = " + this.number + TAB
-	        + "status = " + this.status + TAB
-	        + "loop = " + this.loop + TAB
-	        + "type = " + this.zoneType + TAB
-	        + "area = " + this.area + TAB
-	        + "options = " + this.options + TAB
-	        + "name = " + this.name + TAB
-	        + " )";
-	
-	    return retValue;
+		this.status = status;
 	}
-	
-	
+
+	public void setLoop(int loop) {
+		this.loop = loop;
+	}
+
+	public void setZoneType(int zoneType) {
+		this.zoneType = zoneType;
+	}
+
+	public void setArea(int area) {
+		this.area = area;
+	}
+
+	public void setOptions(int options) {
+		this.options = options;
+	}
+
+	public void updateZone(ZoneStatus zoneStatus) {
+		setLoop(zoneStatus.getLoop());
+		setStatus(zoneStatus.getStatus());
+	}
+
+	@Override
+	public String toString() {
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ZoneProperties ( " + "number = " + this.number + TAB + "status = " + this.status + TAB + "loop = "
+				+ this.loop + TAB + "type = " + this.zoneType + TAB + "area = " + this.area + TAB + "options = "
+				+ this.options + TAB + "name = " + this.name + TAB + " )";
+
+		return retValue;
+	}
+
 }

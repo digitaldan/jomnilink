@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -21,21 +21,21 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 import com.digitaldan.jomnilinkII.Message;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.Status;
 
-public class ExtendedObjectStatus extends ObjectStatus implements Message{
+public class ExtendedObjectStatus extends ObjectStatus implements Message {
 
 	//private int statusType;
 	private int recordLength;
 	//private Status[] statuses;
-	
+
 	/*
-	 * 
-	OBJECT STATUS 
-	 
-	This message is sent by the HAI controller in reply to an OBJECT STATUS message.  The HAI controller reports 
-	the status for the specified object(s). 
+	 *
+	OBJECT STATUS
+
+	This message is sent by the HAI controller in reply to an OBJECT STATUS message.  The HAI controller reports
+	the status for the specified object(s).
 	 */
 
-	
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_EXT_OBJ_STATUS;
 	}
@@ -47,28 +47,29 @@ public class ExtendedObjectStatus extends ObjectStatus implements Message{
 		//this.statuses = statuses;
 	}
 
-//	public int getStatusType() {
-//		return statusType;
-//	}
-	
+	//	public int getStatusType() {
+	//		return statusType;
+	//	}
+
 	public int getRecordLength() {
 		return recordLength;
 	}
 
-//	public Status[] getStatuses() {
-//		return statuses;
-//	}
+	//	public Status[] getStatuses() {
+	//		return statuses;
+	//	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ObjectStatus ( "
-//	        + "statusType = " + this.statusType + TAB
-//	        + "statuses = " + this.statuses + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ObjectStatus ( "
+				//	        + "statusType = " + this.statusType + TAB
+				//	        + "statuses = " + this.statuses + TAB
+				+ " )";
+
+		return retValue;
 	}
-	
+
 }

@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -21,47 +21,46 @@ package com.digitaldan.jomnilinkII;
 import java.io.IOException;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-
 
 public class Aes {
 
 	private SecretKeySpec spec;
 	private Cipher decipher;
 	private Cipher encipher;
-	
-	public Aes(byte [] key){
-		spec = new SecretKeySpec(key,"AES");
-		try{
+
+	public Aes(byte[] key) {
+		spec = new SecretKeySpec(key, "AES");
+		try {
 			decipher = Cipher.getInstance("AES/ECB/NoPadding");
 			decipher.init(Cipher.DECRYPT_MODE, spec);
 			encipher = Cipher.getInstance("AES/ECB/NoPadding");
 			encipher.init(Cipher.ENCRYPT_MODE, spec);
-		}catch(Exception ignored){
+		} catch (Exception ignored) {
 		}
 	}
-	
-	public byte[] decrypt(byte[] data) throws IOException{
+
+	public byte[] decrypt(byte[] data) throws IOException {
 		try {
-		    return decipher.doFinal(data);
-		}catch(Exception e){
+			return decipher.doFinal(data);
+		} catch (Exception e) {
 			throw new IOException(e.getMessage());
 		}
 	}
-	
-	public int decrypt(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset) throws IOException{
+
+	public int decrypt(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset)
+			throws IOException {
 		try {
-		    return decipher.doFinal(input,inputOffset,inputLen, output,outputOffset);
-		}catch(Exception e){
+			return decipher.doFinal(input, inputOffset, inputLen, output, outputOffset);
+		} catch (Exception e) {
 			throw new IOException(e.getMessage());
 		}
 	}
-	
-	public byte[] encrypt(byte[] data) throws IOException{
-		try{
-		    return encipher.doFinal(data);
-		}catch(Exception e){
+
+	public byte[] encrypt(byte[] data) throws IOException {
+		try {
+			return encipher.doFinal(data);
+		} catch (Exception e) {
 			throw new IOException(e.getMessage());
 		}
 	}

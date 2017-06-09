@@ -3,7 +3,7 @@ package com.digitaldan.jomnilinkII;
 public class OmniUnknownMessageTypeException extends Exception {
 
 	private int type;
-	
+
 	public OmniUnknownMessageTypeException(int type) {
 		super();
 		this.type = type;
@@ -12,8 +12,8 @@ public class OmniUnknownMessageTypeException extends Exception {
 	public OmniUnknownMessageTypeException(String message) {
 		super(message);
 	}
-	
-	public int getUnknowMessageType(){
+
+	public int getUnknowMessageType() {
 		return type;
 	}
 

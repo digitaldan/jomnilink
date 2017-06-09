@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -23,31 +23,32 @@ import com.digitaldan.jomnilinkII.Message;
 public class ReqConnectedSecurityStatus implements Message {
 	/*
 	 *This message is used to report the mode and status of each partition in a security system connected to a Lumina or
-Lumina Pro controller.
-        Start character            0x21
-        Message length             0x01
-        Message type               0x2D
-        Data                       none
-        CRC 1                      0xC1
-        CRC 2                      0x8D
-        Expected Reply:            CONNECTED SECURITY SYSTEM STATUS
-
-	 */
+	Lumina Pro controller.
+	    Start character            0x21
+	    Message length             0x01
+	    Message type               0x2D
+	    Data                       none
+	    CRC 1                      0xC1
+	    CRC 2                      0x8D
+	    Expected Reply:            CONNECTED SECURITY SYSTEM STATUS
 	
+	 */
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_CONN_SEC_STATUS;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqConnectedSecurityStatus ( "
-	
-	        + " )";
-	
-	    return retValue;
-	}
+		final String TAB = "    ";
+		String retValue = "";
 
+		retValue = "ReqConnectedSecurityStatus ( "
+
+				+ " )";
+
+		return retValue;
+	}
 
 }

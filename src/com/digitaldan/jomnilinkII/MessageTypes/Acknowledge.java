@@ -1,9 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
-
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -21,23 +20,25 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
 
-public class Acknowledge implements Message{
-	
-	public Acknowledge(){
+public class Acknowledge implements Message {
+
+	public Acknowledge() {
 	}
-	
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ACK;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "Acknowledge ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "Acknowledge ( "
+
+				+ " )";
+
+		return retValue;
 	}
 }

@@ -28,13 +28,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.security.AccessController;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ActivateKeypadEmergency;
 import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
@@ -42,7 +39,6 @@ import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityCommand;
 import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.DownloadNames;
 import com.digitaldan.jomnilinkII.MessageTypes.EnableNotifications;
-import com.digitaldan.jomnilinkII.MessageTypes.EventLogData;
 import com.digitaldan.jomnilinkII.MessageTypes.ExtendedObjectStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectTypeCapacities;
@@ -118,59 +114,63 @@ public class Connection extends Thread {
 	private final List<NotificationListener> notificationListeners;
 	private final List<DisconnectListener> disconnectListeners;
 	private ConnectionWatchdog watchdog;
-	public Connection(String address, int port, String key)
-	throws Exception,IOException,UnknownHostException {
+
+	public Connection(String address, int port, String key) throws Exception, IOException, UnknownHostException {
 
 		ping = true;
-		notifications = new LinkedBlockingQueue<Message>();
+		notifications = new LinkedBlockingQueue<>();
 		response = null;
 		lastException = null;
 		//Neither of these should be modified very often - good fit for COW
-		notificationListeners = new CopyOnWriteArrayList();
-		disconnectListeners = new CopyOnWriteArrayList();
+		notificationListeners = new CopyOnWriteArrayList<NotificationListener>();
+		disconnectListeners = new CopyOnWriteArrayList<DisconnectListener>();
 
 		byte[] _key = hexStringToByteArray(key.replaceAll("\\W", ""));
 
-		socket = new Socket(address,port);
+		socket = new Socket(address, port);
 		is = socket.getInputStream();
 		os = socket.getOutputStream();
 		socket.setSoTimeout(OMNI_TO);
 		tx = 1;
 		rx = 1;
 
-		sendBytes(new OmniPacket(PACKET_TYPE_CLIENT_REQUEST_NEW_SESSION,null));
+		sendBytes(new OmniPacket(PACKET_TYPE_CLIENT_REQUEST_NEW_SESSION, null));
 
 		OmniPacket rec = readBytes();
 
-		if(rec.type() != PACKET_TYPE_CONTROLLER_ACKNOWLEDGE_NEW_SESSION)
+		if (rec.type() != PACKET_TYPE_CONTROLLER_ACKNOWLEDGE_NEW_SESSION) {
 			throw new Exception("Controller not accepting new connections");
+		}
 
-		byte [] data = rec.data();
+		byte[] data = rec.data();
 
-		int version = (int)((data[0] << 8) + (data[1] << 0));
-		if(debug)
+		int version = (data[0] << 8) + (data[1] << 0);
+		if (debug) {
 			System.out.println("Controller version " + version);
+		}
 
-		byte [] sessionid = new byte[5];
+		byte[] sessionid = new byte[5];
 		System.arraycopy(data, 2, sessionid, 0, 5);
 
-		for (int i = 0; i < 5; i++){
+		for (int i = 0; i < 5; i++) {
 			_key[i + 11] ^= sessionid[i];
 		}
 
 		aes = new Aes(_key);
-		sendBytesEncrypted(new OmniPacket(PACKET_TYPE_CLIENT_REQUEST_SECURE_CONNECTION,sessionid));
+		sendBytesEncrypted(new OmniPacket(PACKET_TYPE_CLIENT_REQUEST_SECURE_CONNECTION, sessionid));
 
 		rec = readBytesEncrypted();
-		if(rec.type() != PACKET_TYPE_CONTROLLER_ACKNOWLEDGE_SECURE_CONNECTION)
+		if (rec.type() != PACKET_TYPE_CONTROLLER_ACKNOWLEDGE_SECURE_CONNECTION) {
 			throw new Exception("Could not establish secure connection");
+		}
 
 		data = rec.data();
 
-		for(int i=0; i<5; i++){
-			if(debug)
+		for (int i = 0; i < 5; i++) {
+			if (debug) {
 				System.out.println("Data " + i + " mine " + sessionid[i] + " controllers " + data[i]);
-			if( (int)data[i] != (int)sessionid[i]){
+			}
+			if (data[i] != sessionid[i]) {
 				throw new IOException("Controller returned wrong sessioid");
 			}
 		}
@@ -189,61 +189,66 @@ public class Connection extends Thread {
 		watchdog.start();
 	}
 
-	public void disconnect(){
+	public void disconnect() {
 		connected = false;
-		if(socket != null){
+		if (socket != null) {
 			try {
 				socket.close();
-			} catch (Exception e){ }
+			} catch (Exception e) {
+			}
 		}
 		notifications.offer(NotificationHandler.POISON);
 	}
 
-	public boolean connected(){
+	public boolean connected() {
 		return connected;
 	}
 
-	public Exception lastError(){
+	public Exception lastError() {
 		return lastException;
 	}
 
-	public boolean autoPingOmni(){
+	public boolean autoPingOmni() {
 		return ping;
 	}
 
-	public void autoPingOmni(boolean ping){
+	public void autoPingOmni(boolean ping) {
 		this.ping = ping;
 	}
 
-	public void addNotificationListener(NotificationListener listener){
-	  notificationListeners.add(listener);
+	public void addNotificationListener(NotificationListener listener) {
+		notificationListeners.add(listener);
 	}
 
-	public void removeNotificationListener(NotificationListener listener){
+	public void removeNotificationListener(NotificationListener listener) {
 		notificationListeners.remove(listener);
 	}
 
-	public void addDisconnectListener(DisconnectListener listener){
+	public void addDisconnectListener(DisconnectListener listener) {
 		disconnectListeners.add(listener);
 	}
 
-	public void removeDisconnecListener(DisconnectListener listener){
+	public void removeDisconnecListener(DisconnectListener listener) {
 		disconnectListeners.remove(listener);
 	}
 
-	public Message sendAndReceive(Message message) throws IOException, OmniNotConnectedException, OmniUnknownMessageTypeException{
+	public Message sendAndReceive(Message message)
+			throws IOException, OmniNotConnectedException, OmniUnknownMessageTypeException {
 
-		synchronized(writeLock){
-			if(!connected)
+		synchronized (writeLock) {
+			if (!connected) {
 				throw new OmniNotConnectedException(lastError());
+			}
 
 			OmniPacket ret;
-			sendBytesEncrypted(new OmniPacket(PACKET_TYPE_OMNI_LINK_MESSAGE,
-					MessageFactory.toBytes(message)));
-			synchronized(readLock){
+			sendBytesEncrypted(new OmniPacket(PACKET_TYPE_OMNI_LINK_MESSAGE, MessageFactory.toBytes(message)));
+			synchronized (readLock) {
 				//wait for notfiy when response comes in on thread
-				while(response == null && connected) {
-					try { readLock.wait();} catch (InterruptedException ignored){}
+				while (response == null && connected) {
+					try {
+						readLock.wait();
+					} catch (InterruptedException ignored) {
+					}
 				}
 				ret = response;
 				//no longer need this reference
@@ -251,12 +256,13 @@ public class Connection extends Thread {
 				//notify reader it can continue;
 				readLock.notify();
 				//if an error occurs on our other thread it saves the exception
-				if(!connected)
-				    throw new OmniNotConnectedException(lastError());
+				if (!connected) {
+					throw new OmniNotConnectedException(lastError());
+				}
 			}
-			if(ret.type() != PACKET_TYPE_OMNI_LINK_MESSAGE) {
+			if (ret.type() != PACKET_TYPE_OMNI_LINK_MESSAGE) {
 				System.out.println(bytesToString(ret.data()));
-				throw new IOException("RECEIEVD NON OMNI_LINK_MESG ("+ ( ret == null ? "NULL MESG" : ret.type() ) +")");
+				throw new IOException("RECEIEVD NON OMNI_LINK_MESG (" + (ret == null ? "NULL MESG" : ret.type()) + ")");
 			}
 
 			//used to ping after a certain amount of time
@@ -267,38 +273,37 @@ public class Connection extends Thread {
 		}
 	}
 
+	@Override
 	public void run() {
 		OmniPacket ret;
-		while(connected){
+		while (connected) {
 			synchronized (readLock) {
 				try {
-					if((ret = readBytesEncrypted2()).seq() == 0 &&
-							ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE){
+					if ((ret = readBytesEncryptedExtended()).seq() == 0
+							&& ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
 						notifications.put(MessageFactory.fromBytes(ret.data()));
-						if(debug)
+						if (debug) {
 							System.out.println("run: NOTIFICATION: Added message with type " + ret.type);
-					} else if(ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
+						}
+					} else if (ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
 						response = ret;
 						//notify calling request lock
 						readLock.notify();
 						//wait until the response is finished
-						try { readLock.wait();} catch (InterruptedException ignored){}
+						try {
+							readLock.wait();
+						} catch (InterruptedException ignored) {
+						}
 					} else {
 						throw new IOException("Non omnilink message");
 					}
-				} catch(OmniUnknownMessageTypeException e){
+				} catch (OmniUnknownMessageTypeException e) {
 					//ignored
-					if(debug){
+					if (debug) {
 						e.printStackTrace();
 						System.out.println("run: Uknown Messgage type " + e.getUnknowMessageType() + " Continuing");
 					}
-//				}catch(SocketTimeoutException e){
-//					//ignored
-//					if(debug){
-//						e.printStackTrace();
-//						System.out.println("Ignoring SocketTimeoutException, will try and send omni a ping if needed");
-//					}
-				}catch(Exception e){
+				} catch (Exception e) {
 					disconnect();
 					lastException = e;
 					//tell listeners about exception
@@ -306,69 +311,51 @@ public class Connection extends Thread {
 				} finally {
 					readLock.notifyAll();
 				}
-				//omni will kick you off in 5 minutes if they don't get a message
-//				if(ping && connected &&
-//						System.currentTimeMillis() >= PING_TO + lastTXMessageTime){
-//					if(debug){
-//						System.out.println("Pinging Server");
-//					}
-//					pingServer();
-//				}
 			}
 		}
-		if(debug)
+		if (debug) {
 			System.out.println("run: not connected, thread exiting");
+		}
 	}
 
-//	private void pingServer(){
-//		Thread p = new Thread("pingServer"){
-//			public void run(){
-//				try {
-//					reqSystemStatus();
-//				} catch (Exception e){
-//
-//				}
-//			}
-//		};
-//		p.start();
-//	}
 	/*
 	 * The following procedure is used to encrypt Omni-Link II application data:
-    1.   Process data in 128-bit (16-byte) blocks. If available data does not fill a 16-byte block, the data is
-         left-justified and padded on the right with zeros to fill the block.
-    2.   Modify the first two bytes of the 16-byte encryption block by performing a logical XOR operation with the
-         two bytes of the “message sequence number” in the HAI header (i.e., XOR the first byte of the encryption
-         block with the MSB of the message sequence number, and XOR the second byte of the encryption block
-         with the LSB of the message sequence number).
-    3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
-         negotiated when the client and controller established the secure connection.
-    4.   Process the next block of data until all data has been processed.
+	1.   Process data in 128-bit (16-byte) blocks. If available data does not fill a 16-byte block, the data is
+	     left-justified and padded on the right with zeros to fill the block.
+	2.   Modify the first two bytes of the 16-byte encryption block by performing a logical XOR operation with the
+	     two bytes of the “message sequence number” in the HAI header (i.e., XOR the first byte of the encryption
+	     block with the MSB of the message sequence number, and XOR the second byte of the encryption block
+	     with the LSB of the message sequence number).
+	3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
+	     negotiated when the client and controller established the secure connection.
+	4.   Process the next block of data until all data has been processed.
 
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
 		/* 1. */
-		if(debug)
+		if (debug) {
 			System.out.println("TX: " + bytesToString(p.data()));
+		}
 		int txlength = (p.data().length + 15) & ~0xF;
-		byte [] paddedData = new byte[txlength];
+		byte[] paddedData = new byte[txlength];
 
 		System.arraycopy(p.data(), 0, paddedData, 0, p.data().length);
-		for(int i = p.data().length; i < txlength ;i++){
+		for (int i = p.data().length; i < txlength; i++) {
 			paddedData[i] = 0x00;
 		}
 		/* 2 */
-		for (int i = 0; i < (txlength / 16); i++){
+		for (int i = 0; i < (txlength / 16); i++) {
 			paddedData[0 + (16 * i)] ^= (tx >> 8) & 0xFF;
 			paddedData[1 + (16 * i)] ^= (tx) & 0xFF;
 		}
 		/*3*/
-		byte []encData;
+		byte[] encData;
 		try {
 			encData = aes.encrypt(paddedData);
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new IOException(e.getMessage());
 		}
-		sendBytes(new OmniPacket(p.type(),encData));
+		sendBytes(new OmniPacket(p.type(), encData));
 	}
 
 	private void sendBytes(OmniPacket p) throws IOException {
@@ -377,34 +364,39 @@ public class Connection extends Thread {
 		dout.writeShort(tx);
 		dout.writeByte(p.type());
 		dout.writeByte(0);
-		if(p.data() != null)
+		if (p.data() != null) {
 			dout.write(p.data());
+		}
 		os.write(bout.toByteArray());
 		os.flush();
 		tx++;
-		if(tx >= 65535)
+		if (tx >= 65535) {
 			tx = 1;
+		}
 	}
 
 	private OmniPacket readBytesEncrypted() throws IOException, SocketTimeoutException {
 		OmniPacket p = readBytes();
-		if(debug)
+		if (debug) {
 			System.out.println("Enc Dec " + bytesToString(p.data()));
-		if(p.data().length == 0)
+		}
+		if (p.data().length == 0) {
 			return p;
-		byte [] decData = aes.decrypt(p.data());
+		}
+		byte[] decData = aes.decrypt(p.data());
 		/* XOR data */
-		for (int i = 0; i < (decData.length / 16); i++){
+		for (int i = 0; i < (decData.length / 16); i++) {
 			decData[0 + (16 * i)] ^= (p.seq >> 8) & 0xFF;
 			decData[1 + (16 * i)] ^= (p.seq) & 0xFF;
 		}
-		if(debug)
+		if (debug) {
 			System.out.println("Data Dec " + bytesToString(decData));
-		return new OmniPacket(p.seq,p.type(), decData);
+		}
+		return new OmniPacket(p.seq, p.type(), decData);
 
 	}
 
-	private OmniPacket readBytesEncrypted2() throws IOException, SocketTimeoutException{
+	private OmniPacket readBytesEncryptedExtended() throws IOException, SocketTimeoutException {
 		//Notifications have thrown a bit of a curve ball, its possible to have
 		//two packets on the wire, but because the length of the packet
 		//is encrypted we have to peek into the first 16 bytes, decrypt those
@@ -412,71 +404,78 @@ public class Connection extends Thread {
 		//unattractive,
 		DataInputStream dis = new DataInputStream(is);
 
-		if(debug)
-			if(debug)System.out.println("readBytesEncrypted2: Bytes available for reading: " + is.available());
+		if (debug) {
+			if (debug) {
+				System.out.println("readBytesEncrypted2: Bytes available for reading: " + is.available());
+			}
+		}
 
 		int seq = dis.readUnsignedShort();
 		int type = dis.readUnsignedByte();
 		int reserved = dis.readUnsignedByte();
 
-		byte [] encData = new byte [16];
+		byte[] encData = new byte[16];
 		dis.readFully(encData);
-		byte [] decData = aes.decrypt(encData);
+		byte[] decData = aes.decrypt(encData);
 
-		decData[0]^=(seq >> 8) & 0xFF;
-		decData[1]^=(seq) & 0xFF;
-
+		decData[0] ^= (seq >> 8) & 0xFF;
+		decData[1] ^= (seq) & 0xFF;
 
 		//not all messages are omnilink
-		if(type != PACKET_TYPE_OMNI_LINK_MESSAGE) {
-			if(debug){
+		if (type != PACKET_TYPE_OMNI_LINK_MESSAGE) {
+			if (debug) {
 				System.out.println("RX: " + bytesToString(decData));
 				System.out.println("NON OMNI LINK PACKET: " + type);
 			}
-			return new OmniPacket(seq,type,decData);
+			return new OmniPacket(seq, type, decData);
 		}
 
 		//continue with omnilink decoding
-		int start = (int) decData[0] & 0xFF;
-		int length = (int) decData[1] & 0xFF;
+		int start = decData[0] & 0xFF;
+		int length = decData[1] & 0xFF;
 
-		if(start != Message.MESG_START)
+		if (start != Message.MESG_START) {
 			System.out.println("invalid start char (" + start + ")");
+		}
 		//throw new IOException("invalid start char (" + start + ")");
-		if(length < 0)
+		if (length < 0) {
 			throw new IOException("invalid message length (" + length + ")");
+		}
 
-
-		if(debug)
+		if (debug) {
 			System.out.println("readBytesEncrypted2: Omni message Length " + length);
+		}
 		//length plus start and crc fields, round up to next 16, minus the bytes we have already read
-		int readLength = ((((length+3)/16)+1)*16) -16;
-		if(debug)
+		int readLength = ((((length + 3) / 16) + 1) * 16) - 16;
+		if (debug) {
 			System.out.println("readBytesEncrypted2: Additional bytes to read " + readLength);
+		}
 
-		if(readLength > 0){
+		if (readLength > 0) {
 			//buffer for existing 16 bytes of data plus any on the wire
-			byte [] decData2 = new byte[decData.length + readLength];
+			byte[] decData2 = new byte[decData.length + readLength];
 			encData = new byte[readLength];
 			//copy the data we already have from decData to decData2
-			System.arraycopy(decData, 0,decData2,0,decData.length);
+			System.arraycopy(decData, 0, decData2, 0, decData.length);
 			//read the rest
 			dis.readFully(encData);
 			//add decrypted data to the buffer
-			aes.decrypt(encData,0,readLength,decData2,decData.length);
+			aes.decrypt(encData, 0, readLength, decData2, decData.length);
 			/* XOR data */
-			for (int i = 1; i < (decData2.length / 16); i++){
+			for (int i = 1; i < (decData2.length / 16); i++) {
 				decData2[0 + (16 * i)] ^= (seq >> 8) & 0xFF;
 				decData2[1 + (16 * i)] ^= (seq) & 0xFF;
 			}
 			decData = decData2;
 		}
-		if(debug)
+		if (debug) {
 			System.out.println("RX: " + bytesToString(decData));
+		}
 
-		if(debug)
+		if (debug) {
 			System.out.println("readBytesEncrypted2: Data still available after read " + is.available());
-		return new OmniPacket(seq,type,decData);
+		}
+		return new OmniPacket(seq, type, decData);
 
 	}
 
@@ -490,251 +489,296 @@ public class Connection extends Thread {
 		int type = dis.readUnsignedByte();
 		int reserved = dis.readUnsignedByte();
 
-		byte [] msgdata = new byte [cnt -4];
+		byte[] msgdata = new byte[cnt - 4];
 		dis.readFully(msgdata);
 
-		return new OmniPacket(seq,type,msgdata);
+		return new OmniPacket(seq, type, msgdata);
 	}
 
-	public void enableNotifications() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException{
+	public void enableNotifications() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new EnableNotifications());
-		if(msg.getMessageType() != Message.MESG_TYPE_ACK)
+		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
+		}
 	}
 
-	public SystemInformation reqSystemInformation() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException{
+	public SystemInformation reqSystemInformation() throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqSystemInformation());
-		if(msg.getMessageType() != Message.MESG_TYPE_SYS_INFO)
+		if (msg.getMessageType() != Message.MESG_TYPE_SYS_INFO) {
 			throw new OmniInvalidResponseException(msg);
-		return (SystemInformation)msg;
+		}
+		return (SystemInformation) msg;
 	}
 
-	public SystemStatus reqSystemStatus() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public SystemStatus reqSystemStatus() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqSystemStatus());
-		if(msg.getMessageType() != Message.MESG_TYPE_SYS_STATUS)
+		if (msg.getMessageType() != Message.MESG_TYPE_SYS_STATUS) {
 			throw new OmniInvalidResponseException(msg);
-		return (SystemStatus)msg;
+		}
+		return (SystemStatus) msg;
 	}
 
-	public SystemTroubles reqSystemTroubles() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public SystemTroubles reqSystemTroubles() throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqSystemTroubles());
-		if(msg.getMessageType() != Message.MESG_TYPE_SYS_TROUBLES)
+		if (msg.getMessageType() != Message.MESG_TYPE_SYS_TROUBLES) {
 			throw new OmniInvalidResponseException(msg);
-		return (SystemTroubles)msg;
+		}
+		return (SystemTroubles) msg;
 	}
 
-	public SystemFeatures reqSystemFeatures() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public SystemFeatures reqSystemFeatures() throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqSystemFeatures());
-		if(msg.getMessageType() != Message.MESG_TYPE_SYS_FEATURES)
+		if (msg.getMessageType() != Message.MESG_TYPE_SYS_FEATURES) {
 			throw new OmniInvalidResponseException(msg);
-		return (SystemFeatures)msg;
+		}
+		return (SystemFeatures) msg;
 	}
 
-	public SystemFormats reqSystemFormats() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public SystemFormats reqSystemFormats() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqSystemFormats());
-		if(msg.getMessageType() != Message.MESG_TYPE_SYS_FORMATS)
+		if (msg.getMessageType() != Message.MESG_TYPE_SYS_FORMATS) {
 			throw new OmniInvalidResponseException(msg);
-		return (SystemFormats)msg;
+		}
+		return (SystemFormats) msg;
 	}
 
-	public ObjectTypeCapacities reqObjectTypeCapacities(int objectType) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public ObjectTypeCapacities reqObjectTypeCapacities(int objectType) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqObjectTypeCapacities(objectType));
-		if(msg.getMessageType() != Message.MESG_TYPE_OBJ_CAPACITY)
+		if (msg.getMessageType() != Message.MESG_TYPE_OBJ_CAPACITY) {
 			throw new OmniInvalidResponseException(msg);
-		return (ObjectTypeCapacities)msg;
+		}
+		return (ObjectTypeCapacities) msg;
 	}
 
-	public Message reqObjectProperties(int objectType, int objectNum, int direction,
-			int filter1, int filter2, int filter3) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqObjectProperties(objectType, objectNum, direction,
-				filter1, filter2, filter3));
-		if(msg.getMessageType() != Message.MESG_TYPE_OBJ_PROP && msg.getMessageType()
-				!= Message.MESG_TYPE_END_OF_DATA)
+	public Message reqObjectProperties(int objectType, int objectNum, int direction, int filter1, int filter2,
+			int filter3) throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(
+				new ReqObjectProperties(objectType, objectNum, direction, filter1, filter2, filter3));
+		if (msg.getMessageType() != Message.MESG_TYPE_OBJ_PROP
+				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
+		}
 		return msg;
 	}
 
-	public ObjectStatus reqObjectStatus(int objectType, int startObject, int endObject) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		return reqObjectStatus(objectType,startObject,endObject,false);
-	}
-	public ExtendedObjectStatus reqExtendedObjectStatus(int objectType, int startObject, int endObject) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		return (ExtendedObjectStatus)reqObjectStatus(objectType,startObject,endObject,true);
+	public ObjectStatus reqObjectStatus(int objectType, int startObject, int endObject) throws IOException,
+			OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+		return reqObjectStatus(objectType, startObject, endObject, false);
 	}
 
-	public ObjectStatus reqObjectStatus(int objectType, int startObject, int endObject, boolean extended) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Status []s = null;
+	public ExtendedObjectStatus reqExtendedObjectStatus(int objectType, int startObject, int endObject)
+			throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
+		return (ExtendedObjectStatus) reqObjectStatus(objectType, startObject, endObject, true);
+	}
+
+	public ObjectStatus reqObjectStatus(int objectType, int startObject, int endObject, boolean extended)
+			throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
+		Status[] s = null;
 		switch (objectType) {
-		case Message.OBJ_TYPE_AREA:{
+		case Message.OBJ_TYPE_AREA: {
 			s = new AreaStatus[endObject - startObject + 1];
 		}
-		break;
-		case Message.OBJ_TYPE_AUDIO_ZONE:{
+			break;
+		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			s = new AudioZoneStatus[endObject - startObject + 1];
 		}
-		break;
-		case Message.OBJ_TYPE_AUX_SENSOR:{
+			break;
+		case Message.OBJ_TYPE_AUX_SENSOR: {
 			s = new AuxSensorStatus[endObject - startObject + 1];
 		}
-		break;
-		case Message.OBJ_TYPE_EXP:{
+			break;
+		case Message.OBJ_TYPE_EXP: {
 			s = new ExpansionStatus[endObject - startObject + 1];
 		}
-		break;
-		case Message.OBJ_TYPE_MESG:{
+			break;
+		case Message.OBJ_TYPE_MESG: {
 			s = new MessageStatus[endObject - startObject + 1];
 		}
-		break;
-		case Message.OBJ_TYPE_THERMO:{
-			if(extended)
+			break;
+		case Message.OBJ_TYPE_THERMO: {
+			if (extended) {
 				s = new ExtendedThermostatStatus[endObject - startObject + 1];
-			else
+			} else {
 				s = new ThermostatStatus[endObject - startObject + 1];
+			}
 		}
-		break;
-
+			break;
 		case Message.OBJ_TYPE_UNIT: {
 			s = new UnitStatus[endObject - startObject + 1];
 		}
-		break;
+			break;
 		case Message.OBJ_TYPE_ZONE: {
 			s = new ZoneStatus[endObject - startObject + 1];
 		}
-		break;
+			break;
 		case Message.OBJ_TYPE_USER_SETTING: {
 			s = new UserSettingStatus[endObject - startObject + 1];
 		}
-		break;
+			break;
 		case Message.OBJ_TYPE_CONTROL_READER: {
 			s = new AccessControlReaderStatus[endObject - startObject + 1];
 		}
-		break;
+			break;
 		case Message.OBJ_TYPE_CONTROL_LOCK: {
 			s = new AccessControlReaderLockStatus[endObject - startObject + 1];
 		}
-		break;
+			break;
 		default:
 			break;
 		}
 		int current = startObject;
 		int next = current;
-		while(current <= endObject){
+		while (current <= endObject) {
 			next += 25;
-			if(next > endObject)
+			if (next > endObject) {
 				next = endObject;
+			}
 			Message msg = null;
-			if(extended)
-				msg = sendAndReceive(new ReqObjectStatus(objectType,current,next));
-			else
-				msg = sendAndReceive(new ReqExtenedObjectStatus(objectType,current,next));
+			if (extended) {
+				msg = sendAndReceive(new ReqObjectStatus(objectType, current, next));
+			} else {
+				msg = sendAndReceive(new ReqExtenedObjectStatus(objectType, current, next));
+			}
 
-			if(msg.getMessageType() != Message.MESG_TYPE_OBJ_STATUS &&
-					msg.getMessageType() != Message.MESG_TYPE_EXT_OBJ_STATUS)
+			if (msg.getMessageType() != Message.MESG_TYPE_OBJ_STATUS
+					&& msg.getMessageType() != Message.MESG_TYPE_EXT_OBJ_STATUS) {
 				throw new OmniInvalidResponseException(msg);
-			System.arraycopy(((ObjectStatus)msg).getStatuses(), 0, s,current - startObject, next - current + 1 );
+			}
+			System.arraycopy(((ObjectStatus) msg).getStatuses(), 0, s, current - startObject, next - current + 1);
 			current = next;
-			if(current == endObject) break;
+			if (current == endObject) {
+				break;
+			}
 			System.out.println("Current: " + current + " end " + endObject);
 		}
-		return new ObjectStatus(objectType,s);
+		return new ObjectStatus(objectType, s);
 	}
 
-	public Message reqAudioSourceStatus(int source, int position) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public Message reqAudioSourceStatus(int source, int position) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqAudioSourceStatus(source, position));
-		if(msg.getMessageType() != Message.MESG_TYPE_AUDIO_SOURCE_STATUS &&
-				msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA)
+		if (msg.getMessageType() != Message.MESG_TYPE_AUDIO_SOURCE_STATUS
+				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
+		}
 		return msg;
 	}
 
-	public ZoneReadyStatus reqZoneReadyStatus() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public ZoneReadyStatus reqZoneReadyStatus() throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqZoneReadyStatus());
-		if(msg.getMessageType() != Message.MESG_TYPE_ZONE_READY)
+		if (msg.getMessageType() != Message.MESG_TYPE_ZONE_READY) {
 			throw new OmniInvalidResponseException(msg);
-		return (ZoneReadyStatus)msg;
+		}
+		return (ZoneReadyStatus) msg;
 	}
 
-	public ConnectedSecurityStatus reqConnectedSecurityStatus() throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public ConnectedSecurityStatus reqConnectedSecurityStatus() throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(new ReqConnectedSecurityStatus());
-		if(msg.getMessageType() != Message.MESG_TYPE_CONN_SEC_STATUS)
+		if (msg.getMessageType() != Message.MESG_TYPE_CONN_SEC_STATUS) {
 			throw new OmniInvalidResponseException(msg);
-		return (ConnectedSecurityStatus)msg;
+		}
+		return (ConnectedSecurityStatus) msg;
 	}
 
-	public Message uploadEventLogData(int number, int direction) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new UploadEventRecord(number,direction));
-		if(msg.getMessageType() != Message.MESG_TYPE_EVENT_LOG_DATA &&
-				msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA)
+	public Message uploadEventLogData(int number, int direction) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new UploadEventRecord(number, direction));
+		if (msg.getMessageType() != Message.MESG_TYPE_EVENT_LOG_DATA
+				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
+		}
 		return msg;
 	}
 
-	public Message uploadNames(int objectType, int objectNumber) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new UploadNames(objectType,objectNumber));
-		if(msg.getMessageType() != Message.MESG_TYPE_NAME_DATA &&
-				msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA)
+	public Message uploadNames(int objectType, int objectNumber) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new UploadNames(objectType, objectNumber));
+		if (msg.getMessageType() != Message.MESG_TYPE_NAME_DATA
+				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
+		}
 		return msg;
 	}
 
-
-	public void downloadNames(int objectType, int objectNumber, String name) throws IOException, OmniNotConnectedException , OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new DownloadNames(objectType,objectNumber,name));
-		if(msg.getMessageType() != Message.MESG_TYPE_ACK)
+	public void downloadNames(int objectType, int objectNumber, String name) throws IOException,
+			OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new DownloadNames(objectType, objectNumber, name));
+		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
+		}
 	}
 
-	public  void connectedSecurityCommand(int command, int partition, int digit1,
-			int digit2,int digit3,int digit4,int digit5,int digit6) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ConnectedSecurityCommand(command,partition, digit1,
-				digit2,digit3,digit4,digit5,digit6));
-		if(msg.getMessageType() != Message.MESG_TYPE_ACK)
+	public void connectedSecurityCommand(int command, int partition, int digit1, int digit2, int digit3, int digit4,
+			int digit5, int digit6) throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(
+				new ConnectedSecurityCommand(command, partition, digit1, digit2, digit3, digit4, digit5, digit6));
+		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
+		}
 	}
 
-	public  void controllerCommand(int command, int p1, int p2) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new CommandMessage(command,p1,p2));
-		if(msg.getMessageType() != Message.MESG_TYPE_ACK)
+	public void controllerCommand(int command, int p1, int p2) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new CommandMessage(command, p1, p2));
+		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
+		}
 	}
 
-	public  void setTimeCommand(int year, int month, int day, int dayOfWeek,
-			int hour, int minute, boolean daylightSavings) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new SetTimeCommand(year, month, day, dayOfWeek,
-				hour, minute, daylightSavings));
-		if(msg.getMessageType() != Message.MESG_TYPE_ACK)
+	public void setTimeCommand(int year, int month, int day, int dayOfWeek, int hour, int minute,
+			boolean daylightSavings) throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new SetTimeCommand(year, month, day, dayOfWeek, hour, minute, daylightSavings));
+		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
+		}
 	}
 
-	public  void activateKeypadEmergency(int area,int emergencyType) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ActivateKeypadEmergency(area,emergencyType));
-		if(msg.getMessageType() != Message.MESG_TYPE_ACK)
+	public void activateKeypadEmergency(int area, int emergencyType) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new ActivateKeypadEmergency(area, emergencyType));
+		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
+		}
 	}
 
-	public SecurityCodeValidation reqSecurityCodeValidation(int area, int digit1,
-			int digit2,int digit3,int digit4) throws IOException, OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSecurityCodeValidation(area, digit1,
-				digit2,digit3,digit4));
-		if(msg.getMessageType() != Message.MESG_TYPE_SEC_CODE_VALID)
+	public SecurityCodeValidation reqSecurityCodeValidation(int area, int digit1, int digit2, int digit3, int digit4)
+			throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
+			OmniUnknownMessageTypeException {
+		Message msg = sendAndReceive(new ReqSecurityCodeValidation(area, digit1, digit2, digit3, digit4));
+		if (msg.getMessageType() != Message.MESG_TYPE_SEC_CODE_VALID) {
 			throw new OmniInvalidResponseException(msg);
-		return (SecurityCodeValidation)msg;
+		}
+		return (SecurityCodeValidation) msg;
 	}
 
 	private static byte[] hexStringToByteArray(String s) {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-					+ Character.digit(s.charAt(i+1), 16));
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
 		}
 		return data;
 	}
 
-	private String bytesToString(byte[] bytes){
+	private String bytesToString(byte[] bytes) {
 		StringBuffer buff = new StringBuffer();
-		for(int i=0;i<bytes.length;i++){
+		for (int i = 0; i < bytes.length; i++) {
 			buff.append("0x");
-			buff.append(Integer.toString( ( bytes[i] & 0xff ) + 0x100, 16).substring( 1 ));
+			buff.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
 			buff.append(" ");
 		}
 		return buff.toString();
@@ -743,7 +787,7 @@ public class Connection extends Thread {
 	private class OmniPacket {
 		private int seq;
 		private int type;
-		private byte [] data;
+		private byte[] data;
 
 		public OmniPacket(int seq, int type, byte[] data) {
 			this.seq = seq;
@@ -756,42 +800,53 @@ public class Connection extends Thread {
 			this.data = data;
 		}
 
-		public int seq(){return seq;}
-		public int type(){return type;}
-		public byte[] data(){return data;}
+		public int seq() {
+			return seq;
+		}
+
+		public int type() {
+			return type;
+		}
+
+		public byte[] data() {
+			return data;
+		}
 	}
 
-	private void notifyDisconnectHandlers(Exception e){
+	private void notifyDisconnectHandlers(Exception e) {
 		for (DisconnectListener l : disconnectListeners) {
 			l.notConnectedEvent(e);
 		}
 	}
 
 	private class ConnectionWatchdog extends Thread {
-		public void run(){
+		@Override
+		public void run() {
 			this.setName("ConnectionWatchdog");
-			while(connected){
-				if(ping &&
-						System.currentTimeMillis() >= PING_TO + lastTXMessageTime){
-					if(debug){
+			while (connected) {
+				if (ping && System.currentTimeMillis() >= PING_TO + lastTXMessageTime) {
+					if (debug) {
 						System.out.println("Pinging Server");
 					}
 					try {
-					reqSystemStatus();
-					} catch(Exception ignored){};
+						reqSystemStatus();
+					} catch (Exception ignored) {
+					}
+					;
 				}
 				try {
 					sleep(1000);
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+				}
 			}
 		}
 	}
 
-	private static class NotificationHandler implements Runnable{
+	private static class NotificationHandler implements Runnable {
 
-		public static final Message POISON = new Message(){
+		public static final Message POISON = new Message() {
 			@Override
-			public int getMessageType(){
+			public int getMessageType() {
 				return 0;
 			}
 		};
@@ -800,28 +855,28 @@ public class Connection extends Thread {
 		private final List<NotificationListener> listeners;
 		private boolean alive = true;
 
-		private NotificationHandler(BlockingQueue<Message> notifications, List<NotificationListener> listeners){
+		private NotificationHandler(BlockingQueue<Message> notifications, List<NotificationListener> listeners) {
 			this.notifications = notifications;
 			this.listeners = listeners;
 		}
 
-		public void run(){
-			while(alive){
-				try{
+		@Override
+		public void run() {
+			while (alive) {
+				try {
 					Message message = notifications.take();
-					if( message == POISON ){
+					if (message == POISON) {
 						alive = false;
-					}
-					else{
+					} else {
 						for (NotificationListener listener : listeners) {
-							if(message instanceof ObjectStatus){
-								listener.objectStausNotification((ObjectStatus)message);
+							if (message instanceof ObjectStatus) {
+								listener.objectStausNotification((ObjectStatus) message);
 							} else {
-								listener.otherEventNotification((OtherEventNotifications)message);
+								listener.otherEventNotification((OtherEventNotifications) message);
 							}
 						}
 					}
-				}catch(Throwable t){
+				} catch (Throwable t) {
 					//Catch all exceptions to prevent notification thread from dying.
 					System.out.println("Notifcation Handler Caught Exception: " + t.getMessage());
 					t.printStackTrace();
@@ -829,5 +884,4 @@ public class Connection extends Thread {
 			}
 		}
 	}
-
 }

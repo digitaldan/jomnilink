@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -25,28 +25,28 @@ public class SystemFormats implements Message {
 	private int tempFormat;
 	private int timeformat;
 	private int dateFormat;
-	
+
 	/*
 	 * This message is sent by the HAI controller in reply to a REQUEST SYSTEM FORMATS message. The controller
-reports the configured temperature format, time format, and date format.
-          Start character           0x21
-          Message length            0x04
-          Message type              0x29
-          Data 1                    temperature format (1-2)
-          Data 2                    time format (1-2)
-          Data 3                    date format (1-2)
-          CRC 1                     varies
-          CRC 2                     varies
-    The temperature format byte is shown below.
-          1=F
-          2=C
-    The time format byte is shown below.
-          1 = 12 HR
-          2 = 24 HR
-    The date format byte is shown below.
-          1 = MMDD
-          2 = DDMM
-
+	reports the configured temperature format, time format, and date format.
+	      Start character           0x21
+	      Message length            0x04
+	      Message type              0x29
+	      Data 1                    temperature format (1-2)
+	      Data 2                    time format (1-2)
+	      Data 3                    date format (1-2)
+	      CRC 1                     varies
+	      CRC 2                     varies
+	The temperature format byte is shown below.
+	      1=F
+	      2=C
+	The time format byte is shown below.
+	      1 = 12 HR
+	      2 = 24 HR
+	The date format byte is shown below.
+	      1 = MMDD
+	      2 = DDMM
+	
 	 */
 	public SystemFormats(int tempFormat, int timeformat, int dateFormat) {
 		super();
@@ -66,21 +66,21 @@ reports the configured temperature format, time format, and date format.
 	public int getDateFormat() {
 		return dateFormat;
 	}
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_FORMATS;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "SystemFormats ( "
-	        + "tempFormat = " + this.tempFormat + TAB
-	        + "timeformat = " + this.timeformat + TAB
-	        + "dateFormat = " + this.dateFormat + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "SystemFormats ( " + "tempFormat = " + this.tempFormat + TAB + "timeformat = " + this.timeformat
+				+ TAB + "dateFormat = " + this.dateFormat + TAB + " )";
+
+		return retValue;
 	}
 
 }

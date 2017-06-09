@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -23,22 +23,21 @@ import com.digitaldan.jomnilinkII.Message;
 public class ObjectTypeCapacities implements Message {
 	private int objectType;
 	private int capacity;
-	
-	
+
 	/*
 	 * This message is sent by the HAI controller in reply to a REQUEST OBJECT TYPE CAPACITIES message. The
-HAI controller reports the number of objects of the specified type that the controller supports.
-        Start Character            0x21
-        Message Length             0x04
-        Message Type               0x1F
-        Data 1                     capacity type
-        Data 2                     capacity (MSB)
-        Data 3                     capacity (LSB)
-        CRC 1                      varies
-        CRC 2                      varies
-
-	 */
+	HAI controller reports the number of objects of the specified type that the controller supports.
+	    Start Character            0x21
+	    Message Length             0x04
+	    Message Type               0x1F
+	    Data 1                     capacity type
+	    Data 2                     capacity (MSB)
+	    Data 3                     capacity (LSB)
+	    CRC 1                      varies
+	    CRC 2                      varies
 	
+	 */
+
 	public ObjectTypeCapacities(int objectType, int capacity) {
 		super();
 		this.objectType = objectType;
@@ -52,22 +51,21 @@ HAI controller reports the number of objects of the specified type that the cont
 	public int getCapacity() {
 		return capacity;
 	}
-	
 
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_OBJ_CAPACITY;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ObjectTypeCapacities ( "
-	        + "objectType = " + this.objectType + TAB
-	        + "capacity = " + this.capacity + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ObjectTypeCapacities ( " + "objectType = " + this.objectType + TAB + "capacity = " + this.capacity
+				+ TAB + " )";
+
+		return retValue;
 	}
 
 }

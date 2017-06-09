@@ -1,9 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
-
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -21,29 +20,30 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
 
-public class OtherEventNotifications implements Message{
-	
+public class OtherEventNotifications implements Message {
+
 	private int[] notifications;
-	public OtherEventNotifications(int[] notifications){
+
+	public OtherEventNotifications(int[] notifications) {
 		this.notifications = notifications;
 	}
-	
-	public int[] getNotifications(){
+
+	public int[] getNotifications() {
 		return notifications;
 	}
-	
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_OTHER_EVENT_NOTIFY;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "OtherEventNotifications ( "
-	    	  + "notifications = " + this.notifications + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "OtherEventNotifications ( " + "notifications = " + this.notifications + TAB + " )";
+
+		return retValue;
 	}
 }

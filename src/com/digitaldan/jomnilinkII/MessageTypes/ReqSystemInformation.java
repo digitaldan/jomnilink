@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -24,29 +24,31 @@ public class ReqSystemInformation implements Message {
 
 	/*
 	 *This message requests the HAI controller to report its model number, software version, and local phone number.
-        Start character           0x21
-        Message length            0x01
-        Message type              0x16
-        Data                      none
-        CRC 1                     0x80
-        CRC 2                     0x5E
-        Expected reply            SYSTEM INFORMATION
- 
-	 */
+	    Start character           0x21
+	    Message length            0x01
+	    Message type              0x16
+	    Data                      none
+	    CRC 1                     0x80
+	    CRC 2                     0x5E
+	    Expected reply            SYSTEM INFORMATION
 	
+	 */
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_INFO;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqSystemInformation ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ReqSystemInformation ( "
+
+				+ " )";
+
+		return retValue;
 	}
 
 }

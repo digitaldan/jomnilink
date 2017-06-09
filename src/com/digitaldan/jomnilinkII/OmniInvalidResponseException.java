@@ -3,7 +3,7 @@ package com.digitaldan.jomnilinkII;
 public class OmniInvalidResponseException extends Exception {
 
 	private Message response;
-	
+
 	public OmniInvalidResponseException(Message response) {
 		super();
 		this.response = response;
@@ -12,8 +12,8 @@ public class OmniInvalidResponseException extends Exception {
 	public OmniInvalidResponseException(String message) {
 		super(message);
 	}
-	
-	public Message getInvalidResponse(){
+
+	public Message getInvalidResponse() {
 		return response;
 	}
 

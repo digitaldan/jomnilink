@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -24,29 +24,31 @@ public class ReqSystemFeatures implements Message {
 
 	/*
 	 * This message requests the HAI controller to report its enabled features.
-        Start character           0x21
-        Message length            0x01
-        Message type              0x1C
-        Data                      none
-        CRC 1                     0x00
-        CRC 2                     0x59
-        Expected reply:           SYSTEM FEATURES
-
-	 * 
-	 */
+	    Start character           0x21
+	    Message length            0x01
+	    Message type              0x1C
+	    Data                      none
+	    CRC 1                     0x00
+	    CRC 2                     0x59
+	    Expected reply:           SYSTEM FEATURES
 	
+	 *
+	 */
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_FEATURES;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqSystemFeatures ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ReqSystemFeatures ( "
+
+				+ " )";
+
+		return retValue;
 	}
 }

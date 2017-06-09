@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -22,32 +22,32 @@ import com.digitaldan.jomnilinkII.Message;
 
 public class SystemTroubles implements Message {
 
-	private int [] troubles;
-	
+	private int[] troubles;
+
 	/*
 	 *This message is sent by the HAI controller in reply to a REQUEST SYSTEM TROUBLES message. The controller
-reports any system troubles. If multiple troubles exist, each trouble is reported in a separate data byte.
-         Start character            0x21
-         Message length             number of troubles + 1
-         Message type               0x1B
-         Data 1                     first trouble
-         ...
-         Data n                     last trouble
-         CRC 1                      varies
-         CRC 2                      varies
-The system trouble conditions are shown below.
- Trouble Byte            Condition
-        1         Freeze
-        2         Battery low
-        3         AC power
-        4         Phone line
-        5         Digital communicator
-        6         Fuse
-        7         Freeze
-        8         Battery low
- 
-	 */
+	reports any system troubles. If multiple troubles exist, each trouble is reported in a separate data byte.
+	     Start character            0x21
+	     Message length             number of troubles + 1
+	     Message type               0x1B
+	     Data 1                     first trouble
+	     ...
+	     Data n                     last trouble
+	     CRC 1                      varies
+	     CRC 2                      varies
+	The system trouble conditions are shown below.
+	Trouble Byte            Condition
+	    1         Freeze
+	    2         Battery low
+	    3         AC power
+	    4         Phone line
+	    5         Digital communicator
+	    6         Fuse
+	    7         Freeze
+	    8         Battery low
 	
+	 */
+
 	public SystemTroubles(int[] troubles) {
 		super();
 		this.troubles = troubles;
@@ -56,20 +56,20 @@ The system trouble conditions are shown below.
 	public int[] getTroubles() {
 		return troubles;
 	}
-	
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_TROUBLES;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "SystemTroubles ( "
-	        + "troubles = " + this.troubles + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "SystemTroubles ( " + "troubles = " + this.troubles + TAB + " )";
+
+		return retValue;
 	}
 
 }

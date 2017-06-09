@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -22,53 +22,54 @@ import com.digitaldan.jomnilinkII.Message;
 
 public class EnableNotifications implements Message {
 
-	
 	/*
 	 *ENABLE NOTIFICATIONS 
- 
-The ENABLE NOTIFICATIONS message requests the HAI controller to send event notifications as they occur.  If 
-the ENABLE NOTIFICATIONS feature is disabled, the HAI controller will not send event data. 
- 
- Start character  0x21 
- Message length  0x02 
- Message type  0x15 
- Data 1   enable byte (0=disable, 1=enable) 
- CRC 1   varies 
- CRC 2   varies 
- 
-Expected reply   ACKNOWLEDGE 
-
-NOTE notifiations that come back have a SEQ of 00
-
+	
+	The ENABLE NOTIFICATIONS message requests the HAI controller to send event notifications as they occur.  If 
+	the ENABLE NOTIFICATIONS feature is disabled, the HAI controller will not send event data. 
+	
+	Start character  0x21 
+	Message length  0x02 
+	Message type  0x15 
+	Data 1   enable byte (0=disable, 1=enable) 
+	CRC 1   varies 
+	CRC 2   varies 
+	
+	Expected reply   ACKNOWLEDGE 
+	
+	NOTE notifiations that come back have a SEQ of 00
+	
 	 */
 	private boolean enabled;
-	
-	public EnableNotifications(){
+
+	public EnableNotifications() {
 		super();
 		enabled = true;
 	}
-	
-	public EnableNotifications(boolean enabled){
+
+	public EnableNotifications(boolean enabled) {
 		super();
 	}
-	
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ENABLE_NOTIFICATIONS;
 	}
 
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return enabled;
 	}
-	
+
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "EnableNotifications ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "EnableNotifications ( "
+
+				+ " )";
+
+		return retValue;
 	}
 
 }

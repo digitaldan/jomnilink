@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -24,30 +24,32 @@ public class ReqZoneReadyStatus implements Message {
 
 	/*
 	 *This message is used to report the secure/not ready status of security zones. Any burglary or 24 hour zone that is
-not in the secure state will be reported as not ready. Auxiliary and temperature zones are always reported as secure.
-          Start character             0x21
-          Message length              0x01
-          Message type                0x38
-          Data                        none
-          CRC 1                       0x00
-          CRC 2                       0x42
-          Expected reply:             ZONE READY STATUS
-
-	 */
+	not in the secure state will be reported as not ready. Auxiliary and temperature zones are always reported as secure.
+	      Start character             0x21
+	      Message length              0x01
+	      Message type                0x38
+	      Data                        none
+	      CRC 1                       0x00
+	      CRC 2                       0x42
+	      Expected reply:             ZONE READY STATUS
 	
+	 */
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_ZONE_READY;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ReqZoneReadyStatus ( "
-	
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ReqZoneReadyStatus ( "
+
+				+ " )";
+
+		return retValue;
 	}
-	
+
 }

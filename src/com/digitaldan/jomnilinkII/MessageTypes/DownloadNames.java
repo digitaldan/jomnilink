@@ -7,7 +7,7 @@ public class DownloadNames implements Message {
 	private int objectType;
 	private int objectNumber;
 	private String name;
-	
+
 	public DownloadNames(int objectType, int objectNumber, String name) {
 		super();
 		this.objectType = objectType;
@@ -15,6 +15,7 @@ public class DownloadNames implements Message {
 		this.name = name;
 	}
 
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_DOWNLOAD_NAMES;
 	}

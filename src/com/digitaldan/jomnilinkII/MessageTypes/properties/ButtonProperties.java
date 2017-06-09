@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -23,18 +23,16 @@ import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 public class ButtonProperties extends ObjectProperties {
 
 	public ButtonProperties(int number, String name) {
-		super(OBJ_TYPE_BUTTON, number,name);
+		super(OBJ_TYPE_BUTTON, number, name);
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "ButtonProperties ( "
-	    	+ "number = " + this.number + TAB
-	        + "name = " + this.name + TAB
-	        + " )";
-	
-	    return retValue;
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "ButtonProperties ( " + "number = " + this.number + TAB + "name = " + this.name + TAB + " )";
+
+		return retValue;
 	}
 }

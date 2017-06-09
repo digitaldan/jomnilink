@@ -1,8 +1,8 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 /**
-*  Copyright (C) 2009  Dan Cunningham                                         
-*                                                                             
+*  Copyright (C) 2009  Dan Cunningham
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, version 2
@@ -18,27 +18,27 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
 import com.digitaldan.jomnilinkII.Message;
 
-public class EndOfData implements Message{
-	
-	public EndOfData(){
-	}
-	
+public class EndOfData implements Message {
 
+	public EndOfData() {
+	}
+
+	@Override
 	public int getMessageType() {
 		return MESG_TYPE_END_OF_DATA;
 	}
 
+	@Override
 	public String toString() {
-	    final String TAB = "    ";
-	    String retValue = "";
-	    
-	    retValue = "EndOfData ( "
-	
-	        + " )";
-	
-	    return retValue;
-	}	
+		final String TAB = "    ";
+		String retValue = "";
+
+		retValue = "EndOfData ( "
+
+				+ " )";
+
+		return retValue;
+	}
 }
