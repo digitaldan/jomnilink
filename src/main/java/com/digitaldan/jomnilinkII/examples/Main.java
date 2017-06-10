@@ -1,5 +1,8 @@
 package com.digitaldan.jomnilinkII.examples;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.digitaldan.jomnilinkII.Connection;
 import com.digitaldan.jomnilinkII.DisconnectListener;
 import com.digitaldan.jomnilinkII.Message;
@@ -31,10 +34,12 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
 
 public class Main {
 
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
 	public static void main(String[] args) {
 		try {
 			if (args.length != 3) {
-				System.out.println("Usage:com.digitaldan.jomnilinkII.Main  host port encKey");
+				logger.info("Usage:com.digitaldan.jomnilinkII.Main  host port encKey");
 				System.exit(-1);
 			}
 			String host = args[0];
@@ -48,41 +53,41 @@ public class Main {
 				public void objectStausNotification(ObjectStatus s) {
 					switch (s.getStatusType()) {
 					case Message.OBJ_TYPE_AREA:
-						System.out.println("STATUS_AREA changed");
+						logger.info("STATUS_AREA changed");
 						break;
 					case Message.OBJ_TYPE_AUDIO_ZONE:
-						System.out.println("STATUS_AUDIO_ZONE changed");
+						logger.info("STATUS_AUDIO_ZONE changed");
 						break;
 					case Message.OBJ_TYPE_AUX_SENSOR:
-						System.out.println("STATUS_AUX changed");
+						logger.info("STATUS_AUX changed");
 						break;
 					case Message.OBJ_TYPE_EXP:
-						System.out.println("STATUS_EXP changed");
+						logger.info("STATUS_EXP changed");
 						break;
 					case Message.OBJ_TYPE_MESG:
-						System.out.println("STATUS_MESG changed");
+						logger.info("STATUS_MESG changed");
 						break;
 					case Message.OBJ_TYPE_THERMO:
-						System.out.println("STATUS_THERMO changed");
+						logger.info("STATUS_THERMO changed");
 						break;
 					case Message.OBJ_TYPE_UNIT:
-						System.out.println("STATUS_UNIT changed");
+						logger.info("STATUS_UNIT changed");
 						break;
 					case Message.OBJ_TYPE_ZONE:
-						System.out.println("STATUS_ZONE changed");
+						logger.info("STATUS_ZONE changed");
 						break;
 					default:
-						System.out.println("Unknown type " + s.getStatusType());
+						logger.info("Unknown type " + s.getStatusType());
 						break;
 					}
-					System.out.println(s.toString());
+					logger.info(s.toString());
 				}
 
 				@Override
 				public void otherEventNotification(OtherEventNotifications o) {
-					System.out.println("Other Event");
+					logger.info("Other Event");
 					for (int k = 0; k < o.getNotifications().length; k++) {
-						System.out.println("Event bits " + MessageUtils.getBits(o.getNotifications()[k]));
+						logger.info("Event bits {}", MessageUtils.getBits(o.getNotifications()[k]));
 					}
 				}
 			});
@@ -96,11 +101,11 @@ public class Main {
 			});
 			//			c.debug = true;
 			c.enableNotifications();
-			System.out.println(c.reqSystemInformation().toString());
-			System.out.println(c.reqSystemStatus().toString());
-			System.out.println(c.reqSystemTroubles().toString());
-			System.out.println(c.reqSystemFormats().toString());
-			System.out.println(c.reqSystemFeatures().toString());
+			logger.info(c.reqSystemInformation().toString());
+			logger.info(c.reqSystemStatus().toString());
+			logger.info(c.reqSystemTroubles().toString());
+			logger.info(c.reqSystemFormats().toString());
+			logger.info(c.reqSystemFeatures().toString());
 			int max_zones = c.reqObjectTypeCapacities(Message.OBJ_TYPE_ZONE).getCapacity();
 			int max_units = c.reqObjectTypeCapacities(Message.OBJ_TYPE_UNIT).getCapacity();
 			int max_areas = c.reqObjectTypeCapacities(Message.OBJ_TYPE_AREA).getCapacity();
@@ -112,101 +117,101 @@ public class Main {
 			int max_audio_sources = c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_SOURCE).getCapacity();
 
 			//Aux sensors returns error, They are considered zones by HAI
-			// System.out.println(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUX_SENSOR).toString());
-			System.out.println(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_SOURCE).toString());
-			System.out.println(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_ZONE).toString());
+			// logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUX_SENSOR).toString());
+			logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_SOURCE).toString());
+			logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_ZONE).toString());
 
 			int objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_ZONE, objnum, 1, ObjectProperties.FILTER_1_NAMED,
 					ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_ANY_LOAD))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_AREA, objnum, 1, ObjectProperties.FILTER_1_NAMED_UNAMED,
 					ObjectProperties.FILTER_2_NONE, ObjectProperties.FILTER_3_NONE))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_UNIT, objnum, 1, ObjectProperties.FILTER_1_NAMED,
 					ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_ANY_LOAD))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_BUTTON, objnum, 1, ObjectProperties.FILTER_1_NAMED,
 					ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_NONE))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_CODE, objnum, 1, ObjectProperties.FILTER_1_NAMED,
 					ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_NONE))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_THERMO, objnum, 1, ObjectProperties.FILTER_1_NAMED,
 					ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_NONE))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_AUX_SENSOR, objnum, 1, ObjectProperties.FILTER_1_NAMED,
 					ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_NONE))
 							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-				System.out.println(m.toString());
+				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 
 			ObjectStatus status = c.reqObjectStatus(Message.OBJ_TYPE_UNIT, 1, max_units);
 			UnitStatus[] units = (UnitStatus[]) status.getStatuses();
 			for (int i = 0; i < units.length; i++) {
-				System.out.println(units[i].toString());
+				logger.info(units[i].toString());
 			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_ZONE, 1, max_zones);
 			ZoneStatus[] zones = (ZoneStatus[]) status.getStatuses();
 			for (int i = 0; i < zones.length; i++) {
-				System.out.println(zones[i].toString());
+				logger.info(zones[i].toString());
 			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_AREA, 1, max_areas);
 			AreaStatus[] areas = (AreaStatus[]) status.getStatuses();
 			for (int i = 0; i < areas.length; i++) {
-				System.out.println(areas[i].toString());
+				logger.info(areas[i].toString());
 			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_THERMO, 1, 9);
 			ThermostatStatus[] thermos = (ThermostatStatus[]) status.getStatuses();
 			for (int i = 0; i < thermos.length; i++) {
-				System.out.println(thermos[i].toString());
+				logger.info(thermos[i].toString());
 			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_MESG, 1, max_mesgs);
 			MessageStatus[] megs = (MessageStatus[]) status.getStatuses();
 			for (int i = 0; i < megs.length; i++) {
-				System.out.println(megs[i].toString());
+				logger.info(megs[i].toString());
 			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_AUX_SENSOR, 1, max_zones);
 			AuxSensorStatus[] auxs = (AuxSensorStatus[]) status.getStatuses();
 			for (int i = 0; i < auxs.length; i++) {
-				System.out.println(auxs[i].toString());
+				logger.info(auxs[i].toString());
 			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_AUDIO_ZONE, 1, max_audio_zones);
 			AudioZoneStatus[] audiozs = (AudioZoneStatus[]) status.getStatuses();
 			for (int i = 0; i < audiozs.length; i++) {
-				System.out.println(audiozs[i].toString());
+				logger.info(audiozs[i].toString());
 			}
 			for (int as = 1; as < max_audio_sources; as++) {
 				int pos = 0;
 				while ((m = c.reqAudioSourceStatus(as, pos))
 						.getMessageType() == Message.MESG_TYPE_AUDIO_SOURCE_STATUS) {
 					AudioSourceStatus a = (AudioSourceStatus) m;
-					System.out.println(a.toString());
+					logger.info(a.toString());
 					pos = a.getPosition();
 				}
 			}
@@ -215,23 +220,21 @@ public class Main {
 			while ((m = c.uploadEventLogData(num, 1)).getMessageType() == Message.MESG_TYPE_EVENT_LOG_DATA
 					&& count < 10) {
 				EventLogData e = (EventLogData) m;
-				System.out.println(e.toString());
+				logger.info(e.toString());
 				num = e.getEventNumber();
 				count++;
 			}
 
-			System.out.println(c.uploadNames(Message.OBJ_TYPE_UNIT, 0).toString());
-			System.out.println(c.reqSecurityCodeValidation(1, 1, 2, 3, 4).toString());
+			logger.info(c.uploadNames(Message.OBJ_TYPE_UNIT, 0).toString());
+			logger.info(c.reqSecurityCodeValidation(1, 1, 2, 3, 4).toString());
 
-			System.out.println("All Done, OmniConnection thread now running");
+			logger.info("All Done, OmniConnection thread now running");
 
 		} catch (OmniInvalidResponseException e) {
-			e.printStackTrace();
-			System.out.println("Message:" + e.getInvalidResponse().getMessageType());
+			logger.error("Invalid Response", e);
 			System.exit(-1);
 		} catch (OmniNotConnectedException e) {
-			e.printStackTrace();
-			System.out.println("Message:" + e.getNotConnectedReason());
+			logger.error("Error connecting", e);
 			System.exit(-1);
 		} catch (Exception e) {
 			e.printStackTrace();

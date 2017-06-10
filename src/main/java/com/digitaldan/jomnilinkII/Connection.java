@@ -33,6 +33,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.digitaldan.jomnilinkII.MessageTypes.ActivateKeypadEmergency;
 import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
 import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityCommand;
@@ -81,6 +84,8 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.UserSettingStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
 
 public class Connection extends Thread {
+	private static final Logger logger = LoggerFactory.getLogger(Connection.class);
+
 	private static int PACKET_TYPE_CLIENT_REQUEST_NEW_SESSION = 1;
 	private static int PACKET_TYPE_CONTROLLER_ACKNOWLEDGE_NEW_SESSION = 2;
 	private static int PACKET_TYPE_CLIENT_REQUEST_SECURE_CONNECTION = 3;
@@ -145,9 +150,8 @@ public class Connection extends Thread {
 		byte[] data = rec.data();
 
 		int version = (data[0] << 8) + (data[1] << 0);
-		if (debug) {
-			System.out.println("Controller version " + version);
-		}
+
+		logger.debug("Controller version {}", version);
 
 		byte[] sessionid = new byte[5];
 		System.arraycopy(data, 2, sessionid, 0, 5);
@@ -167,9 +171,7 @@ public class Connection extends Thread {
 		data = rec.data();
 
 		for (int i = 0; i < 5; i++) {
-			if (debug) {
-				System.out.println("Data " + i + " mine " + sessionid[i] + " controllers " + data[i]);
-			}
+			logger.trace("Data {} mine {} controllers {}" + data[i], i, sessionid[i], data[i]);
 			if (data[i] != sessionid[i]) {
 				throw new IOException("Controller returned wrong sessioid");
 			}
@@ -261,7 +263,7 @@ public class Connection extends Thread {
 				}
 			}
 			if (ret.type() != PACKET_TYPE_OMNI_LINK_MESSAGE) {
-				System.out.println(bytesToString(ret.data()));
+				logger.trace("Invalid bytes {}", bytesToString(ret.data()));
 				throw new IOException("RECEIEVD NON OMNI_LINK_MESG (" + (ret == null ? "NULL MESG" : ret.type()) + ")");
 			}
 
@@ -282,9 +284,7 @@ public class Connection extends Thread {
 					if ((ret = readBytesEncryptedExtended()).seq() == 0
 							&& ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
 						notifications.put(MessageFactory.fromBytes(ret.data()));
-						if (debug) {
-							System.out.println("run: NOTIFICATION: Added message with type " + ret.type);
-						}
+						logger.debug("run: NOTIFICATION: Added message with type {}", ret.type);
 					} else if (ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
 						response = ret;
 						//notify calling request lock
@@ -298,11 +298,8 @@ public class Connection extends Thread {
 						throw new IOException("Non omnilink message");
 					}
 				} catch (OmniUnknownMessageTypeException e) {
-					//ignored
-					if (debug) {
-						e.printStackTrace();
-						System.out.println("run: Uknown Messgage type " + e.getUnknowMessageType() + " Continuing");
-					}
+					//ignore
+					logger.debug("run: Uknown Messgage type {}  Continuing", e.getUnknowMessageType());
 				} catch (Exception e) {
 					disconnect();
 					lastException = e;
@@ -313,9 +310,7 @@ public class Connection extends Thread {
 				}
 			}
 		}
-		if (debug) {
-			System.out.println("run: not connected, thread exiting");
-		}
+		logger.debug("run: not connected, thread exiting");
 	}
 
 	/*
@@ -329,13 +324,11 @@ public class Connection extends Thread {
 	3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
 	     negotiated when the client and controller established the secure connection.
 	4.   Process the next block of data until all data has been processed.
-
+	
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
 		/* 1. */
-		if (debug) {
-			System.out.println("TX: " + bytesToString(p.data()));
-		}
+		logger.trace("TX: {}", bytesToString(p.data()));
 		int txlength = (p.data().length + 15) & ~0xF;
 		byte[] paddedData = new byte[txlength];
 
@@ -377,9 +370,7 @@ public class Connection extends Thread {
 
 	private OmniPacket readBytesEncrypted() throws IOException, SocketTimeoutException {
 		OmniPacket p = readBytes();
-		if (debug) {
-			System.out.println("Enc Dec " + bytesToString(p.data()));
-		}
+		logger.trace("Enc Dec " + bytesToString(p.data()));
 		if (p.data().length == 0) {
 			return p;
 		}
@@ -389,9 +380,7 @@ public class Connection extends Thread {
 			decData[0 + (16 * i)] ^= (p.seq >> 8) & 0xFF;
 			decData[1 + (16 * i)] ^= (p.seq) & 0xFF;
 		}
-		if (debug) {
-			System.out.println("Data Dec " + bytesToString(decData));
-		}
+		logger.trace("Data Dec {}", bytesToString(decData));
 		return new OmniPacket(p.seq, p.type(), decData);
 
 	}
@@ -403,13 +392,7 @@ public class Connection extends Thread {
 		//bytes and get the length, this makes the following code tricky and
 		//unattractive,
 		DataInputStream dis = new DataInputStream(is);
-
-		if (debug) {
-			if (debug) {
-				System.out.println("readBytesEncrypted2: Bytes available for reading: " + is.available());
-			}
-		}
-
+		logger.trace("readBytesEncryptedExtended: Bytes available for reading: {}", is.available());
 		int seq = dis.readUnsignedShort();
 		int type = dis.readUnsignedByte();
 		int reserved = dis.readUnsignedByte();
@@ -423,10 +406,7 @@ public class Connection extends Thread {
 
 		//not all messages are omnilink
 		if (type != PACKET_TYPE_OMNI_LINK_MESSAGE) {
-			if (debug) {
-				System.out.println("RX: " + bytesToString(decData));
-				System.out.println("NON OMNI LINK PACKET: " + type);
-			}
+			logger.trace("NON OMNI LINK PACKET: {} RX Bytes: {}", type, bytesToString(decData));
 			return new OmniPacket(seq, type, decData);
 		}
 
@@ -435,21 +415,19 @@ public class Connection extends Thread {
 		int length = decData[1] & 0xFF;
 
 		if (start != Message.MESG_START) {
-			System.out.println("invalid start char (" + start + ")");
+			logger.debug("invalid start char ({})", start);
 		}
 		//throw new IOException("invalid start char (" + start + ")");
 		if (length < 0) {
 			throw new IOException("invalid message length (" + length + ")");
 		}
 
-		if (debug) {
-			System.out.println("readBytesEncrypted2: Omni message Length " + length);
-		}
+		logger.trace("Omni message Length {}", length);
+
 		//length plus start and crc fields, round up to next 16, minus the bytes we have already read
 		int readLength = ((((length + 3) / 16) + 1) * 16) - 16;
-		if (debug) {
-			System.out.println("readBytesEncrypted2: Additional bytes to read " + readLength);
-		}
+
+		logger.trace("Additional bytes to read {}", readLength);
 
 		if (readLength > 0) {
 			//buffer for existing 16 bytes of data plus any on the wire
@@ -468,13 +446,9 @@ public class Connection extends Thread {
 			}
 			decData = decData2;
 		}
-		if (debug) {
-			System.out.println("RX: " + bytesToString(decData));
-		}
 
-		if (debug) {
-			System.out.println("readBytesEncrypted2: Data still available after read " + is.available());
-		}
+		logger.trace("RX: {} Data still available after read {}", bytesToString(decData), is.available());
+
 		return new OmniPacket(seq, type, decData);
 
 	}
@@ -659,7 +633,7 @@ public class Connection extends Thread {
 			if (current == endObject) {
 				break;
 			}
-			System.out.println("Current: " + current + " end " + endObject);
+			logger.trace("Current: {}  end: {} ", current, endObject);
 		}
 		return new ObjectStatus(objectType, s);
 	}
@@ -825,9 +799,7 @@ public class Connection extends Thread {
 			this.setName("ConnectionWatchdog");
 			while (connected) {
 				if (ping && System.currentTimeMillis() >= PING_TO + lastTXMessageTime) {
-					if (debug) {
-						System.out.println("Pinging Server");
-					}
+					logger.debug("Pinging Server");
 					try {
 						reqSystemStatus();
 					} catch (Exception ignored) {
@@ -878,7 +850,7 @@ public class Connection extends Thread {
 					}
 				} catch (Throwable t) {
 					//Catch all exceptions to prevent notification thread from dying.
-					System.out.println("Notifcation Handler Caught Exception: " + t.getMessage());
+					logger.error("Notifcation Handler Caught Exception", t);
 					t.printStackTrace();
 				}
 			}
