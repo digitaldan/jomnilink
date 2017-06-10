@@ -23,14 +23,12 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.Status;
 
 public class ExtendedObjectStatus extends ObjectStatus implements Message {
 
-	//private int statusType;
 	private int recordLength;
-	//private Status[] statuses;
 
 	/*
 	 *
 	OBJECT STATUS
-
+	
 	This message is sent by the HAI controller in reply to an OBJECT STATUS message.  The HAI controller reports
 	the status for the specified object(s).
 	 */
@@ -42,34 +40,10 @@ public class ExtendedObjectStatus extends ObjectStatus implements Message {
 
 	public ExtendedObjectStatus(int statusType, int recordLength, Status[] statuses) {
 		super(statusType, statuses);
-		//this.statusType = statusType;
 		this.recordLength = recordLength;
-		//this.statuses = statuses;
 	}
-
-	//	public int getStatusType() {
-	//		return statusType;
-	//	}
 
 	public int getRecordLength() {
 		return recordLength;
 	}
-
-	//	public Status[] getStatuses() {
-	//		return statuses;
-	//	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ObjectStatus ( "
-				//	        + "statusType = " + this.statusType + TAB
-				//	        + "statuses = " + this.statuses + TAB
-				+ " )";
-
-		return retValue;
-	}
-
 }

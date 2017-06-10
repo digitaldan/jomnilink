@@ -19,7 +19,6 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.AreaStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AudioZoneStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AuxSensorStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.MessageStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
 
@@ -186,11 +185,11 @@ public class Main {
 			for (int i = 0; i < areas.length; i++) {
 				logger.info(areas[i].toString());
 			}
-			status = c.reqObjectStatus(Message.OBJ_TYPE_THERMO, 1, 9);
-			ThermostatStatus[] thermos = (ThermostatStatus[]) status.getStatuses();
-			for (int i = 0; i < thermos.length; i++) {
-				logger.info(thermos[i].toString());
-			}
+			//			status = c.reqObjectStatus(Message.OBJ_TYPE_THERMO, 1, 9);
+			//			ThermostatStatus[] thermos = (ThermostatStatus[]) status.getStatuses();
+			//			for (int i = 0; i < thermos.length; i++) {
+			//				logger.info(thermos[i].toString());
+			//			}
 			status = c.reqObjectStatus(Message.OBJ_TYPE_MESG, 1, max_mesgs);
 			MessageStatus[] megs = (MessageStatus[]) status.getStatuses();
 			for (int i = 0; i < megs.length; i++) {
