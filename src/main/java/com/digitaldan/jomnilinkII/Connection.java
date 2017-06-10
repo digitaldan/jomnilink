@@ -125,7 +125,6 @@ public class Connection extends Thread {
 		notifications = new LinkedBlockingQueue<>();
 		response = null;
 		lastException = null;
-		//Neither of these should be modified very often - good fit for COW
 		notificationListeners = new CopyOnWriteArrayList<NotificationListener>();
 		disconnectListeners = new CopyOnWriteArrayList<DisconnectListener>();
 
@@ -261,7 +260,7 @@ public class Connection extends Thread {
 				}
 			}
 			if (ret.type() != PACKET_TYPE_OMNI_LINK_MESSAGE) {
-				logger.trace("Invalid bytes {}", bytesToString(ret.data()));
+				logger.debug("Invalid reply {}", bytesToString(ret.data()));
 				throw new IOException("RECEIEVD NON OMNI_LINK_MESG (" + (ret == null ? "NULL MESG" : ret.type()) + ")");
 			}
 
@@ -390,7 +389,7 @@ public class Connection extends Thread {
 		//bytes and get the length, this makes the following code tricky and
 		//unattractive,
 		DataInputStream dis = new DataInputStream(is);
-		logger.trace("readBytesEncryptedExtended: Bytes available for reading: {}", is.available());
+		logger.trace("Bytes available for reading: {}", is.available());
 		int seq = dis.readUnsignedShort();
 		int type = dis.readUnsignedByte();
 		int reserved = dis.readUnsignedByte();
