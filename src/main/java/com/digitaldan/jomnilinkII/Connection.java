@@ -121,7 +121,6 @@ public class Connection extends Thread {
 	private ConnectionWatchdog watchdog;
 
 	public Connection(String address, int port, String key) throws Exception, IOException, UnknownHostException {
-
 		ping = true;
 		notifications = new LinkedBlockingQueue<>();
 		response = null;
@@ -140,7 +139,6 @@ public class Connection extends Thread {
 		rx = 1;
 
 		sendBytes(new OmniPacket(PACKET_TYPE_CLIENT_REQUEST_NEW_SESSION, null));
-
 		OmniPacket rec = readBytes();
 
 		if (rec.type() != PACKET_TYPE_CONTROLLER_ACKNOWLEDGE_NEW_SESSION) {
@@ -324,7 +322,7 @@ public class Connection extends Thread {
 	3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
 	     negotiated when the client and controller established the secure connection.
 	4.   Process the next block of data until all data has been processed.
-	
+
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
 		/* 1. */
@@ -619,9 +617,9 @@ public class Connection extends Thread {
 			}
 			Message msg = null;
 			if (extended) {
-				msg = sendAndReceive(new ReqObjectStatus(objectType, current, next));
-			} else {
 				msg = sendAndReceive(new ReqExtenedObjectStatus(objectType, current, next));
+			} else {
+				msg = sendAndReceive(new ReqObjectStatus(objectType, current, next));
 			}
 
 			if (msg.getMessageType() != Message.MESG_TYPE_OBJ_STATUS
