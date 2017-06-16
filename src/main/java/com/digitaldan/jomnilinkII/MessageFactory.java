@@ -402,14 +402,14 @@ public class MessageFactory {
 				for (int i = 0; i < status.length; i++) {
 					status[i] = new ThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
 							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readBoolean(), in.readBoolean());
+							in.readUnsignedByte(), in.readUnsignedByte());
 				}
 			} else {
 				status = new ExtendedThermostatStatus[(length - 1) / 14];
 				for (int i = 0; i < status.length; i++) {
 					status[i] = new ExtendedThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
 							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readBoolean(), in.readBoolean(), in.readUnsignedByte(), in.readUnsignedByte(),
+							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
 							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte());
 				}
 			}
@@ -539,8 +539,8 @@ public class MessageFactory {
 			int heatSetpoint = in.readUnsignedByte();
 			int coolSetpoint = in.readUnsignedByte();
 			int mode = in.readUnsignedByte();
-			boolean fan = in.readBoolean();
-			boolean hold = in.readBoolean();
+			int fan = in.readUnsignedByte();
+			int hold = in.readUnsignedByte();
 			int thermostatType = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);

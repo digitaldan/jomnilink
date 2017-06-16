@@ -25,8 +25,8 @@ public class ThermostatStatus extends Status {
 	private int heatSetpotint;
 	private int coolSetpoint;
 	private int mode;
-	private boolean fan;
-	private boolean hold;
+	private int fan;
+	private int hold;
 
 	/*
 	 *THERMOSTAT STATUS
@@ -73,7 +73,7 @@ public class ThermostatStatus extends Status {
 	     Bit 0                       Communications failure
 	     Bit 1                       Freeze alarm
 	The temperatures are reported in the Omni temperature format (see Appendix C).
-	
+
 	The system mode is as follows:
 	     0                           Off
 	     1                           Heat
@@ -84,11 +84,11 @@ public class ThermostatStatus extends Status {
 	     0                           Auto
 	     1                           On
 	The hold status is non-zero if the thermostat is in hold mode.
-	
+
 	 */
 
 	public ThermostatStatus(int number, int status, int temp, int heatSetpotint, int coolSetpoint, int systemMode,
-			boolean fan, boolean hold) {
+			int fan, int hold) {
 		super(number);
 		this.status = status;
 		this.temperature = temp;
@@ -119,11 +119,11 @@ public class ThermostatStatus extends Status {
 		return mode;
 	}
 
-	public boolean isFan() {
+	public int getFan() {
 		return fan;
 	}
 
-	public boolean isHold() {
+	public int getHold() {
 		return hold;
 	}
 
@@ -147,11 +147,11 @@ public class ThermostatStatus extends Status {
 		this.mode = mode;
 	}
 
-	public void setFan(boolean fan) {
+	public void setFan(int fan) {
 		this.fan = fan;
 	}
 
-	public void setHold(boolean hold) {
+	public void setHold(int hold) {
 		this.hold = hold;
 	}
 
