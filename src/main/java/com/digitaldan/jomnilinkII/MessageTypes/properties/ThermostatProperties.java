@@ -65,7 +65,7 @@ public class ThermostatProperties extends ObjectProperties {
 		return mode;
 	}
 
-	public int getFant() {
+	public int getFan() {
 		return fan;
 	}
 
