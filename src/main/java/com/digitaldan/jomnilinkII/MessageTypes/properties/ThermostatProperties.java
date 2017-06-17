@@ -28,12 +28,12 @@ public class ThermostatProperties extends ObjectProperties {
 	private int heatSetpoint;
 	private int coolSetpoint;
 	private int mode;
-	private boolean fan;
-	private boolean hold;
+	private int fan;
+	private int hold;
 	private int thermostatType;
 
 	public ThermostatProperties(int number, int status, int temperature, int heatSetpoint, int coolSetpoint, int mode,
-			boolean fan, boolean hold, int thermostatType, String name) {
+			int fan, int hold, int thermostatType, String name) {
 		super(OBJ_TYPE_THERMO, number, name);
 		this.status = status;
 		this.temperature = temperature;
@@ -65,11 +65,11 @@ public class ThermostatProperties extends ObjectProperties {
 		return mode;
 	}
 
-	public boolean isFan() {
+	public int getFan() {
 		return fan;
 	}
 
-	public boolean isHold() {
+	public int getHold() {
 		return hold;
 	}
 
@@ -97,11 +97,11 @@ public class ThermostatProperties extends ObjectProperties {
 		this.mode = mode;
 	}
 
-	public void setFan(boolean fan) {
+	public void setFan(int fan) {
 		this.fan = fan;
 	}
 
-	public void setHold(boolean hold) {
+	public void setHold(int hold) {
 		this.hold = hold;
 	}
 
@@ -115,8 +115,8 @@ public class ThermostatProperties extends ObjectProperties {
 		setMode(thermoStatus.getMode());
 		setStatus(thermoStatus.getStatus());
 		setTemperature(thermoStatus.getTemperature());
-		setHold(thermoStatus.isHold());
-		setFan(thermoStatus.isFan());
+		setHold(thermoStatus.getHold());
+		setFan(thermoStatus.getFan());
 	}
 
 	@Override
