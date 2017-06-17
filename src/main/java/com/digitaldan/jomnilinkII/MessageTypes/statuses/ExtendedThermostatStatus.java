@@ -9,7 +9,7 @@ public class ExtendedThermostatStatus extends ThermostatStatus {
 	private int extendedStatus;
 
 	public ExtendedThermostatStatus(int number, int status, int temp, int heatSetpotint, int coolSetpoint,
-			int systemMode, boolean fan, boolean hold, int humidity, int humiditySetpoint, int dehumiditySetpoint,
+			int systemMode, int fan, int hold, int humidity, int humiditySetpoint, int dehumiditySetpoint,
 			int outdoorTemp, int extendedStatus) {
 		super(number, status, temp, heatSetpotint, coolSetpoint, systemMode, fan, hold);
 		this.humidity = humidity;
@@ -68,7 +68,7 @@ public class ExtendedThermostatStatus extends ThermostatStatus {
 		retValue = "ThermostatStatus ( " + "number = " + this.number + TAB + "status = " + this.getStatus() + TAB
 				+ "temperature = " + this.getTemperature() + TAB + "heatSetpotint = " + this.getHeatSetpotint() + TAB
 				+ "coolSetpoint = " + this.getCoolSetpoint() + TAB + "systemMode = " + this.getMode() + TAB
-				+ "fanMode = " + this.isFan() + TAB + "holdStatus = " + this.isHold() + TAB + "humidity = "
+				+ "fanMode = " + this.getFan() + TAB + "holdStatus = " + this.getHold() + TAB + "humidity = "
 				+ this.humidity + TAB + "humiditySetpoint = " + this.humiditySetpoint + TAB + "dehumiditySetpoint = "
 				+ this.dehumiditySetpoint + TAB + "outdoorTemp = " + this.outdoorTemp + TAB + "extendedStatus = "
 				+ this.extendedStatus + TAB + " )";
