@@ -78,6 +78,7 @@ public interface Message {
 	public static int OBJ_TYPE_AUDIO_SOURCE = 0x09;
 	public static int OBJ_TYPE_AUDIO_ZONE = 0x0A;
 	public static int OBJ_TYPE_EXP = 0x0B;
+	public static int OBJ_TYPE_CONSOLE = 0x0C;
 	public static int OBJ_TYPE_USER_SETTING = 0x0D;
 	public static int OBJ_TYPE_CONTROL_READER = 0x0E;
 	public static int OBJ_TYPE_CONTROL_LOCK = 0x0F;
