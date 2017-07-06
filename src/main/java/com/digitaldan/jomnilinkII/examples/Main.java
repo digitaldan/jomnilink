@@ -50,7 +50,7 @@ public class Main {
 			c.debug = true;
 			c.addNotificationListener(new NotificationListener() {
 				@Override
-				public void objectStausNotification(ObjectStatus s) {
+				public void objectStatusNotification(ObjectStatus s) {
 					switch (s.getStatusType()) {
 					case Message.OBJ_TYPE_AREA:
 						logger.info("STATUS_AREA changed");

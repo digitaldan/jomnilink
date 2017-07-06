@@ -839,7 +839,7 @@ public class Connection extends Thread {
 					} else {
 						for (NotificationListener listener : listeners) {
 							if (message instanceof ObjectStatus) {
-								listener.objectStausNotification((ObjectStatus) message);
+								listener.objectStatusNotification((ObjectStatus) message);
 							} else {
 								listener.otherEventNotification((OtherEventNotifications) message);
 							}
@@ -847,7 +847,7 @@ public class Connection extends Thread {
 					}
 				} catch (Throwable t) {
 					//Catch all exceptions to prevent notification thread from dying.
-					logger.error("Notifcation Handler Caught Exception", t);
+					logger.error("Notification Handler Caught Exception", t);
 					t.printStackTrace();
 				}
 			}
