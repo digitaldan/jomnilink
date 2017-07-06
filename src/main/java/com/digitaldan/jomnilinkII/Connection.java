@@ -840,8 +840,10 @@ public class Connection extends Thread {
 						for (NotificationListener listener : listeners) {
 							if (message instanceof ObjectStatus) {
 								listener.objectStatusNotification((ObjectStatus) message);
-							} else {
+							} else if (message instanceof OtherEventNotifications){
 								listener.otherEventNotification((OtherEventNotifications) message);
+							} else{
+								logger.debug("Unhandled notficiation message: {}", message);
 							}
 						}
 					}
