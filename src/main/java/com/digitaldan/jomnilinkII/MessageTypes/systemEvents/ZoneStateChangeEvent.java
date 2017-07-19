@@ -20,6 +20,10 @@ public class ZoneStateChangeEvent extends SystemEvent {
 		return event >> 9 & 0x01;
 	}
 
+	public boolean isOn() {
+		return getZoneState() > 0;
+	}
+
 	public int getZoneNumber() {
 		//511 = 0x1FF = 111111111
 		return event & 0x1FF;

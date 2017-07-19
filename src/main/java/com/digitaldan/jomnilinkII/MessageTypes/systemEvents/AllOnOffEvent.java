@@ -16,8 +16,12 @@ public class AllOnOffEvent extends SystemEvent {
 		super(event, SystemEventType.ALL_ON_OFF);
 	}
 
+	public int getAllOnOffState() {
+		return event >> 4 & 0x01;
+	}
+
 	public boolean isOn() {
-		return (event >> 4 & 0x01) == 1;
+		return getAllOnOffState() > 0;
 	}
 
 	public int getArea() {
