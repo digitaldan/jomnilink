@@ -2,9 +2,7 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Value;
-import lombok.experimental.PackagePrivate;
 
 /**
 *  Copyright (C) 2009  Dan Cunningham
