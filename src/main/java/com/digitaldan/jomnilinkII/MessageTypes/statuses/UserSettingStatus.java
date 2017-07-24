@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,10 +23,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class UserSettingStatus extends Status {
 
-	private int settingType;
-	private int settingValue;
+	private final int settingType;
+	private final int settingValue;
 
 	/*
 	 *USER SETTING STATUS (Requires Firmware Version 3.0 or Later)
@@ -52,36 +60,10 @@ public class UserSettingStatus extends Status {
 	      CRC 2                      varies
 	
 	 */
-	public UserSettingStatus(int number, int settingType, int settingValue) {
+	@Builder
+	private UserSettingStatus(int number, int settingType, int settingValue) {
 		super(number);
 		this.settingType = settingType;
 		this.settingValue = settingValue;
-	}
-
-	public int getSettingType() {
-		return settingType;
-	}
-
-	public int getSettingValue() {
-		return settingValue;
-	}
-
-	public void setSettingType(int settingType) {
-		this.settingType = settingType;
-	}
-
-	public void setSettingValue(int settingValue) {
-		this.settingValue = settingValue;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "UnitStatus ( " + "number = " + this.number + TAB + "settingType = " + this.settingType + TAB
-				+ "settingValue = " + this.settingValue + TAB + " )";
-
-		return retValue;
 	}
 }

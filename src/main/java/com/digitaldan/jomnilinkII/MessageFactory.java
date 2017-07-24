@@ -377,14 +377,22 @@ public class MessageFactory {
 		case Message.OBJ_TYPE_ZONE: {
 			status = new ZoneStatus[(length - 1) / 4];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new ZoneStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = ZoneStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.loop(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_UNIT: {
 			status = new UnitStatus[(length - 1) / 5];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new UnitStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedShort());
+				status[i] = UnitStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.time(in.readUnsignedShort())
+							.build();
 			}
 		}
 			break;
@@ -404,17 +412,35 @@ public class MessageFactory {
 			if (!extended) {
 				status = new ThermostatStatus[(length - 1) / 9];
 				for (int i = 0; i < status.length; i++) {
-					status[i] = new ThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte());
+					status[i] =
+							ThermostatStatus.builder()
+							.number(in.readUnsignedShort() )
+							.status(in.readUnsignedByte())
+							.temperature(in.readUnsignedByte() )
+							.heatSetpoint(in.readUnsignedByte() )
+							.coolSetpoint(in.readUnsignedByte() )
+							.mode(in.readUnsignedByte())
+							.fan(in.readUnsignedByte() )
+							.hold(in.readUnsignedByte())
+							.build();
 				}
 			} else {
 				status = new ExtendedThermostatStatus[(length - 1) / 14];
 				for (int i = 0; i < status.length; i++) {
-					status[i] = new ExtendedThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte());
+					status[i] = ExtendedThermostatStatus.builder()
+								.number(in.readUnsignedShort())
+								.status( in.readUnsignedByte())
+								.temperature(in.readUnsignedByte())
+								.heatSetpoint(in.readUnsignedByte())
+								.coolSetpoint(in.readUnsignedByte())
+								.mode(in.readUnsignedByte())
+								.fan(in.readUnsignedByte())
+								.humidity(in.readUnsignedByte())
+								.humiditySetpoint(in.readUnsignedByte())
+								.dehumidifySetpoint(in.readUnsignedByte())
+								.outdoorTemp(in.readUnsignedByte())
+								.extendedStatus(in.readUnsignedByte())
+								.build();
 				}
 			}
 		}
@@ -422,53 +448,81 @@ public class MessageFactory {
 		case Message.OBJ_TYPE_MESG: {
 			status = new MessageStatus[(length - 1) / 3];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new MessageStatus(in.readUnsignedShort(), in.readUnsignedByte());
+				status[i] = MessageStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_AUX_SENSOR: {
 			status = new AuxSensorStatus[(length - 1) / 6];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AuxSensorStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte(),
-						in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = AuxSensorStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.temp(in.readUnsignedByte())
+							.heatSetpoint(in.readUnsignedByte())
+							.coolSetpoint(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			status = new AudioZoneStatus[(length - 1) / 6];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AudioZoneStatus(in.readUnsignedShort(), in.readBoolean(), in.readUnsignedByte(),
-						in.readUnsignedByte(), in.readBoolean());
+				status[i] = AudioZoneStatus.builder()
+							.number(in.readUnsignedShort())
+							.power(in.readBoolean())
+							.source(in.readUnsignedByte())
+							.volume(in.readUnsignedByte())
+							.mute(in.readBoolean())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_EXP: {
 			status = new ExpansionStatus[(length - 1) / 4];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new ExpansionStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = ExpansionStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.battery(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_USER_SETTING: {
 			status = new UserSettingStatus[(length - 1) / 4];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new UserSettingStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = UserSettingStatus.builder()
+							.number(in.readUnsignedShort())
+							.settingType(in.readUnsignedByte())
+							.settingValue(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_CONTROL_READER: {
 			status = new AccessControlReaderStatus[(length - 1) / 5];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AccessControlReaderStatus(in.readUnsignedShort(), in.readBoolean(),
-						in.readUnsignedShort());
+				status[i] = AccessControlReaderStatus.builder()
+							.number(in.readUnsignedShort())
+							.granted(in.readBoolean())
+							.lastUser(in.readUnsignedShort())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_CONTROL_LOCK: {
 			status = new AccessControlReaderLockStatus[(length - 1) / 5];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AccessControlReaderLockStatus(in.readUnsignedShort(), in.readBoolean(),
-						in.readUnsignedShort());
+				status[i] = AccessControlReaderLockStatus.builder()
+                        .number(in.readUnsignedShort())
+                        .locked(in.readBoolean())
+                        .timer(in.readUnsignedShort())
+                        .build();
+
 			}
 		}
 			break;

@@ -2,6 +2,7 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -24,21 +25,13 @@ import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AreaStatus extends Status {
 
 	private final int mode;
 	private final int alarms;
 	private final int entryTimer;
 	private final int exitTimer;
-
-	@Builder(toBuilder = true)
-	private AreaStatus(int number, int mode, int alarms, int entryTimer, int exitTimer){
-		super(number);
-		this.mode = mode;
-		this.alarms = alarms;
-		this.entryTimer = entryTimer;
-		this.exitTimer = exitTimer;
-	}
 
 
 	/*
@@ -117,7 +110,14 @@ public class AreaStatus extends Status {
 	      7                          Temperature alarm
 	                        
 	 */
-
+	@Builder
+	private AreaStatus(int number, int mode, int alarms, int entryTimer, int exitTimer){
+		super(number);
+		this.mode = mode;
+		this.alarms = alarms;
+		this.entryTimer = entryTimer;
+		this.exitTimer = exitTimer;
+	}
 
 
 }

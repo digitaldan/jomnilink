@@ -111,7 +111,7 @@ public class ThermostatProperties extends ObjectProperties {
 
 	public void updateThermostat(ThermostatStatus thermoStatus) {
 		setCoolSetpoint(thermoStatus.getCoolSetpoint());
-		setHeatSetpoint(thermoStatus.getHeatSetpotint());
+		setHeatSetpoint(thermoStatus.getHeatSetpoint());
 		setMode(thermoStatus.getMode());
 		setStatus(thermoStatus.getStatus());
 		setTemperature(thermoStatus.getTemperature());

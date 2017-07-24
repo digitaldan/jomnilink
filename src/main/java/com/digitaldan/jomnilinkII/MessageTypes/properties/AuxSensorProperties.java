@@ -81,7 +81,7 @@ public class AuxSensorProperties extends ObjectProperties {
 
 	public void updateAuxSensor(AuxSensorStatus auxStatus) {
 		setLowSetpoint(auxStatus.getCoolSetpoint());
-		setHighSetpoint(auxStatus.getHeatSetpotint());
+		setHighSetpoint(auxStatus.getHeatSetpoint());
 		setStatus(auxStatus.getStatus());
 		setCurrent(auxStatus.getTemp());
 	}

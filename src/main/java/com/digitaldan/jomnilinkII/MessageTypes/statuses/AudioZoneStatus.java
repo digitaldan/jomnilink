@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,12 +23,15 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AudioZoneStatus extends Status {
 
-	private boolean power;
-	private int source;
-	private int volume;
-	private boolean mute;
+	private final boolean power;
+	private final int source;
+	private final int volume;
+	private final boolean mute;
 
 	/*
 	 *AUDIO ZONE STATUS
@@ -57,7 +65,8 @@ public class AudioZoneStatus extends Status {
 	     CRC 1                     varies
 	     CRC 2                     varies
 	 */
-	public AudioZoneStatus(int number, boolean power, int source, int volume, boolean mute) {
+	@Builder
+	private AudioZoneStatus(int number, boolean power, int source, int volume, boolean mute) {
 		super(number);
 		this.power = power;
 		this.source = source;
@@ -65,46 +74,5 @@ public class AudioZoneStatus extends Status {
 		this.mute = mute;
 	}
 
-	public boolean isPower() {
-		return power;
-	}
 
-	public int getSource() {
-		return source;
-	}
-
-	public int getVolume() {
-		return volume;
-	}
-
-	public boolean isMute() {
-		return mute;
-	}
-
-	public void setPower(boolean power) {
-		this.power = power;
-	}
-
-	public void setSource(int source) {
-		this.source = source;
-	}
-
-	public void setVolume(int volume) {
-		this.volume = volume;
-	}
-
-	public void setMute(boolean mute) {
-		this.mute = mute;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "AudioZoneStatus ( " + "number = " + this.number + TAB + "power = " + this.power + TAB + "source = "
-				+ this.source + TAB + "volume = " + this.volume + TAB + "mute = " + this.mute + TAB + " )";
-
-		return retValue;
-	}
 }
