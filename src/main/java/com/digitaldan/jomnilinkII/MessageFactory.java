@@ -391,8 +391,12 @@ public class MessageFactory {
 		case Message.OBJ_TYPE_AREA: {
 			status = new AreaStatus[(length - 1) / 6];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AreaStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte(),
-						in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = AreaStatus.builder()
+						.number(in.readUnsignedShort())
+						.mode(in.readUnsignedByte())
+						.alarms(in.readUnsignedByte())
+						.entryTimer(in.readUnsignedByte())
+						.exitTimer(in.readUnsignedByte()).build();
 			}
 		}
 			break;
