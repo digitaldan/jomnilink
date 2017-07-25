@@ -19,20 +19,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 */
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
+import lombok.Builder;
 
 public class ButtonProperties extends ObjectProperties {
 
-	public ButtonProperties(int number, String name) {
+	@Builder
+	private ButtonProperties(int number, String name) {
 		super(OBJ_TYPE_BUTTON, number, name);
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ButtonProperties ( " + "number = " + this.number + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
-	}
 }

@@ -558,7 +558,15 @@ public class MessageFactory {
 			int options = in.readUnsignedByte();
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new ZoneProperties(number, status, loop, type, area, options, name);
+			return ZoneProperties.builder()
+					.number(number)
+					.status(status)
+					.loop(loop)
+					.zoneType(type)
+					.area(area)
+					.options(options)
+					.name(name)
+                    .build();
 		}
 		case Message.OBJ_TYPE_UNIT: {
 			int state = in.readUnsignedByte();
@@ -566,17 +574,23 @@ public class MessageFactory {
 			int type = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new UnitProperties(number, state, time, type, name);
+			return UnitProperties.builder()
+					.number(number)
+					.state(state)
+					.time(time)
+					.unitType(type)
+					.name(name)
+					.build();
 		}
 		case Message.OBJ_TYPE_BUTTON: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new ButtonProperties(number, name);
+			return ButtonProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_CODE: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new CodeProperties(number, name);
+			return CodeProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_AREA: {
 			int mode = in.readUnsignedByte();
@@ -588,8 +602,17 @@ public class MessageFactory {
 			int entryDelay = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AreaProperties(number, mode, alarms, entryTimer, exitTimer, enabled, exitDelay, entryDelay,
-					name);
+			return AreaProperties.builder()
+					.number(number)
+					.mode(mode)
+					.alarms(alarms)
+					.entryTimer(entryTimer)
+					.exitTimer(exitTimer)
+					.enabled(enabled)
+					.exitDelay(exitDelay)
+					.entryDelay(entryDelay)
+					.name(name)
+					.build();
 		}
 		case Message.OBJ_TYPE_THERMO: {
 			int status = in.readUnsignedByte();
@@ -602,13 +625,21 @@ public class MessageFactory {
 			int thermostatType = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new ThermostatProperties(number, status, temperature, heatSetpoint, coolSetpoint, mode, fan, hold,
-					thermostatType, name);
+			return ThermostatProperties.builder()
+					.number(number)
+					.status(status)
+					.temperature(temperature)
+					.heatSetpoint(heatSetpoint)
+					.coolSetpoint(coolSetpoint)
+					.mode(mode)
+					.fan(fan)
+					.hold(hold)
+                    .build();
 		}
 		case Message.OBJ_TYPE_MESG: {
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new MessageProperties(number, name);
+			return MessageProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_AUX_SENSOR: {
 			int status = in.readUnsignedByte();
@@ -618,12 +649,20 @@ public class MessageFactory {
 			int sensorType = in.readUnsignedByte();
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new AuxSensorProperties(number, status, current, lowSetpoint, highSetpoint, sensorType, name);
+			return AuxSensorProperties.builder()
+					.number(number)
+					.status(status)
+					.current(current)
+					.lowSetpoint(lowSetpoint)
+					.highSetpoint(highSetpoint)
+					.sensorType(sensorType)
+					.name(name)
+					.build();
 		}
 		case Message.OBJ_TYPE_AUDIO_SOURCE: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AudioSourceProperties(number, name);
+			return AudioSourceProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			boolean on = in.readBoolean();
@@ -632,7 +671,14 @@ public class MessageFactory {
 			boolean mute = in.readBoolean();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AudioZoneProperties(number, on, source, volume, mute, name);
+			return AudioZoneProperties.builder()
+					.number(number)
+					.on(on)
+					.source(source)
+					.volume(volume)
+					.mute(mute)
+					.name(name)
+					.build();
 		}
 		default:
 			throw new IOException("Unknown property type " + objectType);

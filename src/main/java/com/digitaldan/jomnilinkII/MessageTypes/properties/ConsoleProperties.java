@@ -19,20 +19,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 */
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
+import lombok.Builder;
 
 public class ConsoleProperties extends ObjectProperties {
 
-	public ConsoleProperties(int number, String name) {
+	@Builder
+	private ConsoleProperties(int number, String name) {
 		super(OBJ_TYPE_CONSOLE, number, name);
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ConsoleProperties ( " + "number = " + this.number + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
-	}
 }

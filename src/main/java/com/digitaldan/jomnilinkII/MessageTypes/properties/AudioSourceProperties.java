@@ -19,20 +19,12 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 */
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
+import lombok.Builder;
 
 public class AudioSourceProperties extends ObjectProperties {
 
-	public AudioSourceProperties(int number, String name) {
+	@Builder
+	private AudioSourceProperties(int number, String name) {
 		super(OBJ_TYPE_AUDIO_SOURCE, number, name);
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "AudioSourceProperties ( " + "number = " + this.number + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
 	}
 }
