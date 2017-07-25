@@ -19,7 +19,12 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@AllArgsConstructor
 public class EnableNotifications implements Message {
 
 	/*
@@ -40,36 +45,11 @@ public class EnableNotifications implements Message {
 	NOTE notifiations that come back have a SEQ of 00
 	
 	 */
-	private boolean enabled;
-
-	public EnableNotifications() {
-		super();
-		enabled = true;
-	}
-
-	public EnableNotifications(boolean enabled) {
-		super();
-	}
+	private final boolean enabled;
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ENABLE_NOTIFICATIONS;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "EnableNotifications ( "
-
-				+ " )";
-
-		return retValue;
 	}
 
 }

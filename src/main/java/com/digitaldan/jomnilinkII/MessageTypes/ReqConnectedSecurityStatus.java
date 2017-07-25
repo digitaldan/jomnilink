@@ -19,8 +19,23 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqConnectedSecurityStatus implements Message {
+
+
+	private static ReqConnectedSecurityStatus INSTANCE = new ReqConnectedSecurityStatus();
+
+	private ReqConnectedSecurityStatus() {
+	}
+
+	public static ReqConnectedSecurityStatus getInstance() {
+		return INSTANCE;
+	}
+
+
+
 	/*
 	 *This message is used to report the mode and status of each partition in a security system connected to a Lumina or
 	Lumina Pro controller.
@@ -37,18 +52,6 @@ public class ReqConnectedSecurityStatus implements Message {
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_CONN_SEC_STATUS;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqConnectedSecurityStatus ( "
-
-				+ " )";
-
-		return retValue;
 	}
 
 }

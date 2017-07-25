@@ -19,31 +19,20 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.*;
 
+import java.util.List;
+
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OtherEventNotifications implements Message {
 
-	private int[] notifications;
-
-	public OtherEventNotifications(int[] notifications) {
-		this.notifications = notifications;
-	}
-
-	public int[] getNotifications() {
-		return notifications;
-	}
+	@Singular private final List<Integer> notifications;
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_OTHER_EVENT_NOTIFY;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "OtherEventNotifications ( " + "notifications = " + this.notifications + TAB + " )";
-
-		return retValue;
-	}
 }

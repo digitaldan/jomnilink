@@ -19,10 +19,17 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.*;
 
+import java.util.List;
+
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemTroubles implements Message {
 
-	private int[] troubles;
+	@Singular
+	private final List<Integer> troubles;
 
 	/*
 	 *This message is sent by the HAI controller in reply to a REQUEST SYSTEM TROUBLES message. The controller
@@ -48,28 +55,9 @@ public class SystemTroubles implements Message {
 	
 	 */
 
-	public SystemTroubles(int[] troubles) {
-		super();
-		this.troubles = troubles;
-	}
-
-	public int[] getTroubles() {
-		return troubles;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_TROUBLES;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "SystemTroubles ( " + "troubles = " + this.troubles + TAB + " )";
-
-		return retValue;
 	}
 
 }

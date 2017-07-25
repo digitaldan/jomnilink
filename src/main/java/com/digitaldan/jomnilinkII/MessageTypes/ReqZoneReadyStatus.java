@@ -19,8 +19,20 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqZoneReadyStatus implements Message {
+	private static ReqZoneReadyStatus INSTANCE = new ReqZoneReadyStatus();
+
+	private ReqZoneReadyStatus() {
+	}
+
+	public static ReqZoneReadyStatus getInstance() {
+		return INSTANCE;
+	}
+
+
 
 	/*
 	 *This message is used to report the secure/not ready status of security zones. Any burglary or 24 hour zone that is
@@ -38,18 +50,6 @@ public class ReqZoneReadyStatus implements Message {
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_ZONE_READY;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqZoneReadyStatus ( "
-
-				+ " )";
-
-		return retValue;
 	}
 
 }

@@ -19,12 +19,19 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReqObjectStatus implements Message {
 
-	private int objType;
-	private int objStart;
-	private int objEnd;
+	private final int objectType;
+	private final int startObject;
+	private final int endObject;
 
 	/*
 	 * REQUEST OBJECT STATUS
@@ -62,38 +69,9 @@ public class ReqObjectStatus implements Message {
 	
 	 */
 
-	public ReqObjectStatus(int objectType, int startObject, int endObject) {
-		objType = objectType;
-		objStart = startObject;
-		objEnd = endObject;
-	}
-
-	public int objectType() {
-		return objType;
-	}
-
-	public int objectStart() {
-		return objStart;
-	}
-
-	public int objectEnd() {
-		return objEnd;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_OBJ_STATUS;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqObjectStatus ( " + "objType = " + this.objType + TAB + "objStart = " + this.objStart + TAB
-				+ "objEnd = " + this.objEnd + TAB + " )";
-
-		return retValue;
 	}
 
 }

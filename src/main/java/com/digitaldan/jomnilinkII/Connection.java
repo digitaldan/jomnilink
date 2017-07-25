@@ -48,7 +48,7 @@ import com.digitaldan.jomnilinkII.MessageTypes.ObjectTypeCapacities;
 import com.digitaldan.jomnilinkII.MessageTypes.OtherEventNotifications;
 import com.digitaldan.jomnilinkII.MessageTypes.ReqAudioSourceStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ReqConnectedSecurityStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqExtenedObjectStatus;
+import com.digitaldan.jomnilinkII.MessageTypes.ReqExtendedObjectStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectTypeCapacities;
@@ -468,7 +468,7 @@ public class Connection extends Thread {
 
 	public void enableNotifications() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new EnableNotifications());
+		Message msg = sendAndReceive(new EnableNotifications(true));
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -476,7 +476,7 @@ public class Connection extends Thread {
 
 	public SystemInformation reqSystemInformation() throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSystemInformation());
+		Message msg = sendAndReceive(ReqSystemInformation.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_SYS_INFO) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -485,7 +485,7 @@ public class Connection extends Thread {
 
 	public SystemStatus reqSystemStatus() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSystemStatus());
+		Message msg = sendAndReceive(ReqSystemStatus.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_SYS_STATUS) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -494,7 +494,7 @@ public class Connection extends Thread {
 
 	public SystemTroubles reqSystemTroubles() throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSystemTroubles());
+		Message msg = sendAndReceive(ReqSystemTroubles.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_SYS_TROUBLES) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -503,7 +503,7 @@ public class Connection extends Thread {
 
 	public SystemFeatures reqSystemFeatures() throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSystemFeatures());
+		Message msg = sendAndReceive(ReqSystemFeatures.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_SYS_FEATURES) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -512,7 +512,7 @@ public class Connection extends Thread {
 
 	public SystemFormats reqSystemFormats() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSystemFormats());
+		Message msg = sendAndReceive(ReqSystemFormats.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_SYS_FORMATS) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -521,7 +521,7 @@ public class Connection extends Thread {
 
 	public ObjectTypeCapacities reqObjectTypeCapacities(int objectType) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqObjectTypeCapacities(objectType));
+		Message msg = sendAndReceive(ReqObjectTypeCapacities.builder().objectType(objectType).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_OBJ_CAPACITY) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -531,8 +531,15 @@ public class Connection extends Thread {
 	public Message reqObjectProperties(int objectType, int objectNum, int direction, int filter1, int filter2,
 			int filter3) throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(
-				new ReqObjectProperties(objectType, objectNum, direction, filter1, filter2, filter3));
+		ReqObjectProperties reqObjectProperties = ReqObjectProperties.builder()
+													.objectType(objectType)
+													.objectNumber(objectNum)
+													.direction(direction)
+													.filter1(filter1)
+													.filter2(filter2)
+													.filter3(filter3)
+													.build();
+		Message msg = sendAndReceive(reqObjectProperties);
 		if (msg.getMessageType() != Message.MESG_TYPE_OBJ_PROP
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
@@ -614,11 +621,12 @@ public class Connection extends Thread {
 			if (next > endObject) {
 				next = endObject;
 			}
+
 			Message msg = null;
 			if (extended) {
-				msg = sendAndReceive(new ReqExtenedObjectStatus(objectType, current, next));
+				msg = sendAndReceive(ReqExtendedObjectStatus.builder().objectType(objectType).startObject(current).endObject(next).build());
 			} else {
-				msg = sendAndReceive(new ReqObjectStatus(objectType, current, next));
+				msg = sendAndReceive(ReqObjectStatus.builder().objectType(objectType).startObject(current).endObject(next).build());
 			}
 
 			if (msg.getMessageType() != Message.MESG_TYPE_OBJ_STATUS
@@ -632,12 +640,12 @@ public class Connection extends Thread {
 			}
 			logger.trace("Current: {}  end: {} ", current, endObject);
 		}
-		return new ObjectStatus(objectType, s);
+		return ObjectStatus.builder().statusType(objectType).statuses(s).build();
 	}
 
 	public Message reqAudioSourceStatus(int source, int position) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqAudioSourceStatus(source, position));
+		Message msg = sendAndReceive(ReqAudioSourceStatus.builder().source(source).position(position).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_AUDIO_SOURCE_STATUS
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
@@ -647,7 +655,7 @@ public class Connection extends Thread {
 
 	public ZoneReadyStatus reqZoneReadyStatus() throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqZoneReadyStatus());
+		Message msg = sendAndReceive(ReqZoneReadyStatus.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_ZONE_READY) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -656,7 +664,7 @@ public class Connection extends Thread {
 
 	public ConnectedSecurityStatus reqConnectedSecurityStatus() throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqConnectedSecurityStatus());
+		Message msg = sendAndReceive(ReqConnectedSecurityStatus.getInstance());
 		if (msg.getMessageType() != Message.MESG_TYPE_CONN_SEC_STATUS) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -665,7 +673,7 @@ public class Connection extends Thread {
 
 	public Message uploadEventLogData(int number, int direction) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new UploadEventRecord(number, direction));
+		Message msg = sendAndReceive(UploadEventRecord.builder().eventNumber(number).direction(direction).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_EVENT_LOG_DATA
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
@@ -675,7 +683,7 @@ public class Connection extends Thread {
 
 	public Message uploadNames(int objectType, int objectNumber) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new UploadNames(objectType, objectNumber));
+		Message msg = sendAndReceive(UploadNames.builder().objectType(objectType).objectNumber(objectNumber).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_NAME_DATA
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
@@ -685,7 +693,7 @@ public class Connection extends Thread {
 
 	public void downloadNames(int objectType, int objectNumber, String name) throws IOException,
 			OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new DownloadNames(objectType, objectNumber, name));
+		Message msg = sendAndReceive(DownloadNames.builder().objectType(objectType).objectNumber(objectNumber).name(name).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -694,8 +702,18 @@ public class Connection extends Thread {
 	public void connectedSecurityCommand(int command, int partition, int digit1, int digit2, int digit3, int digit4,
 			int digit5, int digit6) throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(
-				new ConnectedSecurityCommand(command, partition, digit1, digit2, digit3, digit4, digit5, digit6));
+		ConnectedSecurityCommand connectedSecurityCommand = ConnectedSecurityCommand.builder()
+															.command(command)
+															.partition(partition)
+															.digit1(digit1)
+															.digit2(digit2)
+                											.digit3(digit3)
+															.digit4(digit4)
+															.digit5(digit5)
+															.digit6(digit6)
+															.build();
+
+		Message msg = sendAndReceive(connectedSecurityCommand);
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -703,7 +721,7 @@ public class Connection extends Thread {
 
 	public void controllerCommand(int command, int p1, int p2) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new CommandMessage(command, p1, p2));
+		Message msg = sendAndReceive(CommandMessage.builder().command(command).parameter1(p1).parameter2(p2).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -712,7 +730,15 @@ public class Connection extends Thread {
 	public void setTimeCommand(int year, int month, int day, int dayOfWeek, int hour, int minute,
 			boolean daylightSavings) throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new SetTimeCommand(year, month, day, dayOfWeek, hour, minute, daylightSavings));
+		Message msg = sendAndReceive(SetTimeCommand.builder()
+										.year(year)
+										.month(month)
+										.day(day)
+										.dayOfWeek(dayOfWeek)
+										.hour(hour)
+										.minute(minute)
+										.daylightSavings(daylightSavings)
+										.build());
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -720,7 +746,7 @@ public class Connection extends Thread {
 
 	public void activateKeypadEmergency(int area, int emergencyType) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ActivateKeypadEmergency(area, emergencyType));
+		Message msg = sendAndReceive(ActivateKeypadEmergency.builder().area(area).emergencyType(emergencyType).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}
@@ -729,7 +755,13 @@ public class Connection extends Thread {
 	public SecurityCodeValidation reqSecurityCodeValidation(int area, int digit1, int digit2, int digit3, int digit4)
 			throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new ReqSecurityCodeValidation(area, digit1, digit2, digit3, digit4));
+		Message msg = sendAndReceive(ReqSecurityCodeValidation.builder()
+										.area(area)
+										.digit1(digit1)
+										.digit2(digit2)
+										.digit3(digit3)
+										.digit4(digit4)
+										.build());
 		if (msg.getMessageType() != Message.MESG_TYPE_SEC_CODE_VALID) {
 			throw new OmniInvalidResponseException(msg);
 		}
