@@ -41,7 +41,7 @@ import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
 import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityCommand;
 import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.DownloadNames;
-import com.digitaldan.jomnilinkII.MessageTypes.EnableNotifications;
+import com.digitaldan.jomnilinkII.MessageTypes.Notifications;
 import com.digitaldan.jomnilinkII.MessageTypes.ExtendedObjectStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectTypeCapacities;
@@ -468,7 +468,7 @@ public class Connection extends Thread {
 
 	public void enableNotifications() throws IOException, OmniNotConnectedException, OmniInvalidResponseException,
 			OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(new EnableNotifications(true));
+		Message msg = sendAndReceive(Notifications.enable());
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}

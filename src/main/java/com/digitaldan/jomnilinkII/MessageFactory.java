@@ -23,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 import com.digitaldan.jomnilinkII.MessageTypes.*;
 import com.digitaldan.jomnilinkII.MessageTypes.properties.AreaProperties;
@@ -123,7 +122,7 @@ public class MessageFactory {
 		case Message.MESG_TYPE_CLEAR_VOICES:
 			break;
 		case Message.MESG_TYPE_ENABLE_NOTIFICATIONS: {
-			os.writeBoolean(((EnableNotifications) msg).isEnabled());
+			os.writeBoolean(((Notifications) msg).isEnabled());
 		}
 			break;
 		case Message.MESG_TYPE_REQ_OBJ_CAPACITY: {

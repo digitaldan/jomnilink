@@ -19,13 +19,25 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Value;
 
 @Value
-@AllArgsConstructor
-public class EnableNotifications implements Message {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Notifications implements Message {
+
+	private final static Notifications ENABLED = new Notifications(true);
+	private final static Notifications DISABLED = new Notifications(false);
+
+	public static Notifications enable(){
+		return ENABLED;
+	}
+
+	public static Notifications disable(){
+		return DISABLED;
+	}
+
 
 	/*
 	 *ENABLE NOTIFICATIONS 
