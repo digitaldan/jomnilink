@@ -20,17 +20,26 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AreaStatus;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
+
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AreaProperties extends ObjectProperties {
-	private int mode;
-	private int alarms;
-	private int entryTimer;
-	private int exitTimer;
-	private boolean enabled;
-	private int exitDelay;
-	private int entryDelay;
+	private final int mode;
+	private final int alarms;
+	private final int entryTimer;
+	private final int exitTimer;
+	private final boolean enabled;
+	private final int exitDelay;
+	private final int entryDelay;
 
-	public AreaProperties(int number, int mode, int alarms, int entryTimer, int exitTimer, boolean enabled,
+	@Builder
+	private AreaProperties(int number, int mode, int alarms, int entryTimer, int exitTimer, boolean enabled,
 			int exitDelay, int entryDelay, String name) {
 		super(OBJ_TYPE_AREA, number, name);
 		this.mode = mode;
@@ -40,82 +49,6 @@ public class AreaProperties extends ObjectProperties {
 		this.enabled = enabled;
 		this.exitDelay = exitDelay;
 		this.entryDelay = entryDelay;
-	}
-
-	public int getMode() {
-		return mode;
-	}
-
-	public int getAlarms() {
-		return alarms;
-	}
-
-	public int getEntryTimer() {
-		return entryTimer;
-	}
-
-	public int getExitTimer() {
-		return exitTimer;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public int getExitDelay() {
-		return exitDelay;
-	}
-
-	public int getEntryDelay() {
-		return entryDelay;
-	}
-
-	public void setMode(int mode) {
-		this.mode = mode;
-	}
-
-	public void setAlarms(int alarms) {
-		this.alarms = alarms;
-	}
-
-	public void setEntryTimer(int entryTimer) {
-		this.entryTimer = entryTimer;
-	}
-
-	public void setExitTimer(int exitTimer) {
-		this.exitTimer = exitTimer;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public void setExitDelay(int exitDelay) {
-		this.exitDelay = exitDelay;
-	}
-
-	public void setEntryDelay(int entryDelay) {
-		this.entryDelay = entryDelay;
-	}
-
-	public void updateArea(AreaStatus areaStatus) {
-		setAlarms(areaStatus.getAlarms());
-		setEntryTimer(areaStatus.getEntryTimer());
-		setExitTimer(areaStatus.getExitTimer());
-		setMode(areaStatus.getMode());
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "AreaProperties ( " + "number = " + this.number + TAB + "mode = " + this.mode + TAB + "alarms = "
-				+ this.alarms + TAB + "entryTimer = " + this.entryTimer + TAB + "exitTimer = " + this.exitTimer + TAB
-				+ "enabled = " + this.enabled + TAB + "exitDelay = " + this.exitDelay + TAB + "entryDelay = "
-				+ this.entryDelay + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
 	}
 
 }

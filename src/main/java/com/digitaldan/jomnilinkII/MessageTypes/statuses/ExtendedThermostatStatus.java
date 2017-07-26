@@ -1,79 +1,44 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
-public class ExtendedThermostatStatus extends ThermostatStatus {
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+import lombok.experimental.Delegate;
 
-	private int humidity;
-	private int humiditySetpoint;
-	private int dehumiditySetpoint;
-	private int outdoorTemp;
-	private int extendedStatus;
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class ExtendedThermostatStatus extends Status {
 
-	public ExtendedThermostatStatus(int number, int status, int temp, int heatSetpotint, int coolSetpoint,
-			int systemMode, int fan, int hold, int humidity, int humiditySetpoint, int dehumiditySetpoint,
+	private final int humidity;
+	private final int humiditySetpoint;
+	private final int dehumidifySetpoint;
+	private final int outdoorTemp;
+	private final int extendedStatus;
+
+	@Delegate private final ThermostatStatus thermostatStatus;
+
+	@Builder
+	private ExtendedThermostatStatus(int number, int status, int temperature, int heatSetpoint, int coolSetpoint,
+			int mode, int fan, int hold, int humidity, int humiditySetpoint, int dehumidifySetpoint,
 			int outdoorTemp, int extendedStatus) {
-		super(number, status, temp, heatSetpotint, coolSetpoint, systemMode, fan, hold);
+		super(number);
+		thermostatStatus = ThermostatStatus.builder()
+				           .number(number)
+				 		   .status(status)
+				           .temperature(temperature)
+						   .heatSetpoint(heatSetpoint)
+				           .coolSetpoint(coolSetpoint)
+						   .mode(mode)
+						   .fan(fan)
+				           .hold(hold)
+						   .build();
 		this.humidity = humidity;
 		this.humiditySetpoint = humiditySetpoint;
-		this.dehumiditySetpoint = dehumiditySetpoint;
+		this.dehumidifySetpoint = dehumidifySetpoint;
 		this.outdoorTemp = outdoorTemp;
 		this.extendedStatus = extendedStatus;
 
 	}
-
-	public int getHumidity() {
-		return humidity;
-	}
-
-	public int getHumiditySetpoint() {
-		return humiditySetpoint;
-	}
-
-	public int getDehumiditySetpoint() {
-		return dehumiditySetpoint;
-	}
-
-	public int getOutdoorTemp() {
-		return outdoorTemp;
-	}
-
-	public int getExtendedStatus() {
-		return extendedStatus;
-	}
-
-	public void setHumidity(int humidity) {
-		this.humidity = humidity;
-	}
-
-	public void setHumiditySetpoint(int humiditySetpoint) {
-		this.humiditySetpoint = humiditySetpoint;
-	}
-
-	public void setDehumiditySetpoint(int dehumiditySetpoint) {
-		this.dehumiditySetpoint = dehumiditySetpoint;
-	}
-
-	public void setOutdoorTemp(int outdoorTemp) {
-		this.outdoorTemp = outdoorTemp;
-	}
-
-	public void setExtendedStatus(int extendedStatus) {
-		this.extendedStatus = extendedStatus;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ThermostatStatus ( " + "number = " + this.number + TAB + "status = " + this.getStatus() + TAB
-				+ "temperature = " + this.getTemperature() + TAB + "heatSetpotint = " + this.getHeatSetpotint() + TAB
-				+ "coolSetpoint = " + this.getCoolSetpoint() + TAB + "systemMode = " + this.getMode() + TAB
-				+ "fanMode = " + this.getFan() + TAB + "holdStatus = " + this.getHold() + TAB + "humidity = "
-				+ this.humidity + TAB + "humiditySetpoint = " + this.humiditySetpoint + TAB + "dehumiditySetpoint = "
-				+ this.dehumiditySetpoint + TAB + "outdoorTemp = " + this.outdoorTemp + TAB + "extendedStatus = "
-				+ this.extendedStatus + TAB + " )";
-
-		return retValue;
-	}
-
 }

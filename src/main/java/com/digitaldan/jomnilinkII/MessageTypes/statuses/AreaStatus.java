@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,12 +23,16 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AreaStatus extends Status {
 
-	private int mode;
-	private int alarms;
-	private int entryTimer;
-	private int exitTimer;
+	private final int mode;
+	private final int alarms;
+	private final int entryTimer;
+	private final int exitTimer;
+
 
 	/*
 	 *AREA STATUS
@@ -101,8 +110,8 @@ public class AreaStatus extends Status {
 	      7                          Temperature alarm
 	                        
 	 */
-
-	public AreaStatus(int number, int mode, int alarms, int entryTimer, int exitTimer) {
+	@Builder
+	private AreaStatus(int number, int mode, int alarms, int entryTimer, int exitTimer){
 		super(number);
 		this.mode = mode;
 		this.alarms = alarms;
@@ -110,48 +119,5 @@ public class AreaStatus extends Status {
 		this.exitTimer = exitTimer;
 	}
 
-	public int getMode() {
-		return mode;
-	}
-
-	public int getAlarms() {
-		return alarms;
-	}
-
-	public int getEntryTimer() {
-		return entryTimer;
-	}
-
-	public int getExitTimer() {
-		return exitTimer;
-	}
-
-	public void setMode(int mode) {
-		this.mode = mode;
-	}
-
-	public void setAlarms(int alarms) {
-		this.alarms = alarms;
-	}
-
-	public void setEntryTimer(int entryTimer) {
-		this.entryTimer = entryTimer;
-	}
-
-	public void setExitTimer(int exitTimer) {
-		this.exitTimer = exitTimer;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "AreaStatus ( " + "number = " + this.number + TAB + "mode = " + this.mode + TAB + "alarms = "
-				+ this.alarms + TAB + "entryTimer = " + this.entryTimer + TAB + "exitTimer = " + this.exitTimer + TAB
-				+ " )";
-
-		return retValue;
-	}
 
 }

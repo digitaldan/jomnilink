@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -17,10 +22,12 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class MessageStatus extends Status {
 
-	private int status;
+	private final int status;
 
 	/*
 	 *The controller reports the status of a displayed text message object or a group of displayed text message
@@ -48,28 +55,10 @@ public class MessageStatus extends Status {
 	     2                           Not acknowledged (the displayed message has not been acknowledged)
 	
 	 */
-
-	public MessageStatus(int number, int status) {
+	@Builder
+	private MessageStatus(int number, int status) {
 		super(number);
 		this.status = status;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "MessageStatus ( " + "number = " + this.number + TAB + "status = " + this.status + TAB + " )";
-
-		return retValue;
 	}
 
 }

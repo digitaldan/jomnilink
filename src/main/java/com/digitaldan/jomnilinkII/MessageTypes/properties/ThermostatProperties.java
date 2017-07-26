@@ -20,19 +20,27 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ThermostatProperties extends ObjectProperties {
 
-	private int status;
-	private int temperature;
-	private int heatSetpoint;
-	private int coolSetpoint;
-	private int mode;
-	private int fan;
-	private int hold;
-	private int thermostatType;
+	private final int status;
+	private final int temperature;
+	private final int heatSetpoint;
+	private final int coolSetpoint;
+	private final int mode;
+	private final int fan;
+	private final int hold;
+	private final int thermostatType;
 
-	public ThermostatProperties(int number, int status, int temperature, int heatSetpoint, int coolSetpoint, int mode,
+	@Builder
+	private ThermostatProperties(int number, int status, int temperature, int heatSetpoint, int coolSetpoint, int mode,
 			int fan, int hold, int thermostatType, String name) {
 		super(OBJ_TYPE_THERMO, number, name);
 		this.status = status;
@@ -43,93 +51,5 @@ public class ThermostatProperties extends ObjectProperties {
 		this.fan = fan;
 		this.hold = hold;
 		this.thermostatType = thermostatType;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getTemperature() {
-		return temperature;
-	}
-
-	public int getHeatSetpoint() {
-		return heatSetpoint;
-	}
-
-	public int getCoolSetpoint() {
-		return coolSetpoint;
-	}
-
-	public int getMode() {
-		return mode;
-	}
-
-	public int getFan() {
-		return fan;
-	}
-
-	public int getHold() {
-		return hold;
-	}
-
-	public int getThermostatType() {
-		return thermostatType;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setTemperature(int temperature) {
-		this.temperature = temperature;
-	}
-
-	public void setHeatSetpoint(int heatSetpoint) {
-		this.heatSetpoint = heatSetpoint;
-	}
-
-	public void setCoolSetpoint(int coolSetpoint) {
-		this.coolSetpoint = coolSetpoint;
-	}
-
-	public void setMode(int mode) {
-		this.mode = mode;
-	}
-
-	public void setFan(int fan) {
-		this.fan = fan;
-	}
-
-	public void setHold(int hold) {
-		this.hold = hold;
-	}
-
-	public void setThermostatType(int thermostatType) {
-		this.thermostatType = thermostatType;
-	}
-
-	public void updateThermostat(ThermostatStatus thermoStatus) {
-		setCoolSetpoint(thermoStatus.getCoolSetpoint());
-		setHeatSetpoint(thermoStatus.getHeatSetpotint());
-		setMode(thermoStatus.getMode());
-		setStatus(thermoStatus.getStatus());
-		setTemperature(thermoStatus.getTemperature());
-		setHold(thermoStatus.getHold());
-		setFan(thermoStatus.getFan());
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ThermostatProperties ( " + "number = " + this.number + TAB + "communicating = " + this.status + TAB
-				+ "temperature = " + this.temperature + TAB + "heatSetpoint = " + this.heatSetpoint + TAB
-				+ "coolSetpoint = " + this.coolSetpoint + TAB + "mode = " + this.mode + TAB + "fan = " + this.fan + TAB
-				+ "hold = " + this.hold + TAB + "thermostatType = " + this.thermostatType + TAB + "name = " + this.name
-				+ TAB + " )";
-
-		return retValue;
 	}
 }

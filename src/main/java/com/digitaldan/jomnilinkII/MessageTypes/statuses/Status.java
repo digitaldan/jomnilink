@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+import lombok.experimental.NonFinal;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,30 +23,8 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@NonFinal
 public class Status {
-
-	protected int number;
-
-	public Status(int number) {
-		super();
-		this.number = number;
-	}
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "Status ( " + "number = " + this.number + TAB + " )";
-
-		return retValue;
-	}
+    protected final int number;
 }

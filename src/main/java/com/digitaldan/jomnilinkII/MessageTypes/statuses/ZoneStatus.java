@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,10 +23,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ZoneStatus extends Status {
 
-	private int status;
-	private int loop;
+	private final int status;
+	private final int loop;
 
 	/*
 	 *ZONE STATUS
@@ -72,36 +80,10 @@ public class ZoneStatus extends Status {
 	condition that has not yet been acknowledged.
 	
 	 */
-	public ZoneStatus(int number, int status, int loop) {
+	@Builder
+	private ZoneStatus(int number, int status, int loop) {
 		super(number);
 		this.status = status;
 		this.loop = loop;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getLoop() {
-		return loop;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setLoop(int loop) {
-		this.loop = loop;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ZoneStatus ( " + "number = " + this.number + TAB + "status = " + this.status + TAB + "loop = "
-				+ this.loop + TAB + " )";
-
-		return retValue;
 	}
 }

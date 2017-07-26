@@ -20,7 +20,14 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class UnitProperties extends ObjectProperties {
 	public static final int UNIT_TYPE_STANDARD = 1;
 	public static final int UNIT_TYPE_COMPOSE = 3;
@@ -37,54 +44,16 @@ public class UnitProperties extends ObjectProperties {
 	public static final int UNIT_TYPE_AUDIO_ZONE = 14;
 	public static final int UNIT_TYPE_AUDIO_SRC = 15;
 
-	private int state;
-	private int time;
-	private int unitType;
+	private final int state;
+	private final int time;
+	private final int unitType;
 
-	public UnitProperties(int number, int state, int time, int unitType, String name) {
+	@Builder
+	private UnitProperties(int number, int state, int time, int unitType, String name) {
 		super(OBJ_TYPE_UNIT, number, name);
 		this.state = state;
 		this.time = time;
 		this.unitType = unitType;
 	}
 
-	public int getState() {
-		return state;
-	}
-
-	public int getTime() {
-		return time;
-	}
-
-	public int getUnitType() {
-		return unitType;
-	}
-
-	public void setState(int state) {
-		this.state = state;
-	}
-
-	public void setTime(int time) {
-		this.time = time;
-	}
-
-	public void setUnitType(int unitType) {
-		this.unitType = unitType;
-	}
-
-	public void updateUnit(UnitStatus status) {
-		setState(status.getStatus());
-		setTime(status.getTime());
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "UnitProperties ( " + "number = " + this.number + TAB + "state = " + this.state + TAB + "time = "
-				+ this.time + TAB + "unitType = " + this.unitType + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
-	}
 }

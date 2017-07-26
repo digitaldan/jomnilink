@@ -377,22 +377,34 @@ public class MessageFactory {
 		case Message.OBJ_TYPE_ZONE: {
 			status = new ZoneStatus[(length - 1) / 4];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new ZoneStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = ZoneStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.loop(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_UNIT: {
 			status = new UnitStatus[(length - 1) / 5];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new UnitStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedShort());
+				status[i] = UnitStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.time(in.readUnsignedShort())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_AREA: {
 			status = new AreaStatus[(length - 1) / 6];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AreaStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte(),
-						in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = AreaStatus.builder()
+						.number(in.readUnsignedShort())
+						.mode(in.readUnsignedByte())
+						.alarms(in.readUnsignedByte())
+						.entryTimer(in.readUnsignedByte())
+						.exitTimer(in.readUnsignedByte()).build();
 			}
 		}
 			break;
@@ -400,17 +412,35 @@ public class MessageFactory {
 			if (!extended) {
 				status = new ThermostatStatus[(length - 1) / 9];
 				for (int i = 0; i < status.length; i++) {
-					status[i] = new ThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte());
+					status[i] =
+							ThermostatStatus.builder()
+							.number(in.readUnsignedShort() )
+							.status(in.readUnsignedByte())
+							.temperature(in.readUnsignedByte() )
+							.heatSetpoint(in.readUnsignedByte() )
+							.coolSetpoint(in.readUnsignedByte() )
+							.mode(in.readUnsignedByte())
+							.fan(in.readUnsignedByte() )
+							.hold(in.readUnsignedByte())
+							.build();
 				}
 			} else {
 				status = new ExtendedThermostatStatus[(length - 1) / 14];
 				for (int i = 0; i < status.length; i++) {
-					status[i] = new ExtendedThermostatStatus(in.readUnsignedShort(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte(),
-							in.readUnsignedByte(), in.readUnsignedByte(), in.readUnsignedByte());
+					status[i] = ExtendedThermostatStatus.builder()
+								.number(in.readUnsignedShort())
+								.status( in.readUnsignedByte())
+								.temperature(in.readUnsignedByte())
+								.heatSetpoint(in.readUnsignedByte())
+								.coolSetpoint(in.readUnsignedByte())
+								.mode(in.readUnsignedByte())
+								.fan(in.readUnsignedByte())
+								.humidity(in.readUnsignedByte())
+								.humiditySetpoint(in.readUnsignedByte())
+								.dehumidifySetpoint(in.readUnsignedByte())
+								.outdoorTemp(in.readUnsignedByte())
+								.extendedStatus(in.readUnsignedByte())
+								.build();
 				}
 			}
 		}
@@ -418,53 +448,81 @@ public class MessageFactory {
 		case Message.OBJ_TYPE_MESG: {
 			status = new MessageStatus[(length - 1) / 3];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new MessageStatus(in.readUnsignedShort(), in.readUnsignedByte());
+				status[i] = MessageStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_AUX_SENSOR: {
 			status = new AuxSensorStatus[(length - 1) / 6];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AuxSensorStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte(),
-						in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = AuxSensorStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.temp(in.readUnsignedByte())
+							.heatSetpoint(in.readUnsignedByte())
+							.coolSetpoint(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			status = new AudioZoneStatus[(length - 1) / 6];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AudioZoneStatus(in.readUnsignedShort(), in.readBoolean(), in.readUnsignedByte(),
-						in.readUnsignedByte(), in.readBoolean());
+				status[i] = AudioZoneStatus.builder()
+							.number(in.readUnsignedShort())
+							.power(in.readBoolean())
+							.source(in.readUnsignedByte())
+							.volume(in.readUnsignedByte())
+							.mute(in.readBoolean())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_EXP: {
 			status = new ExpansionStatus[(length - 1) / 4];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new ExpansionStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = ExpansionStatus.builder()
+							.number(in.readUnsignedShort())
+							.status(in.readUnsignedByte())
+							.battery(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_USER_SETTING: {
 			status = new UserSettingStatus[(length - 1) / 4];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new UserSettingStatus(in.readUnsignedShort(), in.readUnsignedByte(), in.readUnsignedByte());
+				status[i] = UserSettingStatus.builder()
+							.number(in.readUnsignedShort())
+							.settingType(in.readUnsignedByte())
+							.settingValue(in.readUnsignedByte())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_CONTROL_READER: {
 			status = new AccessControlReaderStatus[(length - 1) / 5];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AccessControlReaderStatus(in.readUnsignedShort(), in.readBoolean(),
-						in.readUnsignedShort());
+				status[i] = AccessControlReaderStatus.builder()
+							.number(in.readUnsignedShort())
+							.granted(in.readBoolean())
+							.lastUser(in.readUnsignedShort())
+							.build();
 			}
 		}
 			break;
 		case Message.OBJ_TYPE_CONTROL_LOCK: {
 			status = new AccessControlReaderLockStatus[(length - 1) / 5];
 			for (int i = 0; i < status.length; i++) {
-				status[i] = new AccessControlReaderLockStatus(in.readUnsignedShort(), in.readBoolean(),
-						in.readUnsignedShort());
+				status[i] = AccessControlReaderLockStatus.builder()
+                        .number(in.readUnsignedShort())
+                        .locked(in.readBoolean())
+                        .timer(in.readUnsignedShort())
+                        .build();
+
 			}
 		}
 			break;
@@ -500,7 +558,15 @@ public class MessageFactory {
 			int options = in.readUnsignedByte();
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new ZoneProperties(number, status, loop, type, area, options, name);
+			return ZoneProperties.builder()
+					.number(number)
+					.status(status)
+					.loop(loop)
+					.zoneType(type)
+					.area(area)
+					.options(options)
+					.name(name)
+                    .build();
 		}
 		case Message.OBJ_TYPE_UNIT: {
 			int state = in.readUnsignedByte();
@@ -508,17 +574,23 @@ public class MessageFactory {
 			int type = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new UnitProperties(number, state, time, type, name);
+			return UnitProperties.builder()
+					.number(number)
+					.state(state)
+					.time(time)
+					.unitType(type)
+					.name(name)
+					.build();
 		}
 		case Message.OBJ_TYPE_BUTTON: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new ButtonProperties(number, name);
+			return ButtonProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_CODE: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new CodeProperties(number, name);
+			return CodeProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_AREA: {
 			int mode = in.readUnsignedByte();
@@ -530,8 +602,17 @@ public class MessageFactory {
 			int entryDelay = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AreaProperties(number, mode, alarms, entryTimer, exitTimer, enabled, exitDelay, entryDelay,
-					name);
+			return AreaProperties.builder()
+					.number(number)
+					.mode(mode)
+					.alarms(alarms)
+					.entryTimer(entryTimer)
+					.exitTimer(exitTimer)
+					.enabled(enabled)
+					.exitDelay(exitDelay)
+					.entryDelay(entryDelay)
+					.name(name)
+					.build();
 		}
 		case Message.OBJ_TYPE_THERMO: {
 			int status = in.readUnsignedByte();
@@ -544,13 +625,21 @@ public class MessageFactory {
 			int thermostatType = in.readUnsignedByte();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new ThermostatProperties(number, status, temperature, heatSetpoint, coolSetpoint, mode, fan, hold,
-					thermostatType, name);
+			return ThermostatProperties.builder()
+					.number(number)
+					.status(status)
+					.temperature(temperature)
+					.heatSetpoint(heatSetpoint)
+					.coolSetpoint(coolSetpoint)
+					.mode(mode)
+					.fan(fan)
+					.hold(hold)
+                    .build();
 		}
 		case Message.OBJ_TYPE_MESG: {
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new MessageProperties(number, name);
+			return MessageProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_AUX_SENSOR: {
 			int status = in.readUnsignedByte();
@@ -560,12 +649,20 @@ public class MessageFactory {
 			int sensorType = in.readUnsignedByte();
 			in.readFully(nameLong);
 			String name = readName(nameLong);
-			return new AuxSensorProperties(number, status, current, lowSetpoint, highSetpoint, sensorType, name);
+			return AuxSensorProperties.builder()
+					.number(number)
+					.status(status)
+					.current(current)
+					.lowSetpoint(lowSetpoint)
+					.highSetpoint(highSetpoint)
+					.sensorType(sensorType)
+					.name(name)
+					.build();
 		}
 		case Message.OBJ_TYPE_AUDIO_SOURCE: {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AudioSourceProperties(number, name);
+			return AudioSourceProperties.builder().number(number).name(name).build();
 		}
 		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			boolean on = in.readBoolean();
@@ -574,7 +671,14 @@ public class MessageFactory {
 			boolean mute = in.readBoolean();
 			in.readFully(nameShort);
 			String name = readName(nameShort);
-			return new AudioZoneProperties(number, on, source, volume, mute, name);
+			return AudioZoneProperties.builder()
+					.number(number)
+					.on(on)
+					.source(source)
+					.volume(volume)
+					.mute(mute)
+					.name(name)
+					.build();
 		}
 		default:
 			throw new IOException("Unknown property type " + objectType);

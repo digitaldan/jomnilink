@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,10 +23,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AccessControlReaderLockStatus extends Status {
 
-	private boolean locked;
-	private int timer;
+	private final boolean locked;
+	private final int timer;
 
 	/*
 	 *ACCESS CONTROL READER LOCK STATUS (Requires Firmware Version 3.0 or Later)
@@ -53,36 +61,13 @@ public class AccessControlReaderLockStatus extends Status {
 	
 	
 	 */
-	public AccessControlReaderLockStatus(int number, boolean locked, int timer) {
+
+	@Builder
+	private AccessControlReaderLockStatus(int number, boolean locked, int timer) {
 		super(number);
 		this.locked = locked;
 		this.timer = timer;
 	}
 
-	public boolean isLocked() {
-		return locked;
-	}
 
-	public int getTimer() {
-		return timer;
-	}
-
-	public void setLocked(boolean locked) {
-		this.locked = locked;
-	}
-
-	public void setTimer(int timer) {
-		this.timer = timer;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "UnitStatus ( " + "number = " + this.number + TAB + "isLocked = " + this.locked + TAB + "timer = "
-				+ this.timer + TAB + " )";
-
-		return retValue;
-	}
 }
