@@ -19,10 +19,16 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.*;
 
+import java.util.List;
+
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemFeatures implements Message {
 
-	private int[] features;
+	@Singular private final List<Integer> features;
 
 	/*
 	 * 
@@ -49,28 +55,10 @@ public class SystemFeatures implements Message {
 	    8         Proficient
 	
 	 */
-	public SystemFeatures(int[] features) {
-		super();
-		this.features = features;
-	}
-
-	public int[] getFeatures() {
-		return features;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_FEATURES;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "SystemFeatures ( " + "features = " + this.features + TAB + " )";
-
-		return retValue;
 	}
 
 }

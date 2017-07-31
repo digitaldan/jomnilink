@@ -19,13 +19,21 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemInformation implements Message {
-	private int model;
-	private int major;
-	private int minor;
-	private int revision;
-	private String phone;
+
+	private final int model;
+	private final int major;
+	private final int minor;
+	private final int revision;
+	private final String phone;
 
 	/*
 	 *This message is sent by the HAI controller in reply to a REQUEST SYSTEM INFORMATION message. The
@@ -58,48 +66,9 @@ public class SystemInformation implements Message {
 	
 	 */
 
-	public SystemInformation(int model, int major, int minor, int revision, String phone) {
-		this.model = model;
-		this.major = major;
-		this.minor = minor;
-		this.revision = revision;
-		this.phone = phone;
-	}
-
-	public int getModel() {
-		return model;
-	}
-
-	public int getMajor() {
-		return major;
-	}
-
-	public int getMinor() {
-		return minor;
-	}
-
-	public int getRevision() {
-		return revision;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_INFO;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "SystemInformation ( " + "model = " + this.model + TAB + "major = " + this.major + TAB + "minor = "
-				+ this.minor + TAB + "revision = " + this.revision + TAB + "phone = " + this.phone + TAB + " )";
-
-		return retValue;
 	}
 
 }

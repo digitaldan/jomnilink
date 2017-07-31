@@ -1,11 +1,26 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ActivateKeypadEmergency implements Message {
 
-	private int area;
-	private int emergencyType;
+	private final int area;
+	private final int emergencyType;
+
+	/*
+	@Builder
+	private ActivateKeypadEmergency(int area, int emergencyType){
+		this.area = area;
+		this.emergencyType = emergencyType;
+	}
+	*/
 
 	/*
 	 * ACTIVATE KEYPAD EMERGENCY 
@@ -24,23 +39,10 @@ public class ActivateKeypadEmergency implements Message {
 	Expected reply   ACKNOWLEDGE 
 	
 	 */
-	public ActivateKeypadEmergency(int area, int emergencyType) {
-		super();
-		this.area = area;
-		this.emergencyType = emergencyType;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ACT_KEYPAD_EMERGENCY;
-	}
-
-	public int getArea() {
-		return area;
-	}
-
-	public int getEmergencyType() {
-		return emergencyType;
 	}
 
 }

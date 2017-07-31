@@ -19,10 +19,16 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.*;
 
+import java.util.List;
+
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZoneReadyStatus implements Message {
 
-	private int[] zones;
+	@Singular private List<Integer> zones;
 
 	/*
 	 * ZONE READY STATUS
@@ -41,28 +47,10 @@ public class ZoneReadyStatus implements Message {
 	     CRC 2                      varies
 	
 	 */
-	public ZoneReadyStatus(int[] zones) {
-		super();
-		this.zones = zones;
-	}
-
-	public int[] getZones() {
-		return zones;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_STATUS;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ZoneReadyStatus ( " + "zones = " + this.zones + TAB + " )";
-
-		return retValue;
 	}
 
 }

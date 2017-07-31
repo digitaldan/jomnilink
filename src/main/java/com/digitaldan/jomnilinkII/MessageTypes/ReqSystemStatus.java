@@ -19,8 +19,21 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqSystemStatus implements Message {
+
+	private static ReqSystemStatus INSTANCE = new ReqSystemStatus();
+
+	private ReqSystemStatus() {
+	}
+
+	public static ReqSystemStatus getInstance() {
+		return INSTANCE;
+	}
+
+
 
 	/*
 	 * This message requests the HAI controller to report its time, date, calculated time of sunrise and sunset, battery
@@ -38,18 +51,6 @@ public class ReqSystemStatus implements Message {
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_STATUS;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqSystemStatus ( "
-
-				+ " )";
-
-		return retValue;
 	}
 
 }

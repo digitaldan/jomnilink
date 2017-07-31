@@ -19,25 +19,31 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.*;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemStatus implements Message {
-	private boolean timeDateValid;
-	private int year;
-	private int month;
-	private int day;
-	private int dayOfWeek;
-	private int hour;
-	private int minute;
-	private int second;
-	private boolean daylightSavings;
-	private int sunriseHour;
-	private int sunriseMinute;
-	private int sunsetHour;
-	private int sunsetMinute;
-	private int batteryReading;
-	private HashMap<Integer, Integer> alarms;
+
+	private final boolean timeDateValid;
+	private final int year;
+	private final int month;
+	private final int day;
+	private final int dayOfWeek;
+	private final int hour;
+	private final int minute;
+	private final int second;
+	private final boolean daylightSavings;
+	private final int sunriseHour;
+	private final int sunriseMinute;
+	private final int sunsetHour;
+	private final int sunsetMinute;
+	private final int batteryReading;
+	@Singular private final Map<Integer, Integer> alarms;
 
 	/*
 	 * This message is sent by the HAI controller in reply to a REQUEST SYSTEM STATUS message. The controller
@@ -81,106 +87,10 @@ public class SystemStatus implements Message {
 	    7          Temperature alarm
 	
 	 */
-	public SystemStatus(boolean timeDateValid, int year, int month, int day, int dayOfWeek, int hour, int minute,
-			int second, boolean daylightSavings, int sunriseHour, int sunriseMinute, int sunsetHour, int sunsetMinute,
-			int batteryReading, HashMap<Integer, Integer> alarms) {
-		super();
-		this.timeDateValid = timeDateValid;
-		this.year = year;
-		this.month = month;
-		this.day = day;
-		this.dayOfWeek = dayOfWeek;
-		this.hour = hour;
-		this.minute = minute;
-		this.second = second;
-		this.daylightSavings = daylightSavings;
-		this.sunriseHour = sunriseHour;
-		this.sunriseMinute = sunriseMinute;
-		this.sunsetHour = sunsetHour;
-		this.sunsetMinute = sunsetMinute;
-		this.batteryReading = batteryReading;
-		this.alarms = alarms;
-	}
-
-	public boolean isTimeDateValid() {
-		return timeDateValid;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public int getDay() {
-		return day;
-	}
-
-	public int getDayOfWeek() {
-		return dayOfWeek;
-	}
-
-	public int getHour() {
-		return hour;
-	}
-
-	public int getMinute() {
-		return minute;
-	}
-
-	public int getSecond() {
-		return second;
-	}
-
-	public boolean isDaylightSavings() {
-		return daylightSavings;
-	}
-
-	public int getSunriseHour() {
-		return sunriseHour;
-	}
-
-	public int getSunriseMinute() {
-		return sunriseMinute;
-	}
-
-	public int getSunsetHour() {
-		return sunsetHour;
-	}
-
-	public int getSunsetMinute() {
-		return sunsetMinute;
-	}
-
-	public int getBatteryReading() {
-		return batteryReading;
-	}
-
-	public HashMap<Integer, Integer> getAlarms() {
-		return alarms;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_STATUS;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "SystemStatus ( " + "timeDateValid = " + this.timeDateValid + TAB + "year = " + this.year + TAB
-				+ "month = " + this.month + TAB + "day = " + this.day + TAB + "dayOfWeek = " + this.dayOfWeek + TAB
-				+ "hour = " + this.hour + TAB + "minute = " + this.minute + TAB + "second = " + this.second + TAB
-				+ "daylightSavings = " + this.daylightSavings + TAB + "sunriseHour = " + this.sunriseHour + TAB
-				+ "sunriseMinute = " + this.sunriseMinute + TAB + "sunsetHour = " + this.sunsetHour + TAB
-				+ "sunsetMinute = " + this.sunsetMinute + TAB + "batteryReading = " + this.batteryReading + TAB
-				+ "alarms = " + this.alarms + TAB + " )";
-
-		return retValue;
 	}
 
 }

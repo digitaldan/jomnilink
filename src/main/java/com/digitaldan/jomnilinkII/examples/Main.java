@@ -86,8 +86,8 @@ public class Main {
 				@Override
 				public void otherEventNotification(OtherEventNotifications o) {
 					logger.info("Other Event");
-					for (int k = 0; k < o.getNotifications().length; k++) {
-						logger.info("Event bits {}", MessageUtils.getBits(o.getNotifications()[k]));
+					for(Integer notification : o.getNotifications()){
+						logger.info("Event bits {}", MessageUtils.getBits(notification));
 					}
 				}
 			});

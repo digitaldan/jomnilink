@@ -20,10 +20,17 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.Status;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ExtendedObjectStatus extends ObjectStatus implements Message {
 
-	private int recordLength;
+	private final int recordLength;
 
 	/*
 	 *
@@ -38,12 +45,10 @@ public class ExtendedObjectStatus extends ObjectStatus implements Message {
 		return MESG_TYPE_EXT_OBJ_STATUS;
 	}
 
-	public ExtendedObjectStatus(int statusType, int recordLength, Status[] statuses) {
+	@Builder(builderMethodName = "extendedBuilder")
+	private ExtendedObjectStatus(int statusType, int recordLength, Status[] statuses) {
 		super(statusType, statuses);
 		this.recordLength = recordLength;
 	}
 
-	public int getRecordLength() {
-		return recordLength;
-	}
 }

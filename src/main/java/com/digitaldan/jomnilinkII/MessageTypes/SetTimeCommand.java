@@ -1,16 +1,23 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SetTimeCommand implements Message {
 
-	int year;
-	int month;
-	int day;
-	int dayOfWeek;
-	int hour;
-	int minute;
-	boolean daylightSavings;
+	private final int year;
+	private final int month;
+	private final int day;
+	private final int dayOfWeek;
+	private final int hour;
+	private final int minute;
+	private final boolean daylightSavings;
 
 	/*
 	 * SET TIME COMMAND 
@@ -34,48 +41,9 @@ public class SetTimeCommand implements Message {
 	
 	 */
 
-	public SetTimeCommand(int year, int month, int day, int dayOfWeek, int hour, int minute, boolean daylightSavings) {
-		super();
-		this.year = year;
-		this.month = month;
-		this.day = day;
-		this.dayOfWeek = dayOfWeek;
-		this.hour = hour;
-		this.minute = minute;
-		this.daylightSavings = daylightSavings;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SET_TIME;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public int getDay() {
-		return day;
-	}
-
-	public int getDayOfWeek() {
-		return dayOfWeek;
-	}
-
-	public int getHour() {
-		return hour;
-	}
-
-	public int getMinute() {
-		return minute;
-	}
-
-	public boolean isDaylightSavings() {
-		return daylightSavings;
 	}
 
 }

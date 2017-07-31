@@ -19,26 +19,22 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class Acknowledge implements Message {
 
-	public Acknowledge() {
+	private static final Acknowledge INSTANCE = new Acknowledge();
+
+	private Acknowledge() {
+	}
+
+	public static Acknowledge getInstance() {
+		return INSTANCE;
 	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ACK;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "Acknowledge ( "
-
-				+ " )";
-
-		return retValue;
 	}
 }

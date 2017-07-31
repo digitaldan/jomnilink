@@ -1,17 +1,24 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConnectedSecurityCommand implements Message {
 
-	private int command;
-	private int partition;
-	private int digit1;
-	private int digit2;
-	private int digit3;
-	private int digit4;
-	private int digit5;
-	private int digit6;
+	private final int command;
+	private final int partition;
+	private final int digit1;
+	private final int digit2;
+	private final int digit3;
+	private final int digit4;
+	private final int digit5;
+	private final int digit6;
 
 	/*
 	 * CONNECTED SECURITY SYSTEM COMMAND 
@@ -34,54 +41,9 @@ public class ConnectedSecurityCommand implements Message {
 	
 	 */
 
-	public ConnectedSecurityCommand(int command, int partition, int digit1, int digit2, int digit3, int digit4,
-			int digit5, int digit6) {
-		super();
-		this.command = command;
-		this.partition = partition;
-		this.digit1 = digit1;
-		this.digit2 = digit2;
-		this.digit3 = digit3;
-		this.digit4 = digit4;
-		this.digit5 = digit5;
-		this.digit6 = digit6;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_CONN_SEC_COMMAND;
-	}
-
-	public int getCommand() {
-		return command;
-	}
-
-	public int getPartition() {
-		return partition;
-	}
-
-	public int getDigit1() {
-		return digit1;
-	}
-
-	public int getDigit2() {
-		return digit2;
-	}
-
-	public int getDigit3() {
-		return digit3;
-	}
-
-	public int getDigit4() {
-		return digit4;
-	}
-
-	public int getDigit5() {
-		return digit5;
-	}
-
-	public int getDigit6() {
-		return digit6;
 	}
 
 }

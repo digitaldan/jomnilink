@@ -19,8 +19,20 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqSystemTroubles implements Message {
+
+	private static ReqSystemTroubles INSTANCE = new ReqSystemTroubles();
+
+	private ReqSystemTroubles() {
+	}
+
+	public static ReqSystemTroubles getInstance() {
+		return INSTANCE;
+	}
+
 
 	/*
 	 * (This message requests the HAI controller to report any system troubles. The response will be variable.
@@ -39,15 +51,4 @@ public class ReqSystemTroubles implements Message {
 		return MESG_TYPE_REQ_SYS_TROUBLES;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqSystemTroubles ( "
-
-				+ " )";
-
-		return retValue;
-	}
 }

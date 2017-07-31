@@ -19,10 +19,19 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class EndOfData implements Message {
 
-	public EndOfData() {
+
+	private static EndOfData INSTANCE = new EndOfData();
+
+	private EndOfData() {
+	}
+
+	public static EndOfData getInstance() {
+		return INSTANCE;
 	}
 
 	@Override
@@ -30,15 +39,4 @@ public class EndOfData implements Message {
 		return MESG_TYPE_END_OF_DATA;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "EndOfData ( "
-
-				+ " )";
-
-		return retValue;
-	}
 }

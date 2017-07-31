@@ -23,40 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
-import com.digitaldan.jomnilinkII.MessageTypes.Acknowledge;
-import com.digitaldan.jomnilinkII.MessageTypes.ActivateKeypadEmergency;
-import com.digitaldan.jomnilinkII.MessageTypes.AudioSourceStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
-import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityCommand;
-import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.DownloadNames;
-import com.digitaldan.jomnilinkII.MessageTypes.EnableNotifications;
-import com.digitaldan.jomnilinkII.MessageTypes.EndOfData;
-import com.digitaldan.jomnilinkII.MessageTypes.EventLogData;
-import com.digitaldan.jomnilinkII.MessageTypes.ExtendedObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.NameData;
-import com.digitaldan.jomnilinkII.MessageTypes.NegativeAcknowledge;
-import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ObjectTypeCapacities;
-import com.digitaldan.jomnilinkII.MessageTypes.OtherEventNotifications;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqAudioSourceStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectTypeCapacities;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSecurityCodeValidation;
-import com.digitaldan.jomnilinkII.MessageTypes.SecurityCodeValidation;
-import com.digitaldan.jomnilinkII.MessageTypes.SetTimeCommand;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemFeatures;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemFormats;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemInformation;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemTroubles;
-import com.digitaldan.jomnilinkII.MessageTypes.UploadEventRecord;
-import com.digitaldan.jomnilinkII.MessageTypes.UploadNames;
-import com.digitaldan.jomnilinkII.MessageTypes.ZoneReadyStatus;
+import com.digitaldan.jomnilinkII.MessageTypes.*;
 import com.digitaldan.jomnilinkII.MessageTypes.properties.AreaProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.properties.AudioSourceProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.properties.AudioZoneProperties;
@@ -127,7 +95,7 @@ public class MessageFactory {
 		case Message.MESG_TYPE_ZONE_READY:
 			return zoneReadyStatus(in, len);
 		case Message.MESG_TYPE_OTHER_EVENT_NOTIFY:
-			return otherEventNOtification(in, len);
+			return otherEventNotification(in, len);
 		case Message.MESG_TYPE_EVENT_LOG_DATA:
 			return eventLogData(in, len);
 		case Message.MESG_TYPE_NAME_DATA:
@@ -154,36 +122,42 @@ public class MessageFactory {
 		case Message.MESG_TYPE_CLEAR_VOICES:
 			break;
 		case Message.MESG_TYPE_ENABLE_NOTIFICATIONS: {
-			os.writeBoolean(((EnableNotifications) msg).isEnabled());
+			os.writeBoolean(((Notifications) msg).isEnabled());
 		}
 			break;
 		case Message.MESG_TYPE_REQ_OBJ_CAPACITY: {
 			ReqObjectTypeCapacities m = (ReqObjectTypeCapacities) msg;
-			os.writeByte(m.objectType());
+			os.writeByte(m.getObjectType());
 		}
 			break;
 		case Message.MESG_TYPE_REQ_OBJ_PROP: {
 			ReqObjectProperties m = (ReqObjectProperties) msg;
-			os.writeByte(m.objectType());
-			os.writeShort(m.objectNum());
-			os.writeByte(m.direction());
-			os.writeByte(m.filter1());
-			os.writeByte(m.filter2());
-			os.writeByte(m.filter3());
+			os.writeByte(m.getObjectType());
+			os.writeShort(m.getObjectNumber());
+			os.writeByte(m.getDirection());
+			os.writeByte(m.getFilter1());
+			os.writeByte(m.getFilter2());
+			os.writeByte(m.getFilter3());
 		}
 			break;
-		case Message.MESG_TYPE_REQ_EXT_OBJ_STATUS:
+		case Message.MESG_TYPE_REQ_EXT_OBJ_STATUS:{
+			ReqExtendedObjectStatus m = (ReqExtendedObjectStatus) msg;
+			os.writeByte(m.getObjectType());
+			os.writeShort(m.getStartObject());
+			os.writeShort(m.getEndObject());
+		}
+		    break;
 		case Message.MESG_TYPE_REQ_OBJ_STATUS: {
 			ReqObjectStatus m = (ReqObjectStatus) msg;
-			os.writeByte(m.objectType());
-			os.writeShort(m.objectStart());
-			os.writeShort(m.objectEnd());
+			os.writeByte(m.getObjectType());
+			os.writeShort(m.getStartObject());
+			os.writeShort(m.getEndObject());
 		}
 			break;
 		case Message.MESG_TYPE_REQ_AUDIO_SOURCE_STATUS: {
 			ReqAudioSourceStatus m = (ReqAudioSourceStatus) msg;
-			os.writeShort(m.source());
-			os.writeByte(m.position());
+			os.writeShort(m.getSource());
+			os.writeByte(m.getPosition());
 		}
 			break;
 		case Message.MESG_TYPE_REQ_ZONE_READY:
@@ -289,17 +263,11 @@ public class MessageFactory {
 		return bos.toByteArray();
 	}
 
-	protected static Acknowledge acknowledge() {
-		return new Acknowledge();
-	}
+	protected static Acknowledge acknowledge() { return Acknowledge.getInstance(); }
 
-	protected static NegativeAcknowledge negativeAcknowledge() {
-		return new NegativeAcknowledge();
-	}
+	protected static NegativeAcknowledge negativeAcknowledge() { return NegativeAcknowledge.getInstance(); }
 
-	protected static EndOfData endOfData() {
-		return new EndOfData();
-	}
+	protected static EndOfData endOfData() { return EndOfData.getInstance(); }
 
 	protected static SystemInformation systemInformation(DataInputStream in) throws IOException {
 		int model = in.readUnsignedByte();
@@ -309,7 +277,12 @@ public class MessageFactory {
 		byte[] phoneBytes = new byte[15];
 		in.readFully(phoneBytes);
 		String phone = new String(phoneBytes);
-		return new SystemInformation(model, major, minor, revision, phone);
+		return SystemInformation.builder()
+				.model(model)
+				.major(major)
+				.minor(minor)
+				.revision(revision)
+				.phone(phone).build();
 	}
 
 	protected static SystemStatus systemStatus(DataInputStream in, int len) throws IOException {
@@ -327,41 +300,54 @@ public class MessageFactory {
 		int sunsetHour = in.readUnsignedByte();
 		int sunsetMinute = in.readUnsignedByte();
 		int batteryReading = in.readUnsignedByte();
-		HashMap<Integer, Integer> alarms = new HashMap<>();
+		SystemStatus.SystemStatusBuilder builder = SystemStatus.builder()
+													.timeDateValid(timeDateValid)
+													.year(year)
+													.month(month)
+													.day(day)
+													.dayOfWeek(dayOfWeek)
+													.hour(hour)
+													.minute(minute)
+													.second(second)
+													.daylightSavings(daylightSavings)
+													.sunriseHour(sunriseHour)
+													.sunsetMinute(sunsetMinute)
+													.sunsetHour(sunsetHour)
+													.sunsetMinute(sunsetMinute)
+													.batteryReading(batteryReading);
 		for (int i = 16; i < len; i = i + 2) {
-			alarms.put(new Integer(in.readUnsignedByte()), new Integer(in.readUnsignedByte()));
+			builder.alarm(in.readUnsignedByte(), in.readUnsignedByte());
 		}
-		return new SystemStatus(timeDateValid, year, month, day, dayOfWeek, hour, minute, second, daylightSavings,
-				sunriseHour, sunriseMinute, sunsetHour, sunsetMinute, batteryReading, alarms);
+		return builder.build();
 	}
 
 	protected static SystemTroubles systemTroubles(DataInputStream in, int length) throws IOException {
-		int[] troubles = new int[length];
+		SystemTroubles.SystemTroublesBuilder builder = SystemTroubles.builder();
 		for (int i = 0; i < length; i++) {
-			troubles[i] = in.readUnsignedByte();
+			builder.trouble(in.readUnsignedByte());
 		}
-		return new SystemTroubles(troubles);
+		return builder.build();
 	}
 
 	protected static SystemFeatures systemFeatures(DataInputStream in, int length) throws IOException {
-		int[] features = new int[length];
+		SystemFeatures.SystemFeaturesBuilder builder = SystemFeatures.builder();
 		for (int i = 0; i < length; i++) {
-			features[i] = in.readUnsignedByte();
+			builder.feature(in.readUnsignedByte());
 		}
-		return new SystemFeatures(features);
+		return builder.build();
 	}
 
 	protected static SystemFormats systemFormats(DataInputStream in, int length) throws IOException {
 		int tempFormat = in.readUnsignedByte();
-		int timeformat = in.readUnsignedByte();
+		int timeFormat = in.readUnsignedByte();
 		int dateFormat = in.readUnsignedByte();
-		return new SystemFormats(tempFormat, timeformat, dateFormat);
+		return SystemFormats.builder().tempFormat(tempFormat).timeFormat(timeFormat).dateFormat(dateFormat).build();
 	}
 
 	protected static ObjectTypeCapacities objectTypeCapacities(DataInputStream in, int length) throws IOException {
 		int objectType = in.readUnsignedByte();
 		int capacity = in.readUnsignedShort();
-		return new ObjectTypeCapacities(objectType, capacity);
+		return ObjectTypeCapacities.builder().objectType(objectType).capacity(capacity).build();
 	}
 
 	protected static ObjectStatus objectStatus(DataInputStream in, int length, boolean extended) throws IOException {
@@ -530,9 +516,9 @@ public class MessageFactory {
 			throw new IOException("Unknown status type " + statusType);
 		}
 		if (extended) {
-			return new ExtendedObjectStatus(statusType, recordLength, status);
+		    return ExtendedObjectStatus.extendedBuilder().statusType(statusType).recordLength(recordLength).statuses(status).build();
 		} else {
-			return new ObjectStatus(statusType, status);
+			return ObjectStatus.builder().statusType(statusType).statuses(status).build();
 		}
 	}
 
@@ -693,32 +679,40 @@ public class MessageFactory {
 		byte[] data = new byte[length - 5];
 		in.readFully(data);
 		String sourceData = new String(data);
-		return new AudioSourceStatus(srcNumber, seqNumber, pos, fieldId, sourceData);
+		return AudioSourceStatus.builder()
+                .sourceNumber(srcNumber)
+				.sequenceNumber(seqNumber)
+				.position(pos)
+				.fieldId(fieldId)
+				.sourceData(sourceData)
+				.build();
 	}
 
 	protected static ZoneReadyStatus zoneReadyStatus(DataInputStream in, int length) throws IOException {
-		int[] zones = new int[length];
+		ZoneReadyStatus.ZoneReadyStatusBuilder builder = ZoneReadyStatus.builder();
 		for (int i = 0; i < length; i++) {
-			zones[i] = in.readUnsignedByte();
+			builder.zone(in.readUnsignedByte());
 		}
-		return new ZoneReadyStatus(zones);
+		return builder.build();
 	}
 
 	protected static ConnectedSecurityStatus connectedSecurityStatus(DataInputStream in, int length)
 			throws IOException {
 		int[] parts = new int[length];
-		for (int i = 0; i < length; i++) {
-			parts[i] = in.readUnsignedByte();
+		ConnectedSecurityStatus.ConnectedSecurityStatusBuilder builder = ConnectedSecurityStatus.builder();
+		for (int i = 0; i < length/2; i++) {
+			ConnectedSecurityStatus.Partition partition = new ConnectedSecurityStatus.Partition(in.readUnsignedByte(), in.readUnsignedByte());
+			builder.partition(partition);
 		}
-		return new ConnectedSecurityStatus(parts);
+		return builder.build();
 	}
 
-	protected static OtherEventNotifications otherEventNOtification(DataInputStream in, int length) throws IOException {
-		int[] notifications = new int[length / 2];
-		for (int i = 0; i < notifications.length; i++) {
-			notifications[i] = in.readUnsignedShort();
+	protected static OtherEventNotifications otherEventNotification(DataInputStream in, int length) throws IOException {
+		OtherEventNotifications.OtherEventNotificationsBuilder builder = OtherEventNotifications.builder();
+		for (int i = 0; i < length/2; i++) {
+			builder.notification(in.readUnsignedShort());
 		}
-		return new OtherEventNotifications(notifications);
+		return builder.build();
 	}
 
 	protected static EventLogData eventLogData(DataInputStream in, int length) throws IOException {
@@ -731,8 +725,17 @@ public class MessageFactory {
 		int eventType = in.readUnsignedByte();
 		int parameter1 = in.readUnsignedByte();
 		int parameter2 = in.readUnsignedShort();
-		return new EventLogData(eventNumber, timeDataValid, month, day, hour, minute, eventType, parameter1,
-				parameter2);
+		return EventLogData.builder()
+				.eventNumber(eventNumber)
+				.timeDataValid(timeDataValid)
+				.month(month)
+				.day(day)
+				.hour(hour)
+				.minute(minute)
+				.eventType(eventType)
+				.parameter1(parameter1)
+				.parameter2(parameter2)
+				.build();
 	}
 
 	protected static NameData nameData(DataInputStream in, int length) throws IOException {
@@ -742,12 +745,12 @@ public class MessageFactory {
 		byte[] data = new byte[length - 3];
 		in.readFully(data);
 		String name = new String(data);
-		return new NameData(objectType, objectNumber, name);
+		return NameData.builder().objectType(objectType).objectNumber(objectNumber).name(name).build();
 	}
 
 	protected static SecurityCodeValidation securityCodeValidation(DataInputStream in, int length) throws IOException {
 		int code = in.readUnsignedByte();
 		int level = in.readUnsignedByte();
-		return new SecurityCodeValidation(code, level);
+		return SecurityCodeValidation.builder().codeNumber(code).authorityLevel(level).build();
 	}
 }

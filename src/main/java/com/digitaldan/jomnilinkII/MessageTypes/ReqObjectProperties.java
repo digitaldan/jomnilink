@@ -19,15 +19,22 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReqObjectProperties implements Message {
 
-	private int objType;
-	private int objNum;
-	private int dir;
-	private int f1;
-	private int f2;
-	private int f3;
+	private final int objectType;
+	private final int objectNumber;
+	private final int direction;
+	private final int filter1;
+	private final int filter2;
+	private final int filter3;
 
 	/*
 	 * REQUEST OBJECT PROPERTIES
@@ -78,54 +85,9 @@ public class ReqObjectProperties implements Message {
 	
 	*/
 
-	public ReqObjectProperties(int objectType, int objectNum, int direction, int filter1, int filter2, int filter3) {
-		objType = objectType;
-		objNum = objectNum;
-		dir = direction;
-		f1 = filter1;
-		f2 = filter2;
-		f3 = filter3;
-	}
-
-	public int objectType() {
-		return objType;
-	}
-
-	public int objectNum() {
-		return objNum;
-	}
-
-	public int direction() {
-		return dir;
-	}
-
-	public int filter1() {
-		return f1;
-	}
-
-	public int filter2() {
-		return f2;
-	}
-
-	public int filter3() {
-		return f3;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_OBJ_PROP;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqObjectProperties ( " + "objType = " + this.objType + TAB + "objNum = " + this.objNum + TAB
-				+ "dir = " + this.dir + TAB + "f1 = " + this.f1 + TAB + "f2 = " + this.f2 + TAB + "f3 = " + this.f3
-				+ TAB + " )";
-
-		return retValue;
 	}
 
 }

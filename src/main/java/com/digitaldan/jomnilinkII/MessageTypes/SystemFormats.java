@@ -19,12 +19,19 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemFormats implements Message {
 
-	private int tempFormat;
-	private int timeformat;
-	private int dateFormat;
+	private final int tempFormat;
+	private final int timeFormat;
+	private final int dateFormat;
 
 	/*
 	 * This message is sent by the HAI controller in reply to a REQUEST SYSTEM FORMATS message. The controller
@@ -48,39 +55,10 @@ public class SystemFormats implements Message {
 	      2 = DDMM
 	
 	 */
-	public SystemFormats(int tempFormat, int timeformat, int dateFormat) {
-		super();
-		this.tempFormat = tempFormat;
-		this.timeformat = timeformat;
-		this.dateFormat = dateFormat;
-	}
-
-	public int getTempFormat() {
-		return tempFormat;
-	}
-
-	public int getTimeformat() {
-		return timeformat;
-	}
-
-	public int getDateFormat() {
-		return dateFormat;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_FORMATS;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "SystemFormats ( " + "tempFormat = " + this.tempFormat + TAB + "timeformat = " + this.timeformat
-				+ TAB + "dateFormat = " + this.dateFormat + TAB + " )";
-
-		return retValue;
 	}
 
 }

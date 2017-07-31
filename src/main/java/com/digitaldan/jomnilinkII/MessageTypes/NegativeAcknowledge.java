@@ -19,10 +19,19 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class NegativeAcknowledge implements Message {
 
-	public NegativeAcknowledge() {
+
+	private static NegativeAcknowledge INSTANCE = new NegativeAcknowledge();
+
+	private NegativeAcknowledge() {
+	}
+
+	public static NegativeAcknowledge getInstance() {
+		return INSTANCE;
 	}
 
 	@Override
@@ -30,15 +39,4 @@ public class NegativeAcknowledge implements Message {
 		return MESG_TYPE_NEG_ACK;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "NegativeAcknowledge ( "
-
-				+ " )";
-
-		return retValue;
-	}
 }

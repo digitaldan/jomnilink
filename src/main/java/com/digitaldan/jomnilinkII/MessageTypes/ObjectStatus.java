@@ -20,11 +20,16 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.Status;
+import lombok.Builder;
+import lombok.Value;
+import lombok.experimental.NonFinal;
 
+@Value
+@NonFinal
 public class ObjectStatus implements Message {
 
-	private int statusType;
-	private Status[] statuses;
+	private final int statusType;
+	private final Status[] statuses;
 
 	/*
 	 *
@@ -39,29 +44,9 @@ public class ObjectStatus implements Message {
 		return MESG_TYPE_OBJ_STATUS;
 	}
 
-	public ObjectStatus(int statusType, Status[] statuses) {
-		super();
+	@Builder
+	protected ObjectStatus(int statusType, Status[] statuses) {
 		this.statusType = statusType;
 		this.statuses = statuses;
 	}
-
-	public int getStatusType() {
-		return statusType;
-	}
-
-	public Status[] getStatuses() {
-		return statuses;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ObjectStatus ( " + "statusType = " + this.statusType + TAB + "statuses = " + this.statuses + TAB
-				+ " )";
-
-		return retValue;
-	}
-
 }

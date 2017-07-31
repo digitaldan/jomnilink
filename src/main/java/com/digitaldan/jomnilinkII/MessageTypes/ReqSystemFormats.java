@@ -19,8 +19,21 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqSystemFormats implements Message {
+
+	private static ReqSystemFormats INSTANCE = new ReqSystemFormats();
+
+	private ReqSystemFormats() {
+	}
+
+	public static ReqSystemFormats getInstance() {
+		return INSTANCE;
+	}
+
+
 
 	/*
 	 *This message requests the HAI controller to report the configured temperature format, time format, and date format.
@@ -39,15 +52,4 @@ public class ReqSystemFormats implements Message {
 		return MESG_TYPE_REQ_SYS_FORMATS;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqSystemFormats ( "
-
-				+ " )";
-
-		return retValue;
-	}
 }
