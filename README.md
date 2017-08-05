@@ -13,6 +13,18 @@ mvn clean package
 mvn clean compile assembly:single
 ```
 
+## Deploy staging jar (must have "STAGING" in pom version)
+
+```
+mvn clean deploy
+```
+
+## Deploy Release jar to Artifactory
+
+```
+mvn clean deploy -P release
+```
+
 ## Crude example usage
 
 ```
