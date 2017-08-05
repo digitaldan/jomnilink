@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import com.digitaldan.jomnilinkII.Connection;
 import com.digitaldan.jomnilinkII.DisconnectListener;
 import com.digitaldan.jomnilinkII.Message;
-import com.digitaldan.jomnilinkII.MessageUtils;
 import com.digitaldan.jomnilinkII.NotificationListener;
 import com.digitaldan.jomnilinkII.OmniInvalidResponseException;
 import com.digitaldan.jomnilinkII.OmniNotConnectedException;
@@ -14,7 +13,6 @@ import com.digitaldan.jomnilinkII.MessageTypes.AudioSourceStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.EventLogData;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.OtherEventNotifications;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AreaStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AudioZoneStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AuxSensorStatus;
@@ -22,6 +20,8 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.MessageStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
+import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.ButtonEvent;
+import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
 
 /*
  * Notes for NIO
@@ -84,11 +84,19 @@ public class Main {
 				}
 
 				@Override
-				public void otherEventNotification(OtherEventNotifications o) {
-					logger.info("Other Event");
-					for(Integer notification : o.getNotifications()){
-						logger.info("Event bits {}", MessageUtils.getBits(notification));
+				public void systemEventNotification(SystemEvent event) {
+					logger.info("Got SystemEvent tyoe {}", event.getType());
+					switch (event.getType()) {
+					case BUTTON:
+						logger.info("ButtonEvent number {}", ((ButtonEvent) event).getButtonNumber());
+						break;
+					case PHONE_LINE_OFF_HOOK:
+						logger.info("PHONE_LINE_OFF_HOOK event");
+						break;
+					default:
+						break;
 					}
+
 				}
 			});
 

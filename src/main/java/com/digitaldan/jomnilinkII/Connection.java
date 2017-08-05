@@ -82,6 +82,7 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UserSettingStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
+import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
 
 public class Connection extends Thread {
 	private static final Logger logger = LoggerFactory.getLogger(Connection.class);
@@ -321,7 +322,7 @@ public class Connection extends Thread {
 	3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
 	     negotiated when the client and controller established the secure connection.
 	4.   Process the next block of data until all data has been processed.
-
+	
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
 		/* 1. */
@@ -872,9 +873,14 @@ public class Connection extends Thread {
 						for (NotificationListener listener : listeners) {
 							if (message instanceof ObjectStatus) {
 								listener.objectStatusNotification((ObjectStatus) message);
-							} else if (message instanceof OtherEventNotifications){
-								listener.otherEventNotification((OtherEventNotifications) message);
-							} else{
+							} else if (message instanceof OtherEventNotifications) {
+								for (int i : ((OtherEventNotifications) message).getNotifications()) {
+									SystemEvent se = SystemEvent.fromEvent(i);
+									if (se != null) {
+										listener.systemEventNotification(se);
+									}
+								}
+							} else {
 								logger.debug("Unhandled notficiation message: {}", message);
 							}
 						}
