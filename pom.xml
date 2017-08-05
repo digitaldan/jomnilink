@@ -4,7 +4,7 @@
 	<groupId>com.github.digitaldan</groupId>
 	<artifactId>jomnilink</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>jomnilink</name>
 	<url>https://github.com/digitaldan/jomnilink</url>
 	<description>jomnilink - A java library for connecting to HAI/Leviton Omni and Lumina home automation controllers using the HAI OmniLink II protocol.</description>
@@ -18,12 +18,87 @@
 		<url>https://github.com/digitaldan/jomnilink.git</url>
 		<developerConnection>Dan Cunningham</developerConnection>
 	</scm>
-	 <developers>
-    <developer>
-      <name>Dan Cunningham</name>
-      <email>dan@digitaldan.com</email>
-    </developer>
-  </developers>
+	<developers>
+		<developer>
+			<name>Dan Cunningham</name>
+			<email>dan@digitaldan.com</email>
+		</developer>
+	</developers>
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<properties>
+				<gpg.executable>gpg</gpg.executable>
+				<gpg.keyname>${env.GPG_KEYNAME}</gpg.keyname>
+				<gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+				<gpg.defaultKeyring>false</gpg.defaultKeyring>
+				<gpg.publicKeyring>${env.GPG_DIR}/pubring.gpg</gpg.publicKeyring>
+				<gpg.secretKeyring>${env.GPG_DIR}/secring.gpg</gpg.secretKeyring>
+			</properties>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.2</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>local-sign</id>
+			<activation>
+				<property>
+					<name>local-sign</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -68,20 +143,6 @@
 						<id>attach-sources</id>
 						<goals>
 							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
 						</goals>
 					</execution>
 				</executions>

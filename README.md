@@ -1,5 +1,17 @@
 # jomnilink - A java library for connecting to HAI/Leviton Omni and Lumina home automation controllers using the HAI OmniLink II protocol.
 
+![TravisCI Build Status](https://travis-ci.org/digitaldan/jomnilink.svg?branch=master)
+
+# Download
+
+## Snapshots
+
+https://oss.sonatype.org/content/repositories/snapshots/com/github/digitaldan/jomnilink/
+
+## Releases
+
+https://repo1.maven.org/maven2/com/github/digitaldan/jomnilink/
+
 # Building
 
 ## Basic jar
@@ -11,18 +23,6 @@ mvn clean package
 
 ```
 mvn clean compile assembly:single
-```
-
-## Deploy staging jar (must have "STAGING" in pom version)
-
-```
-mvn clean deploy
-```
-
-## Deploy Release jar to Central Repo
-
-```
-mvn clean deploy -P release
 ```
 
 ## Crude example usage
