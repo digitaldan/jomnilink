@@ -1,6 +1,6 @@
 # jomnilink - A java library for connecting to HAI/Leviton Omni and Lumina home automation controllers using the HAI OmniLink II protocol.
 
-![TravisCI Build Status](https://travis-ci.org/digitaldan/jomnilink.svg?branch=master)
+[![TravisCI Build Status](https://travis-ci.org/digitaldan/jomnilink.svg?branch=master)](https://travis-ci.org/digitaldan/jomnilink)
 
 # Download
 
