@@ -1,14 +1,21 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReqSecurityCodeValidation implements Message {
 
-	private int area;
-	private int digit1;
-	private int digit2;
-	private int digit3;
-	private int digit4;
+	private final int area;
+	private final int digit1;
+	private final int digit2;
+	private final int digit3;
+	private final int digit4;
 	/*
 	 *  
 	These messages instruct the controller to confirm that the specified four-digit security code is valid in the specified 
@@ -38,38 +45,9 @@ public class ReqSecurityCodeValidation implements Message {
 		
 	 */
 
-	public ReqSecurityCodeValidation(int area, int digit1, int digit2, int digit3, int digit4) {
-		super();
-		this.area = area;
-		this.digit1 = digit1;
-		this.digit2 = digit2;
-		this.digit3 = digit3;
-		this.digit4 = digit4;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SEC_CODE_VALID;
-	}
-
-	public int getArea() {
-		return area;
-	}
-
-	public int getDigit1() {
-		return digit1;
-	}
-
-	public int getDigit2() {
-		return digit2;
-	}
-
-	public int getDigit3() {
-		return digit3;
-	}
-
-	public int getDigit4() {
-		return digit4;
 	}
 
 }

@@ -20,78 +20,29 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ZoneProperties extends ObjectProperties {
-	private int status;
-	private int loop;
-	private int zoneType;
-	private int area;
-	private int options;
+	private final int status;
+	private final int loop;
+	private final int zoneType;
+	private final int area;
+	private final int options;
 
-	public ZoneProperties(int number, int status, int loop, int zoneType, int area, int options, String name) {
+	@Builder
+	private ZoneProperties(int number, int status, int loop, int zoneType, int area, int options, String name) {
 		super(OBJ_TYPE_ZONE, number, name);
 		this.status = status;
 		this.loop = loop;
 		this.zoneType = zoneType;
 		this.area = area;
 		this.options = options;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getLoop() {
-		return loop;
-	}
-
-	public int getZoneType() {
-		return zoneType;
-	}
-
-	public int getArea() {
-		return area;
-	}
-
-	public int getOptions() {
-		return options;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setLoop(int loop) {
-		this.loop = loop;
-	}
-
-	public void setZoneType(int zoneType) {
-		this.zoneType = zoneType;
-	}
-
-	public void setArea(int area) {
-		this.area = area;
-	}
-
-	public void setOptions(int options) {
-		this.options = options;
-	}
-
-	public void updateZone(ZoneStatus zoneStatus) {
-		setLoop(zoneStatus.getLoop());
-		setStatus(zoneStatus.getStatus());
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ZoneProperties ( " + "number = " + this.number + TAB + "status = " + this.status + TAB + "loop = "
-				+ this.loop + TAB + "type = " + this.zoneType + TAB + "area = " + this.area + TAB + "options = "
-				+ this.options + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
 	}
 
 }

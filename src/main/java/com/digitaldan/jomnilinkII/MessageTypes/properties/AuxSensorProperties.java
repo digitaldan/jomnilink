@@ -20,16 +20,24 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AuxSensorStatus;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AuxSensorProperties extends ObjectProperties {
 
-	private int status;
-	private int current;
-	private int lowSetpoint;
-	private int highSetpoint;
-	private int sensorType;
+	private final int status;
+	private final int current;
+	private final int lowSetpoint;
+	private final int highSetpoint;
+	private final int sensorType;
 
-	public AuxSensorProperties(int number, int status, int current, int lowSetpoint, int highSetpoint, int sensorType,
+	@Builder
+	private AuxSensorProperties(int number, int status, int current, int lowSetpoint, int highSetpoint, int sensorType,
 			String name) {
 		super(OBJ_TYPE_AUX_SENSOR, number, name);
 		this.status = status;
@@ -37,66 +45,6 @@ public class AuxSensorProperties extends ObjectProperties {
 		this.lowSetpoint = lowSetpoint;
 		this.highSetpoint = highSetpoint;
 		this.sensorType = sensorType;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getCurrent() {
-		return current;
-	}
-
-	public int getLowSetpoint() {
-		return lowSetpoint;
-	}
-
-	public int getHighSetpoint() {
-		return highSetpoint;
-	}
-
-	public int getSensorType() {
-		return sensorType;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setCurrent(int current) {
-		this.current = current;
-	}
-
-	public void setLowSetpoint(int lowSetpoint) {
-		this.lowSetpoint = lowSetpoint;
-	}
-
-	public void setHighSetpoint(int highSetpoint) {
-		this.highSetpoint = highSetpoint;
-	}
-
-	public void setSensorType(int sensorType) {
-		this.sensorType = sensorType;
-	}
-
-	public void updateAuxSensor(AuxSensorStatus auxStatus) {
-		setLowSetpoint(auxStatus.getCoolSetpoint());
-		setHighSetpoint(auxStatus.getHeatSetpotint());
-		setStatus(auxStatus.getStatus());
-		setCurrent(auxStatus.getTemp());
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "AuxSensorProperties ( " + "number = " + this.number + TAB + "status = " + this.status + TAB
-				+ "current = " + this.current + TAB + "lowSetpoint = " + this.lowSetpoint + TAB + "highSetpoint = "
-				+ this.highSetpoint + TAB + "sensorType = " + this.sensorType + TAB + "name = " + this.name + TAB
-				+ " )";
-
-		return retValue;
 	}
 
 }

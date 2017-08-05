@@ -19,10 +19,17 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectTypeCapacities implements Message {
-	private int objectType;
-	private int capacity;
+	private final int objectType;
+	private final int capacity;
 
 	/*
 	 * This message is sent by the HAI controller in reply to a REQUEST OBJECT TYPE CAPACITIES message. The
@@ -38,34 +45,10 @@ public class ObjectTypeCapacities implements Message {
 	
 	 */
 
-	public ObjectTypeCapacities(int objectType, int capacity) {
-		super();
-		this.objectType = objectType;
-		this.capacity = capacity;
-	}
-
-	public int getObjectType() {
-		return objectType;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_OBJ_CAPACITY;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ObjectTypeCapacities ( " + "objectType = " + this.objectType + TAB + "capacity = " + this.capacity
-				+ TAB + " )";
-
-		return retValue;
 	}
 
 }

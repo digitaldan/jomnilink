@@ -1,12 +1,19 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NameData implements Message {
 
-	private int objectType;
-	private int objetcNumber;
-	private String name;
+	private final int objectType;
+	private final int objectNumber;
+	private final String name;
 
 	/*
 	 * NAME DATA 
@@ -52,39 +59,11 @@ public class NameData implements Message {
 	Audio Zone 10 12 8 36 8 36 
 	
 	 */
-	public NameData(int objectType, int objetcNumber, String name) {
-		super();
-		this.objectType = objectType;
-		this.objetcNumber = objetcNumber;
-		this.name = name;
-	}
+
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_NAME_DATA;
-	}
-
-	public int getObjectType() {
-		return objectType;
-	}
-
-	public int getObjetcNumber() {
-		return objetcNumber;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "NameData ( " + "objectType = " + this.objectType + TAB + "objetcNumber = " + this.objetcNumber + TAB
-				+ "name = " + this.name + TAB + " )";
-
-		return retValue;
 	}
 
 }

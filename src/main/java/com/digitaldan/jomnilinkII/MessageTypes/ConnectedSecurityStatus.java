@@ -19,10 +19,17 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.Builder;
+import lombok.Singular;
+import lombok.Value;
 
+import java.util.List;
+
+@Value
+@Builder
 public class ConnectedSecurityStatus implements Message {
 
-	private Partition[] partitions;
+	@Singular private final List<Partition> partitions;
 	/*
 	 *CONNECTED SECURITY SYSTEM STATUS
 	This message is sent in response to a REQUEST CONNECTED SECURITY SYSTEM STATUS message.
@@ -38,52 +45,22 @@ public class ConnectedSecurityStatus implements Message {
 	    Data 16                     status of partition 8
 	    CRC 1                       varies
 	    CRC 2                       varies
-	
 	 */
-
-	public ConnectedSecurityStatus(int[] partsModeStatus) {
-		super();
-		Partition[] parts = new Partition[partsModeStatus.length / 2];
-		for (int i = 0; i < partsModeStatus.length; i++) {
-			parts[i] = new ConnectedSecurityStatus.Partition(partsModeStatus[i], partsModeStatus[i++]);
-		}
-		this.partitions = parts;
-	}
-
-	public Partition[] getPartitions() {
-		return partitions;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_STATUS;
 	}
 
-	public class Partition {
-		int _mode;
-		int _status;
+	@Value
+	public static class Partition {
+		private final int mode;
+		private final int status;
 
 		public Partition(int mode, int status) {
-			_mode = mode;
-			_status = status;
-		}
-
-		public int status() {
-			return _status;
-		}
-
-		public int mode() {
-			return _mode;
+			this.mode = mode;
+			this.status = status;
 		}
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ConnectedSecurityStatus ( " + "partitions = " + this.partitions + TAB + " )";
-
-		return retValue;
-	}
 }

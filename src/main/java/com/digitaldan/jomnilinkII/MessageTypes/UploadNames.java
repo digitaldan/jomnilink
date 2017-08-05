@@ -1,11 +1,18 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UploadNames implements Message {
 
-	private int objectType;
-	private int objectNumber;
+	private final int objectType;
+	private final int objectNumber;
 
 	/*
 	 * UPLOAD NAMES 
@@ -25,25 +32,11 @@ public class UploadNames implements Message {
 	Data 3   object number (LSB) 
 	CRC 1   varies 
 	CRC 2   varies 
-	
 	 */
-	public UploadNames(int objectType, int objectNumber) {
-		super();
-		this.objectType = objectType;
-		this.objectNumber = objectNumber;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_UPLOAD_NAMES;
-	}
-
-	public int getObjectType() {
-		return objectType;
-	}
-
-	public int getObjectNumber() {
-		return objectNumber;
 	}
 
 }

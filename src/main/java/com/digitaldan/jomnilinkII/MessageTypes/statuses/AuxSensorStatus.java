@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,12 +23,15 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AuxSensorStatus extends Status {
 
-	private int status;
-	private int temp;
-	private int heatSetpotint;
-	private int coolSetpoint;
+	private final int status;
+	private final int temp;
+	private final int heatSetpoint;
+	private final int coolSetpoint;
 
 	/*
 	 *AUXILIARY SENSOR STATUS
@@ -60,55 +68,14 @@ public class AuxSensorStatus extends Status {
 	The temperatures are reported in the Omni temperature format (see Appendix C).
 	
 	 */
-	public AuxSensorStatus(int number, int status, int temp, int heatSetpotint, int coolSetpoint) {
+	@Builder
+	private AuxSensorStatus(int number, int status, int temp, int heatSetpoint, int coolSetpoint) {
 		super(number);
 		this.status = status;
 		this.temp = temp;
-		this.heatSetpotint = heatSetpotint;
+		this.heatSetpoint = heatSetpoint;
 		this.coolSetpoint = coolSetpoint;
 	}
 
-	public int getStatus() {
-		return status;
-	}
 
-	public int getTemp() {
-		return temp;
-	}
-
-	public int getHeatSetpotint() {
-		return heatSetpotint;
-	}
-
-	public int getCoolSetpoint() {
-		return coolSetpoint;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setTemp(int temp) {
-		this.temp = temp;
-	}
-
-	public void setHeatSetpotint(int heatSetpotint) {
-		this.heatSetpotint = heatSetpotint;
-	}
-
-	public void setCoolSetpoint(int coolSetpoint) {
-		this.coolSetpoint = coolSetpoint;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "AuxSensorStatus ( " + "number = " + this.number + TAB + "status = " + this.status + TAB + "temp = "
-				+ this.temp + TAB + "heatSetpotint = " + this.heatSetpotint + TAB + "coolSetpoint = "
-				+ this.coolSetpoint + TAB + " )";
-
-		return retValue;
-	}
 }

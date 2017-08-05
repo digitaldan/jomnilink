@@ -19,8 +19,21 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqSystemInformation implements Message {
+
+	private static ReqSystemInformation INSTANCE = new ReqSystemInformation();
+
+	private ReqSystemInformation() {
+	}
+
+	public static ReqSystemInformation getInstance() {
+		return INSTANCE;
+	}
+
+
 
 	/*
 	 *This message requests the HAI controller to report its model number, software version, and local phone number.
@@ -39,16 +52,5 @@ public class ReqSystemInformation implements Message {
 		return MESG_TYPE_REQ_SYS_INFO;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqSystemInformation ( "
-
-				+ " )";
-
-		return retValue;
-	}
-
 }
+

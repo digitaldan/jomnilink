@@ -1,5 +1,11 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+import lombok.experimental.NonFinal;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,15 +24,19 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@NonFinal
 public class ThermostatStatus extends Status {
 
-	private int status;
-	private int temperature;
-	private int heatSetpotint;
-	private int coolSetpoint;
-	private int mode;
-	private int fan;
-	private int hold;
+	private final int status;
+	private final int temperature;
+	private final int heatSetpoint;
+	private final int coolSetpoint;
+	private final int mode;
+	private final int fan;
+	private final int hold;
 
 	/*
 	 *THERMOSTAT STATUS
@@ -86,86 +96,19 @@ public class ThermostatStatus extends Status {
 	The hold status is non-zero if the thermostat is in hold mode.
 
 	 */
-
-	public ThermostatStatus(int number, int status, int temp, int heatSetpotint, int coolSetpoint, int systemMode,
-			int fan, int hold) {
+	@Builder
+	protected ThermostatStatus(int number, int status, int temperature, int heatSetpoint, int coolSetpoint, int mode,
+							 int fan, int hold) {
 		super(number);
 		this.status = status;
-		this.temperature = temp;
-		this.heatSetpotint = heatSetpotint;
-		this.coolSetpoint = coolSetpoint;
-		this.mode = systemMode;
-		this.fan = fan;
-		this.hold = hold;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getTemperature() {
-		return temperature;
-	}
-
-	public int getHeatSetpotint() {
-		return heatSetpotint;
-	}
-
-	public int getCoolSetpoint() {
-		return coolSetpoint;
-	}
-
-	public int getMode() {
-		return mode;
-	}
-
-	public int getFan() {
-		return fan;
-	}
-
-	public int getHold() {
-		return hold;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setTemperature(int temperature) {
 		this.temperature = temperature;
-	}
-
-	public void setHeatSetpotint(int heatSetpotint) {
-		this.heatSetpotint = heatSetpotint;
-	}
-
-	public void setCoolSetpoint(int coolSetpoint) {
+		this.heatSetpoint = heatSetpoint;
 		this.coolSetpoint = coolSetpoint;
-	}
-
-	public void setMode(int mode) {
 		this.mode = mode;
-	}
-
-	public void setFan(int fan) {
 		this.fan = fan;
-	}
-
-	public void setHold(int hold) {
 		this.hold = hold;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
 
-		retValue = "ThermostatStatus ( " + "number = " + this.number + TAB + "status = " + this.status + TAB
-				+ "temperature = " + this.temperature + TAB + "heatSetpotint = " + this.heatSetpotint + TAB
-				+ "coolSetpoint = " + this.coolSetpoint + TAB + "systemMode = " + this.mode + TAB + "fanMode = "
-				+ this.fan + TAB + "holdStatus = " + this.hold + TAB + " )";
-
-		return retValue;
-	}
 
 }

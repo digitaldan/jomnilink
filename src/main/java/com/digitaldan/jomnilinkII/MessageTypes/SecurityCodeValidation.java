@@ -1,11 +1,18 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityCodeValidation implements Message {
 
-	private int codeNumber;
-	private int authorityLevel;
+	private final int codeNumber;
+	private final int authorityLevel;
 
 	/*
 	 * SECURITY CODE VALIDATION 
@@ -27,35 +34,10 @@ public class SecurityCodeValidation implements Message {
 	3   User 
 	
 	 */
-	public SecurityCodeValidation(int codeNumber, int authorityLevel) {
-		super();
-		this.codeNumber = codeNumber;
-		this.authorityLevel = authorityLevel;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SEC_CODE_VALID;
-	}
-
-	public int getCodeNumber() {
-		return codeNumber;
-	}
-
-	public int getAuthorityLevel() {
-		return authorityLevel;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-
-		String retValue = "";
-
-		retValue = "SecurityCodeValidation ( " + "codeNumber = " + this.codeNumber + TAB + "authorityLevel = "
-				+ this.authorityLevel + TAB + " )";
-
-		return retValue;
 	}
 
 }

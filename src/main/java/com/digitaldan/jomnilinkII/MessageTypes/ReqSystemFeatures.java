@@ -19,8 +19,20 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.ToString;
 
+@ToString
 public class ReqSystemFeatures implements Message {
+	private static ReqSystemFeatures INSTANCE = new ReqSystemFeatures();
+
+	private ReqSystemFeatures() {
+	}
+
+	public static ReqSystemFeatures getInstance() {
+		return INSTANCE;
+	}
+
+
 
 	/*
 	 * This message requests the HAI controller to report its enabled features.
@@ -40,15 +52,4 @@ public class ReqSystemFeatures implements Message {
 		return MESG_TYPE_REQ_SYS_FEATURES;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqSystemFeatures ( "
-
-				+ " )";
-
-		return retValue;
-	}
 }

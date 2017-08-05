@@ -3,6 +3,16 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 import com.digitaldan.jomnilinkII.Message;
 
 public class ClearNames implements Message {
+	private static ClearNames INSTANCE = new ClearNames();
+
+	private ClearNames() {
+	}
+
+	public static ClearNames getInstance() {
+		return INSTANCE;
+	}
+
+
 
 	/*
 	 * CLEAR NAMES 
@@ -17,8 +27,6 @@ public class ClearNames implements Message {
 	 Data   none 
 	 CRC 1   0x40 
 	 CRC 2   0x57 
-	 
-	
 	 */
 
 	@Override

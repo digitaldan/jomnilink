@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,6 +23,9 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ExpansionStatus extends Status {
 
 	private int status;
@@ -50,38 +58,12 @@ public class ExpansionStatus extends Status {
 	     CRC 2                     varies
 	
 	 */
-
-	public ExpansionStatus(int number, int status, int battery) {
+	@Builder
+	private ExpansionStatus(int number, int status, int battery) {
 		super(number);
 		this.status = status;
 		this.battery = battery;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public int getBattery() {
-		return battery;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setBattery(int battery) {
-		this.battery = battery;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ExpansionStatus ( " + "number = " + this.number + TAB + "status = " + this.status + TAB
-				+ "battery = " + this.battery + TAB + " )";
-
-		return retValue;
-	}
 
 }

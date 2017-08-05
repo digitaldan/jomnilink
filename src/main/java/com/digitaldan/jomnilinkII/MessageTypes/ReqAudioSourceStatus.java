@@ -19,11 +19,18 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReqAudioSourceStatus implements Message {
 
-	private int src;
-	private int pos;
+	private final int source;
+	private final int position;
 
 	/*
 	 * This message requests the HAI controller to report the status of an audio source. This is used to report any metadata
@@ -59,31 +66,10 @@ public class ReqAudioSourceStatus implements Message {
 	the HAI controller to resend its last message.
 	
 	 */
-	public ReqAudioSourceStatus(int source, int position) {
-		src = source;
-		pos = position;
-	}
-
-	public int source() {
-		return src;
-	}
-
-	public int position() {
-		return pos;
-	}
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_AUDIO_SOURCE_STATUS;
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "ReqAudioSourceStatus ( " + "src = " + this.src + TAB + "pos = " + this.pos + TAB + " )";
-
-		return retValue;
-	}
 }

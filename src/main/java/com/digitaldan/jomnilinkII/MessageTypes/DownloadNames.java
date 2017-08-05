@@ -1,35 +1,23 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class DownloadNames implements Message {
 
-	private int objectType;
-	private int objectNumber;
-	private String name;
-
-	public DownloadNames(int objectType, int objectNumber, String name) {
-		super();
-		this.objectType = objectType;
-		this.objectNumber = objectNumber;
-		this.name = name;
-	}
+	private final int objectType;
+	private final int objectNumber;
+	private final String name;
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_DOWNLOAD_NAMES;
-	}
-
-	public int getObjectType() {
-		return objectType;
-	}
-
-	public int getObjectNumber() {
-		return objectNumber;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 }

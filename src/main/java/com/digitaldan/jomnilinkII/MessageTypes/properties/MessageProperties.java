@@ -19,20 +19,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.properties;
 */
 
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
+import lombok.Builder;
 
 public class MessageProperties extends ObjectProperties {
 
-	public MessageProperties(int number, String name) {
+    @Builder
+	private MessageProperties(int number, String name) {
 		super(OBJ_TYPE_MESG, number, name);
 	}
 
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "MessageProperties ( " + "number = " + this.number + TAB + "name = " + this.name + TAB + " )";
-
-		return retValue;
-	}
 }

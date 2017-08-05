@@ -19,11 +19,18 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UploadEventRecord implements Message {
 
-	private int eventNumber;
-	private int direction;
+	private final int eventNumber;
+	private final int direction;
 
 	/*
 	 * UPLOAD EVENT RECORD 
@@ -50,34 +57,9 @@ public class UploadEventRecord implements Message {
 	CRC 2   varies 
 	
 	*/
-
-	public UploadEventRecord(int eventNumber, int direction) {
-		this.eventNumber = eventNumber;
-		this.direction = direction;
-	}
-
-	public int getEventNumber() {
-		return eventNumber;
-	}
-
-	public int getDirection() {
-		return direction;
-	}
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_UPLOAD_EVENT_LOG;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "UploadEventRecord ( " + "eventNumber = " + this.eventNumber + TAB + "direction = " + this.direction
-				+ TAB + " )";
-
-		return retValue;
 	}
 
 }

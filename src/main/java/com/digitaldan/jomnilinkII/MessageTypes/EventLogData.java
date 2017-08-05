@@ -1,18 +1,25 @@
 package com.digitaldan.jomnilinkII.MessageTypes;
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventLogData implements Message {
 
-	private int eventNumber;
-	private boolean timeDataValid;
-	private int month;
-	private int day;
-	private int hour;
-	private int minute;
-	private int eventType;
-	private int parameter1;
-	private int parameter2;
+	private final int eventNumber;
+	private final boolean timeDataValid;
+	private final int month;
+	private final int day;
+	private final int hour;
+	private final int minute;
+	private final int eventType;
+	private final int parameter1;
+	private final int parameter2;
 
 	/*
 	 * EVENT LOG DATA 
@@ -153,72 +160,11 @@ public class EventLogData implements Message {
 	138  1-n message P2 logged 
 	
 	 */
-	public EventLogData(int eventNumber, boolean timeDataValid, int month, int day, int hour, int minute, int eventType,
-			int parameter1, int parameter2) {
-		super();
-		this.eventNumber = eventNumber;
-		this.timeDataValid = timeDataValid;
-		this.month = month;
-		this.day = day;
-		this.hour = hour;
-		this.minute = minute;
-		this.eventType = eventType;
-		this.parameter1 = parameter1;
-		this.parameter2 = parameter2;
-	}
+
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_EVENT_LOG_DATA;
-	}
-
-	public int getEventNumber() {
-		return eventNumber;
-	}
-
-	public boolean isTimeDataValid() {
-		return timeDataValid;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public int getDay() {
-		return day;
-	}
-
-	public int getHour() {
-		return hour;
-	}
-
-	public int getMinute() {
-		return minute;
-	}
-
-	public int getEventType() {
-		return eventType;
-	}
-
-	public int getParameter1() {
-		return parameter1;
-	}
-
-	public int getParameter2() {
-		return parameter2;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "EventLogData ( " + "eventNumber = " + this.eventNumber + TAB + "timeDataValid = "
-				+ this.timeDataValid + TAB + "month = " + this.month + TAB + "day = " + this.day + TAB + "hour = "
-				+ this.hour + TAB + "minute = " + this.minute + TAB + "eventType = " + this.eventType + TAB
-				+ "parameter1 = " + this.parameter1 + TAB + "parameter2 = " + this.parameter2 + TAB + " )";
-
-		return retValue;
 	}
 
 }

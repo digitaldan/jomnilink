@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -18,10 +23,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AccessControlReaderStatus extends Status {
 
-	private boolean granted;
-	private int lastUser;
+	private final boolean granted;
+	private final int lastUser;
 
 	/*
 	 *ACCESS CONTROL READER STATUS (Requires Firmware Version 3.0 or Later)
@@ -49,36 +57,11 @@ public class AccessControlReaderStatus extends Status {
 	     CRC 2
 	
 	 */
-	public AccessControlReaderStatus(int number, boolean granted, int lastUser) {
+	@Builder
+	private AccessControlReaderStatus(int number, boolean granted, int lastUser) {
 		super(number);
 		this.granted = granted;
 		this.lastUser = lastUser;
 	}
 
-	public boolean isGranted() {
-		return granted;
-	}
-
-	public int getLastUser() {
-		return lastUser;
-	}
-
-	public void setGranted(boolean granted) {
-		this.granted = granted;
-	}
-
-	public void setLastUser(int lastUser) {
-		this.lastUser = lastUser;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "UnitStatus ( " + "number = " + this.number + TAB + "isGranted = " + this.granted + TAB
-				+ "lastUser = " + this.lastUser + TAB + " )";
-
-		return retValue;
-	}
 }

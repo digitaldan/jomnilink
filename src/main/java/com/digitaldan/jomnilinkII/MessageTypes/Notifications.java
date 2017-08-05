@@ -19,8 +19,25 @@ package com.digitaldan.jomnilinkII.MessageTypes;
 */
 
 import com.digitaldan.jomnilinkII.Message;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
-public class EnableNotifications implements Message {
+@Value
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Notifications implements Message {
+
+	private final static Notifications ENABLED = new Notifications(true);
+	private final static Notifications DISABLED = new Notifications(false);
+
+	public static Notifications enable(){
+		return ENABLED;
+	}
+
+	public static Notifications disable(){
+		return DISABLED;
+	}
+
 
 	/*
 	 *ENABLE NOTIFICATIONS 
@@ -40,36 +57,11 @@ public class EnableNotifications implements Message {
 	NOTE notifiations that come back have a SEQ of 00
 	
 	 */
-	private boolean enabled;
-
-	public EnableNotifications() {
-		super();
-		enabled = true;
-	}
-
-	public EnableNotifications(boolean enabled) {
-		super();
-	}
+	private final boolean enabled;
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ENABLE_NOTIFICATIONS;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "EnableNotifications ( "
-
-				+ " )";
-
-		return retValue;
 	}
 
 }

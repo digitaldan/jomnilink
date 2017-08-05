@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
 /**
 *  Copyright (C) 2009  Dan Cunningham
 *
@@ -17,11 +22,13 @@ package com.digitaldan.jomnilinkII.MessageTypes.statuses;
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class UnitStatus extends Status {
 
-	private int status;
-	private int time;
+	private final int status;
+	private final int time;
 
 	/*
 	 *UNIT STATUS
@@ -88,36 +95,10 @@ public class UnitStatus extends Status {
 	     0-255           Counter value
 	
 	 */
-	public UnitStatus(int number, int status, int time) {
+	@Builder
+	private UnitStatus(int number, int status, int time) {
 		super(number);
 		this.status = status;
 		this.time = time;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getTime() {
-		return time;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setTime(int time) {
-		this.time = time;
-	}
-
-	@Override
-	public String toString() {
-		final String TAB = "    ";
-		String retValue = "";
-
-		retValue = "UnitStatus ( " + "number = " + this.number + TAB + "status = " + this.status + TAB + "time = "
-				+ this.time + TAB + " )";
-
-		return retValue;
 	}
 }
