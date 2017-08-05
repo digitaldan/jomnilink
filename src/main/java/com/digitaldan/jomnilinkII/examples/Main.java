@@ -22,7 +22,6 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.ButtonEvent;
 import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
-import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.ZoneStateChangeEvent;
 
 /*
  * Notes for NIO
@@ -91,10 +90,8 @@ public class Main {
 					case BUTTON:
 						logger.info("ButtonEvent number {}", ((ButtonEvent) event).getButtonNumber());
 						break;
-					case ZONE_STATE_CHANGE:
-						logger.info("ZoneStateChangeEvent number {} state {}",
-								((ZoneStateChangeEvent) event).getZoneNumber(),
-								((ZoneStateChangeEvent) event).getZoneState());
+					case PHONE_LINE_OFF_HOOK:
+						logger.info("PHONE_LINE_OFF_HOOK event");
 						break;
 					default:
 						break;

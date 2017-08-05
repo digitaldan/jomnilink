@@ -5,22 +5,13 @@ public enum SystemEventType {
 	PROLINK_MESSAGE(SystemEventConstants.PROLINKTEMPLATE, SystemEventConstants.PROLINKMASK, ProLinkMessageEvent.class), //
 	CENTRALITE_SWITCH(SystemEventConstants.CENTRALITETEMPLATE, SystemEventConstants.CENTRALITEMASK,
 			CentralightSwitchEvent.class), //
-	ALARM_OMNI(SystemEventConstants.OMNIALARMTEMPLATE, SystemEventConstants.OMNIALARMMASK, OmniAlarmEvent.class), //
-	ALARM_LUMINA(SystemEventConstants.LUMINAALARMTEMPLATE, SystemEventConstants.LUMINAALARMMASK,
-			LuminaAlarmEvent.class), //
-	ZONE_STATE_CHANGE(SystemEventConstants.ZONETEMPLATE, SystemEventConstants.ZONEMASK, ZoneStateChangeEvent.class), //
-	UNIT_STATE_CHANGE(SystemEventConstants.UNITTEMPLATE, SystemEventConstants.UNITMASK, UnitStateChangeEvent.class), //
 	COMPOSE_CODE_RECEIVED(SystemEventConstants.COMPOSETEMPLATE, SystemEventConstants.COMPOSEMASK,
 			ComposeCodeReceivedEvent.class), //
 	X10_CODE_RECEIVED(SystemEventConstants.X10TEMPLATE, SystemEventConstants.X10MASK, X10CodeReceivedEvent.class), //
-	LUMINA_MODE_CHANGE(SystemEventConstants.LUMINAMODECHANGETEMPLATE, SystemEventConstants.LUMINAMODECHANGEMASK,
-			LuminaModeChangeEvent.class), //
 	ALC_UPB_RADIORA_STARLITE_SWITCH_PRESS(SystemEventConstants.ACCESSCONTROLREADERTEMPLATE,
 			SystemEventConstants.ALCUPBRADIORASTARLIGHTMASK, SwitchPressEvent.class), //
 	UPB_LINK(SystemEventConstants.UPBLINKTEMPLATE, SystemEventConstants.UPBLINKMASK, UPBLinkEvent.class), //
 	ALL_ON_OFF(SystemEventConstants.ALLONOFFTEMPLATE, SystemEventConstants.ALLONOFFMASK, AllOnOffEvent.class), //
-	ACCESS_CONTROL_READER(SystemEventConstants.ACCESSCONTROLREADERTEMPLATE,
-			SystemEventConstants.ACCESSCONTROLREADERMASK, AccessControlReaderEvent.class), //
 	PHONE_LINE_DEAD(SystemEventConstants.PHONELINEDEADTEMPLATE, SystemEventConstants.ALLMASK, PhoneLineDeadEvent.class), //
 	PHONE_LINE_RING(SystemEventConstants.PHONELINERINGTEMPLATE, SystemEventConstants.ALLMASK, PhoneLineRingEvent.class), //
 	PHONE_LINE_OFF_HOOK(SystemEventConstants.PHONELINEOFFHOOKTEMPLATE, SystemEventConstants.ALLMASK,
@@ -52,9 +43,7 @@ public enum SystemEventType {
 	CAMERA_5_TRIGGER(SystemEventConstants.CAMERATRIGGER5TEMPLATE, SystemEventConstants.ALLMASK,
 			Camera5TriggerEvent.class), //
 	CAMERA_6_TRIGGER(SystemEventConstants.CAMERATRIGGER6TEMPLATE, SystemEventConstants.ALLMASK,
-			Camera6TriggerEvent.class), //
-	SECURITY_ARMING(SystemEventConstants.SECURITYARMINGTEMPLATE, SystemEventConstants.SECURITYARMINGMASK,
-			SecurityArmingEvent.class);
+			Camera6TriggerEvent.class);
 
 	private final int bitTemplate;
 	private final int bitMask;
