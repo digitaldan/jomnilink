@@ -5,8 +5,12 @@
 # Download
 
 ## Snapshots
+
 https://oss.sonatype.org/content/repositories/snapshots/com/github/digitaldan/jomnilink/
+
 ## Releases
+
+https://repo1.maven.org/maven2/com/github/digitaldan/jomnilink/
 
 # Building
 
