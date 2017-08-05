@@ -19,7 +19,7 @@ mvn clean compile assembly:single
 mvn clean deploy
 ```
 
-## Deploy Release jar to Artifactory
+## Deploy Release jar to Central Repo
 
 ```
 mvn clean deploy -P release
