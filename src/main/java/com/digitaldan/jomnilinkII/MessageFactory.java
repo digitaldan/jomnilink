@@ -421,6 +421,7 @@ public class MessageFactory {
 								.coolSetpoint(in.readUnsignedByte())
 								.mode(in.readUnsignedByte())
 								.fan(in.readUnsignedByte())
+								.hold(in.readUnsignedByte())
 								.humidity(in.readUnsignedByte())
 								.humiditySetpoint(in.readUnsignedByte())
 								.dehumidifySetpoint(in.readUnsignedByte())
