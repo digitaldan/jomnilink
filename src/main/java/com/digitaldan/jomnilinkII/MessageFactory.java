@@ -449,8 +449,8 @@ public class MessageFactory {
 							.number(in.readUnsignedShort())
 							.status(in.readUnsignedByte())
 							.temp(in.readUnsignedByte())
-							.heatSetpoint(in.readUnsignedByte())
 							.coolSetpoint(in.readUnsignedByte())
+							.heatSetpoint(in.readUnsignedByte())
 							.build();
 			}
 		}

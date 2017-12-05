@@ -30,6 +30,15 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class AuxSensorProperties extends ObjectProperties {
 
+	public static final int SENSOR_TYPE_PROGRAMMABLE_ENERGY_SAVER_MODULE = 80;
+	public static final int SENSOR_TYPE_OUTDOOR_TEMPERATURE = 81;
+	public static final int SENSOR_TYPE_TEMPERATURE = 82;
+	public static final int SENSOR_TYPE_TEMPERATURE_ALARM = 83;
+	public static final int SENSOR_TYPE_HUMIDITY = 84;
+	public static final int SENSOR_TYPE_EXTENDED_RANGE_OUTDOOR_TEMPERATURE = 85;
+	public static final int SENSOR_TYPE_EXTENDED_RANGE_TEMPERATURE = 86;
+	public static final int SENSOR_TYPE_EXTENDED_RANGE_TEMPERATURE_ALARM = 87;
+
 	private final int status;
 	private final int current;
 	private final int lowSetpoint;
