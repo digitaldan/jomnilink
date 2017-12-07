@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.digitaldan.jomnilinkII.MessageTypes.ActivateKeypadEmergency;
+import com.digitaldan.jomnilinkII.MessageTypes.AudioSourceStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
 import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityCommand;
 import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityStatus;
@@ -644,14 +645,14 @@ public class Connection extends Thread {
 		return ObjectStatus.builder().statusType(objectType).statuses(s).build();
 	}
 
-	public Message reqAudioSourceStatus(int source, int position) throws IOException, OmniNotConnectedException,
+	public AudioSourceStatus reqAudioSourceStatus(int source, int position) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(ReqAudioSourceStatus.builder().source(source).position(position).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_AUDIO_SOURCE_STATUS
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
 		}
-		return msg;
+		return (AudioSourceStatus) msg;
 	}
 
 	public ZoneReadyStatus reqZoneReadyStatus() throws IOException, OmniNotConnectedException,
