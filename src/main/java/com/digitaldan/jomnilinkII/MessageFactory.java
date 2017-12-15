@@ -621,6 +621,7 @@ public class MessageFactory {
 					.mode(mode)
 					.fan(fan)
 					.hold(hold)
+					.name(name)
                     .build();
 		}
 		case Message.OBJ_TYPE_MESG: {
