@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,19 +113,18 @@ public class Connection extends Thread {
 	private int tx;
 	private int rx;
 	private Aes aes;
-	private OmniPacket response;
-	private Object readLock = new Object();
 	private Object writeLock = new Object();
 	private Exception lastException;
 	private final BlockingQueue<Message> notifications;
 	private final List<NotificationListener> notificationListeners;
 	private final List<DisconnectListener> disconnectListeners;
+	private final BlockingQueue<OmniPacket> responses;
 	private ConnectionWatchdog watchdog;
 
 	public Connection(String address, int port, String key) throws Exception, IOException, UnknownHostException {
 		ping = true;
 		notifications = new LinkedBlockingQueue<>();
-		response = null;
+		responses = new LinkedBlockingQueue<>();
 		lastException = null;
 		notificationListeners = new CopyOnWriteArrayList<NotificationListener>();
 		disconnectListeners = new CopyOnWriteArrayList<DisconnectListener>();
@@ -236,62 +236,41 @@ public class Connection extends Thread {
 			throws IOException, OmniNotConnectedException, OmniUnknownMessageTypeException {
 
 		synchronized (writeLock) {
-			if (!connected) {
-				throw new OmniNotConnectedException(lastError());
-			}
-
-			OmniPacket ret;
-			sendBytesEncrypted(new OmniPacket(PACKET_TYPE_OMNI_LINK_MESSAGE, MessageFactory.toBytes(message)));
-			synchronized (readLock) {
-				//wait for notfiy when response comes in on thread
-				while (response == null && connected) {
-					try {
-						readLock.wait();
-					} catch (InterruptedException ignored) {
-					}
+		    try {
+				if (!connected) {
+					throw new OmniNotConnectedException(lastError());
 				}
-				ret = response;
-				//no longer need this reference
-				response = null;
-				//notify reader it can continue;
-				readLock.notify();
+				sendBytesEncrypted(new OmniPacket(PACKET_TYPE_OMNI_LINK_MESSAGE, MessageFactory.toBytes(message)));
+				OmniPacket omniPacket = responses.poll(30, TimeUnit.SECONDS);
+				if( omniPacket == null){
+					//Throw exception if poll times out.
+					throw new IOException("Response not returned from Omni within 30 seconds");
+				}
 				//if an error occurs on our other thread it saves the exception
 				if (!connected) {
 					throw new OmniNotConnectedException(lastError());
 				}
-			}
-			if (ret.type() != PACKET_TYPE_OMNI_LINK_MESSAGE) {
-				logger.debug("Invalid reply {}", bytesToString(ret.data()));
-				throw new IOException("RECEIEVD NON OMNI_LINK_MESG (" + (ret == null ? "NULL MESG" : ret.type()) + ")");
-			}
 
-			//used to ping after a certain amount of time
-			lastTXMessageTime = System.currentTimeMillis();
-
-			writeLock.notifyAll();
-			return MessageFactory.fromBytes(ret.data());
+				//used to ping after a certain amount of time
+				lastTXMessageTime = System.currentTimeMillis();
+				return MessageFactory.fromBytes(omniPacket.data());
+			}catch(InterruptedException ex){
+		    	throw new IOException(ex);
+			}
 		}
 	}
 
 	@Override
 	public void run() {
-		OmniPacket ret;
 		while (connected) {
-			synchronized (readLock) {
 				try {
-					if ((ret = readBytesEncryptedExtended()).seq() == 0
-							&& ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
-						notifications.put(MessageFactory.fromBytes(ret.data()));
-						logger.debug("run: NOTIFICATION: Added message with type {}", ret.type);
-					} else if (ret.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
-						response = ret;
-						//notify calling request lock
-						readLock.notify();
-						//wait until the response is finished
-						try {
-							readLock.wait();
-						} catch (InterruptedException ignored) {
-						}
+					OmniPacket omniPacket = readBytesEncryptedExtended();
+					if ((omniPacket.seq() == 0
+							&& omniPacket.type() == PACKET_TYPE_OMNI_LINK_MESSAGE)) {
+						notifications.put(MessageFactory.fromBytes(omniPacket.data()));
+						logger.debug("run: NOTIFICATION: Added message with type {}", omniPacket.type);
+					} else if (omniPacket.type() == PACKET_TYPE_OMNI_LINK_MESSAGE) {
+						responses.put(omniPacket);
 					} else {
 						throw new IOException("Non omnilink message");
 					}
@@ -303,9 +282,6 @@ public class Connection extends Thread {
 					lastException = e;
 					//tell listeners about exception
 					notifyDisconnectHandlers(lastException);
-				} finally {
-					readLock.notifyAll();
-				}
 			}
 		}
 		logger.debug("run: not connected, thread exiting");
