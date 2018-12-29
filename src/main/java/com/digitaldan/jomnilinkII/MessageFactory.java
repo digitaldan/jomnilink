@@ -25,16 +25,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import com.digitaldan.jomnilinkII.MessageTypes.*;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.AreaProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.AudioSourceProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.AudioZoneProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.AuxSensorProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.ButtonProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.CodeProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.MessageProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.ThermostatProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.UnitProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.properties.ZoneProperties;
+import com.digitaldan.jomnilinkII.MessageTypes.properties.*;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AccessControlReaderLockStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AccessControlReaderStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.AreaStatus;
@@ -495,7 +486,7 @@ public class MessageFactory {
 			for (int i = 0; i < status.length; i++) {
 				status[i] = AccessControlReaderStatus.builder()
 							.number(in.readUnsignedShort())
-							.granted(in.readBoolean())
+							.granted(!in.readBoolean()) // 0=granted, 1=denied
 							.lastUser(in.readUnsignedShort())
 							.build();
 			}
@@ -506,7 +497,7 @@ public class MessageFactory {
 			for (int i = 0; i < status.length; i++) {
 				status[i] = AccessControlReaderLockStatus.builder()
                         .number(in.readUnsignedShort())
-                        .locked(in.readBoolean())
+                        .locked(!in.readBoolean()) // 0=locked, 1=unlocked
                         .timer(in.readUnsignedShort())
                         .build();
 
@@ -651,6 +642,22 @@ public class MessageFactory {
 			in.readFully(nameShort);
 			String name = readName(nameShort);
 			return AudioSourceProperties.builder().number(number).name(name).build();
+		}
+		case Message.OBJ_TYPE_CONTROL_READER: {
+		    boolean locked = in.readBoolean();
+			int unlockTimer = in.readUnsignedShort();
+			boolean accessDenied = in.readBoolean();
+			int lastUser = in.readByte();
+			in.readFully(nameLong);
+			String name = readName(nameLong);
+			return LockProperties.builder()
+					.number(number)
+					.name(name)
+					.accessDenied(accessDenied)
+					.lastUser(lastUser)
+					.locked(locked)
+					.unlockTimer(unlockTimer)
+					.build();
 		}
 		case Message.OBJ_TYPE_AUDIO_ZONE: {
 			boolean on = in.readBoolean();

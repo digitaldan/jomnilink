@@ -28,26 +28,19 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class AreaProperties extends ObjectProperties {
-	private final int mode;
-	private final int alarms;
-	private final int entryTimer;
-	private final int exitTimer;
-	private final boolean enabled;
-	private final int exitDelay;
-	private final int entryDelay;
+public class LockProperties extends ObjectProperties {
+	private final boolean locked;
+	private final int unlockTimer;
+	private final boolean accessDenied;
+	private final int lastUser;
 
 	@Builder
-	private AreaProperties(int number, int mode, int alarms, int entryTimer, int exitTimer, boolean enabled,
-			int exitDelay, int entryDelay, String name) {
+	private LockProperties(int number, boolean locked, int unlockTimer, boolean accessDenied, int lastUser, String name) {
 		super(OBJ_TYPE_AREA, number, name);
-		this.mode = mode;
-		this.alarms = alarms;
-		this.entryTimer = entryTimer;
-		this.exitTimer = exitTimer;
-		this.enabled = enabled;
-		this.exitDelay = exitDelay;
-		this.entryDelay = entryDelay;
+		this.locked = locked;
+		this.unlockTimer = unlockTimer;
+		this.accessDenied = accessDenied;
+		this.lastUser = lastUser;
 	}
 
 }
