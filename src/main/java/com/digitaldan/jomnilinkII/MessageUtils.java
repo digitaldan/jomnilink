@@ -86,21 +86,4 @@ public class MessageUtils {
     public static float omniToHumidity(int temp) {
         return omniToF(temp);
     }
-
-    public static void main(String args[]) {
-        for (int i = 0; i < 132; i++) {
-            float f = omniToF(i);
-            float c = omniToC(i);
-            System.out.println(i + " C " + c + " F " + f + " C->omni " + CToOmni(c) + " F->omni " + FtoOmni(f));
-        }
-
-        // for (float i = -40; i < 25.5; i += 0.5f) {
-        // System.out.println(i + " OMNI " + CToOmni(i));
-        // }
-        //
-        // for (float i = -40; i < 25.5; i += 0.5f) {
-        // System.out.println(i + " OMNI " + CToOmni(i));
-        // }
-
-    }
 }
