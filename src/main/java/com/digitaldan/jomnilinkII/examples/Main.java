@@ -1,5 +1,6 @@
 package com.digitaldan.jomnilinkII.examples;
 
+import com.digitaldan.jomnilinkII.MessageTypes.statuses.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,13 +14,6 @@ import com.digitaldan.jomnilinkII.MessageTypes.AudioSourceStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.EventLogData;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AreaStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AudioZoneStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AuxSensorStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.MessageStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.ButtonEvent;
 import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
 
@@ -123,6 +117,7 @@ public class Main {
 			int max_mesgs = c.reqObjectTypeCapacities(Message.OBJ_TYPE_MESG).getCapacity();
 			int max_audio_zones = c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_ZONE).getCapacity();
 			int max_audio_sources = c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_SOURCE).getCapacity();
+			int max_locks = c.reqObjectTypeCapacities(Message.OBJ_TYPE_CONTROL_READER).getCapacity();
 
 			//Aux sensors returns error, They are considered zones by HAI
 			// logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUX_SENSOR).toString());
@@ -178,6 +173,13 @@ public class Main {
 				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}
+			objnum = 0;
+			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_CONTROL_READER, objnum, 1, ObjectProperties.FILTER_1_NAMED,
+					ObjectProperties.FILTER_2_NONE, ObjectProperties.FILTER_3_NONE))
+					.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
+				logger.info(m.toString());
+				objnum = ((ObjectProperties) m).getNumber();
+			}
 
 			ObjectStatus status = c.reqObjectStatus(Message.OBJ_TYPE_UNIT, 1, max_units);
 			UnitStatus[] units = (UnitStatus[]) status.getStatuses();
@@ -214,6 +216,12 @@ public class Main {
 			for (int i = 0; i < audiozs.length; i++) {
 				logger.info(audiozs[i].toString());
 			}
+			status = c.reqObjectStatus(Message.OBJ_TYPE_CONTROL_LOCK, 1, max_locks);
+			AccessControlReaderLockStatus[] locks = (AccessControlReaderLockStatus[]) status.getStatuses();
+			for (int i = 0; i < locks.length; i++) {
+				logger.info(locks[i].toString());
+			}
+
 			for (int as = 1; as < max_audio_sources; as++) {
 				int pos = 0;
 				while ((m = c.reqAudioSourceStatus(as, pos))
