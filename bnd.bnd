@@ -1,0 +1,17 @@
+Bundle-SymbolicName: ${project.groupId}.${project.artifactId}
+Bundle-Name: ${project.name}
+Bundle-Description: ${project.description}
+Bundle-ContactAddress: ${project.url}
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+
+Import-Package:\
+    *
+
+-removeheaders: Private-Package
+
+-exportcontents:\
+    com.digitaldan.jomnilinkII,\
+    com.digitaldan.jomnilinkII.MessageTypes,\
+    com.digitaldan.jomnilinkII.MessageTypes.properties,\
+    com.digitaldan.jomnilinkII.MessageTypes.statuses,\
+    com.digitaldan.jomnilinkII.MessageTypes.systemEvents\
