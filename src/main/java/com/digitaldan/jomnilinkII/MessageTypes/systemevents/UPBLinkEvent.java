@@ -1,5 +1,10 @@
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 public class UPBLinkEvent extends SystemEvent {
 
 	/**
@@ -12,12 +17,27 @@ public class UPBLinkEvent extends SystemEvent {
 	 *
 	 * @param event
 	 */
+
+	public enum Command {
+		DEACTIVATED(0), ACTIVATED(1), SET(2), FADE_STOP(3);
+
+		private final int commandValue;
+		private int getCommandValue() {
+			return commandValue;
+		}
+		private static Map<Integer, Command> lookup = Arrays.stream(values()).collect(Collectors.toMap(Command::getCommandValue, Function.identity()));
+
+		Command(int commandValue) {
+			this.commandValue = commandValue;
+		}
+	}
+
 	public UPBLinkEvent(int event) {
 		super(event, SystemEventType.UPB_LINK);
 	}
 
-	public int getLinkCommand() {
-		return event >> 8 & 0x03;
+	public Command getLinkCommand() {
+		return Command.lookup.get(event >> 8 & 0x03);
 	}
 
 	public int getLinkNumber() {

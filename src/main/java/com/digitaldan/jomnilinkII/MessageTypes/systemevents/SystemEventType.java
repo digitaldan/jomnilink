@@ -8,9 +8,9 @@ public enum SystemEventType {
 	COMPOSE_CODE_RECEIVED(SystemEventConstants.COMPOSE_TEMPLATE, SystemEventConstants.COMPOSE_MASK,
 			ComposeCodeReceivedEvent.class), //
 	X10_CODE_RECEIVED(SystemEventConstants.X10_TEMPLATE, SystemEventConstants.X10_MASK, X10CodeReceivedEvent.class), //
+	UPB_LINK(SystemEventConstants.UPB_LINK_TEMPLATE, SystemEventConstants.UPB_LINK_MASK, UPBLinkEvent.class), //
 	ALC_UPB_RADIORA_STARLITE_SWITCH_PRESS(SystemEventConstants.ALC_UPB_RADIORA_STARLIGHT_TEMPLATE,
 			SystemEventConstants.ALC_UPB_RADIORA_STARLIGHT_MASK, SwitchPressEvent.class), //
-	UPB_LINK(SystemEventConstants.UPB_LINK_TEMPLATE, SystemEventConstants.UPB_LINK_MASK, UPBLinkEvent.class), //
 	ALL_ON_OFF(SystemEventConstants.ALL_ON_OFF_TEMPLATE, SystemEventConstants.ALL_ON_OFF_MASK, AllOnOffEvent.class), //
 	PHONE_LINE_DEAD(SystemEventConstants.PHONE_LINE_DEAD_TEMPLATE, SystemEventConstants.ALL_MASK, PhoneLineDeadEvent.class), //
 	PHONE_LINE_RING(SystemEventConstants.PHONE_LINE_RING_TEMPLATE, SystemEventConstants.ALL_MASK, PhoneLineRingEvent.class), //
