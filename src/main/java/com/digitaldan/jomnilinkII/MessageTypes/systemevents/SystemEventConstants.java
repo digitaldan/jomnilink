@@ -6,43 +6,55 @@ package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
  *
  */
 class SystemEventConstants {
-	static final int BUTTON_TEMPLATE = 0; // 0000000000000000
-	static final int BUTTON_MASK = 65280; // 1111111100000000
-	static final int PROLINK_TEMPLATE = 256; // 0000000100000000
-	static final int PROLINK_MASK = 65408; // 1111111110000000
-	static final int CENTRALITE_TEMPLATE = 384; // 0000000110000000
-	static final int CENTRALITE_MASK = 65408; // 1111111110000000
+    static final int BUTTON_TEMPLATE                    = 0b0000_0000_0000_0000;
+    static final int BUTTON_MASK                        = 0b1111_1111_0000_0000;
 
-	static final int COMPOSE_TEMPLATE = 28672; // 0111000000000000
-	static final int COMPOSE_MASK = 61440; // 1111000000000000
-	static final int X10_TEMPLATE = 3072; // 0000110000000000
-	static final int X10_MASK = 64512; // 1111110000000000
+    static final int PROLINK_TEMPLATE                   = 0b0000_0001_0000_0000;
+    static final int PROLINK_MASK                       = 0b1111_1111_1000_0000;
 
-	static final int ALC_UPB_RADIORA_STARLIGHT_TEMPLATE = 61440; // 1111000000000000
-	static final int ALC_UPB_RADIORA_STARLIGHT_MASK = 61440; // 1111000000000000
-	static final int UPB_LINK_TEMPLATE = 64512; // 1111110000000000
-	static final int UPB_LINK_MASK = 64512; // 1111110000000000
-	static final int ALL_ON_OFF_TEMPLATE = 992; // 0000001111100000
-	static final int ALL_ON_OFF_MASK = 65504; // 1111111111100000
-	static final int PHONE_LINE_DEAD_TEMPLATE = 768; // 0000001100000000
-	static final int PHONE_LINE_RING_TEMPLATE = 769; // 0000001100000001
-	static final int PHONE_LINE_OFF_HOOK_TEMPLATE = 770; // 0000001100000010
-	static final int PHONE_LINE_ON_HOOK_TEMPLATE = 771; // 0000001100000011
-	static final int AC_POWER_OFF_TEMPLATE = 772; // 0000001100000100
-	static final int AC_POWER_RESTORED_TEMPLATE = 773; // 0000001100000101
-	static final int BATTERY_LOW_TEMPLATE = 774; // 0000001100000110
-	static final int BATTERY_OK_TEMPLATE = 775; // 0000001100000111
-	static final int DCM_TROUBLE_TEMPLATE = 776; // 0000001100001000
-	static final int DCM_OK_TEMPLATE = 777; // 0000001100001001
-	static final int ENERGY_COST_LOW_TEMPLATE = 778; // 0000001100001010
-	static final int ENERGY_COST_MEDIUM_TEMPLATE = 779; // 0000001100001011
-	static final int ENERGY_COST_HIGH_TEMPLATE = 780; // 0000001100001100
-	static final int ENERGY_COST_CRITICAL_TEMPLATE = 781; // 0000001100001101
-	static final int CAMERA_TRIGGER_1_TEMPLATE = 782; // 0000001100001110
-	static final int CAMERA_TRIGGER_2_TEMPLATE = 783; // 0000001100001111
-	static final int CAMERA_TRIGGER_3_TEMPLATE = 784; // 0000001100010000
-	static final int CAMERA_TRIGGER_4_TEMPLATE = 785; // 0000001100010001
-	static final int CAMERA_TRIGGER_5_TEMPLATE = 786; // 0000001100010010
-	static final int CAMERA_TRIGGER_6_TEMPLATE = 787; // 0000001100010011
-	static final int ALL_MASK = 65535; // 1111111111111111
+    static final int CENTRALITE_TEMPLATE                = 0b0000_0001_1000_0000;
+    static final int CENTRALITE_MASK                    = 0b1111_1111_1000_0000;
+
+    static final int COMPOSE_TEMPLATE                   = 0b0111_0000_0000_0000;
+    static final int COMPOSE_MASK                       = 0b1111_0000_0000_0000;
+
+    static final int X10_TEMPLATE                       = 0b0000_1100_0000_0000;
+    static final int X10_MASK                           = 0b1111_1100_0000_0000;
+
+    static final int ALC_UPB_RADIORA_STARLIGHT_TEMPLATE = 0b1111_0000_0000_0000;
+    static final int ALC_UPB_RADIORA_STARLIGHT_MASK     = 0b1111_0000_0000_0000;
+
+    static final int UPB_LINK_TEMPLATE                  = 0b1111_1100_0000_0000;
+    static final int UPB_LINK_MASK                      = 0b1111_1100_0000_0000;
+
+    static final int ALL_ON_OFF_TEMPLATE                = 0b0000_0011_1110_0000;
+    static final int ALL_ON_OFF_MASK                    = 0b111_1111_1111_00000;
+
+    static final int PHONE_LINE_DEAD_TEMPLATE           = 0b0000_0011_0000_0000;
+    static final int PHONE_LINE_RING_TEMPLATE           = 0b0000_0011_0000_0001;
+    static final int PHONE_LINE_OFF_HOOK_TEMPLATE       = 0b0000_0011_0000_0010;
+    static final int PHONE_LINE_ON_HOOK_TEMPLATE        = 0b0000_0011_0000_0011;
+
+    static final int AC_POWER_OFF_TEMPLATE              = 0b0000_0011_0000_0100;
+    static final int AC_POWER_RESTORED_TEMPLATE         = 0b0000_0011_0000_0101;
+
+    static final int BATTERY_LOW_TEMPLATE               = 0b0000_0011_0000_0110;
+    static final int BATTERY_OK_TEMPLATE                = 0b0000_0011_0000_0111;
+
+    static final int DCM_TROUBLE_TEMPLATE               = 0b0000_0011_0000_1000;
+    static final int DCM_OK_TEMPLATE                    = 0b0000_0011_0000_1001;
+
+    static final int ENERGY_COST_LOW_TEMPLATE           = 0b0000_0011_0000_1010;
+    static final int ENERGY_COST_MEDIUM_TEMPLATE        = 0b0000_0011_0000_1011;
+    static final int ENERGY_COST_HIGH_TEMPLATE          = 0b0000_0011_0000_1100;
+    static final int ENERGY_COST_CRITICAL_TEMPLATE      = 0b0000_0011_0000_1101;
+
+    static final int CAMERA_TRIGGER_1_TEMPLATE          = 0b0000_0011_0000_1110;
+    static final int CAMERA_TRIGGER_2_TEMPLATE          = 0b0000_0011_0000_1111;
+    static final int CAMERA_TRIGGER_3_TEMPLATE          = 0b0000_0011_0001_0000;
+    static final int CAMERA_TRIGGER_4_TEMPLATE          = 0b0000_0011_0001_0001;
+    static final int CAMERA_TRIGGER_5_TEMPLATE          = 0b0000_0011_0001_0010;
+    static final int CAMERA_TRIGGER_6_TEMPLATE          = 0b0000_0011_0001_0011;
+
+    static final int ALL_MASK                           = 0b1111_1111_1111_1111;
 }
