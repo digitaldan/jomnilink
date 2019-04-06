@@ -1,48 +1,48 @@
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
 public enum SystemEventType {
-	BUTTON(SystemEventConstants.BUTTONTEMPLATE, SystemEventConstants.BUTTONMASK, ButtonEvent.class), //
-	PROLINK_MESSAGE(SystemEventConstants.PROLINKTEMPLATE, SystemEventConstants.PROLINKMASK, ProLinkMessageEvent.class), //
-	CENTRALITE_SWITCH(SystemEventConstants.CENTRALITETEMPLATE, SystemEventConstants.CENTRALITEMASK,
+	BUTTON(SystemEventConstants.BUTTON_TEMPLATE, SystemEventConstants.BUTTON_MASK, ButtonEvent.class), //
+	PROLINK_MESSAGE(SystemEventConstants.PROLINK_TEMPLATE, SystemEventConstants.PROLINK_MASK, ProLinkMessageEvent.class), //
+	CENTRALITE_SWITCH(SystemEventConstants.CENTRALITE_TEMPLATE, SystemEventConstants.CENTRALITE_MASK,
 			CentralightSwitchEvent.class), //
-	COMPOSE_CODE_RECEIVED(SystemEventConstants.COMPOSETEMPLATE, SystemEventConstants.COMPOSEMASK,
+	COMPOSE_CODE_RECEIVED(SystemEventConstants.COMPOSE_TEMPLATE, SystemEventConstants.COMPOSE_MASK,
 			ComposeCodeReceivedEvent.class), //
-	X10_CODE_RECEIVED(SystemEventConstants.X10TEMPLATE, SystemEventConstants.X10MASK, X10CodeReceivedEvent.class), //
-	ALC_UPB_RADIORA_STARLITE_SWITCH_PRESS(SystemEventConstants.ALCUPBRADIORASTARLIGHTTEMPLATE,
-			SystemEventConstants.ALCUPBRADIORASTARLIGHTMASK, SwitchPressEvent.class), //
-	UPB_LINK(SystemEventConstants.UPBLINKTEMPLATE, SystemEventConstants.UPBLINKMASK, UPBLinkEvent.class), //
-	ALL_ON_OFF(SystemEventConstants.ALLONOFFTEMPLATE, SystemEventConstants.ALLONOFFMASK, AllOnOffEvent.class), //
-	PHONE_LINE_DEAD(SystemEventConstants.PHONELINEDEADTEMPLATE, SystemEventConstants.ALLMASK, PhoneLineDeadEvent.class), //
-	PHONE_LINE_RING(SystemEventConstants.PHONELINERINGTEMPLATE, SystemEventConstants.ALLMASK, PhoneLineRingEvent.class), //
-	PHONE_LINE_OFF_HOOK(SystemEventConstants.PHONELINEOFFHOOKTEMPLATE, SystemEventConstants.ALLMASK,
+	X10_CODE_RECEIVED(SystemEventConstants.X10_TEMPLATE, SystemEventConstants.X10_MASK, X10CodeReceivedEvent.class), //
+	ALC_UPB_RADIORA_STARLITE_SWITCH_PRESS(SystemEventConstants.ALC_UPB_RADIORA_STARLIGHT_TEMPLATE,
+			SystemEventConstants.ALC_UPB_RADIORA_STARLIGHT_MASK, SwitchPressEvent.class), //
+	UPB_LINK(SystemEventConstants.UPB_LINK_TEMPLATE, SystemEventConstants.UPB_LINK_MASK, UPBLinkEvent.class), //
+	ALL_ON_OFF(SystemEventConstants.ALL_ON_OFF_TEMPLATE, SystemEventConstants.ALL_ON_OFF_MASK, AllOnOffEvent.class), //
+	PHONE_LINE_DEAD(SystemEventConstants.PHONE_LINE_DEAD_TEMPLATE, SystemEventConstants.ALL_MASK, PhoneLineDeadEvent.class), //
+	PHONE_LINE_RING(SystemEventConstants.PHONE_LINE_RING_TEMPLATE, SystemEventConstants.ALL_MASK, PhoneLineRingEvent.class), //
+	PHONE_LINE_OFF_HOOK(SystemEventConstants.PHONE_LINE_OFF_HOOK_TEMPLATE, SystemEventConstants.ALL_MASK,
 			PhoneLineOffHookEvent.class), //
-	PHONE_LINE_ON_HOOK(SystemEventConstants.PHONELINEONHOOKTEMPLATE, SystemEventConstants.ALLMASK,
+	PHONE_LINE_ON_HOOK(SystemEventConstants.PHONE_LINE_ON_HOOK_TEMPLATE, SystemEventConstants.ALL_MASK,
 			PhoneLineOnHookEvent.class), //
-	AC_POWER_OFF(SystemEventConstants.ACPOWEROFFTEMPLATE, SystemEventConstants.ALLMASK, AcPowerOffEvent.class), //
-	AC_POWER_RESTORED(SystemEventConstants.ACPOWERRESTOREDTEMPLATE, SystemEventConstants.ALLMASK,
+	AC_POWER_OFF(SystemEventConstants.AC_POWER_OFF_TEMPLATE, SystemEventConstants.ALL_MASK, AcPowerOffEvent.class), //
+	AC_POWER_RESTORED(SystemEventConstants.AC_POWER_RESTORED_TEMPLATE, SystemEventConstants.ALL_MASK,
 			AcPowerRestoredEvent.class), //
-	BATTERY_LOW(SystemEventConstants.BATTERYLOWTEMPLATE, SystemEventConstants.ALLMASK, BatteryLowEvent.class), //
-	BATTERY_OK(SystemEventConstants.BATTERYOKTEMPLATE, SystemEventConstants.ALLMASK, BatteryOkEvent.class), //
-	DCM_TROUBLE(SystemEventConstants.DCMTROUBLETEMPLATE, SystemEventConstants.ALLMASK, DCMTroubleEvent.class), //
-	DCM_OK(SystemEventConstants.DCMOKTEMPLATE, SystemEventConstants.ALLMASK, DCMOkEvent.class), //
-	ENERGY_COST_LOW(SystemEventConstants.ENERGYCOSTLOWTEMPLATE, SystemEventConstants.ALLMASK, EnergyCostLowEvent.class), //
-	ENERGY_COST_MID(SystemEventConstants.ENERGYCOSTMEDIUMTEMPLATE, SystemEventConstants.ALLMASK,
+	BATTERY_LOW(SystemEventConstants.BATTERY_LOW_TEMPLATE, SystemEventConstants.ALL_MASK, BatteryLowEvent.class), //
+	BATTERY_OK(SystemEventConstants.BATTERY_OK_TEMPLATE, SystemEventConstants.ALL_MASK, BatteryOkEvent.class), //
+	DCM_TROUBLE(SystemEventConstants.DCM_TROUBLE_TEMPLATE, SystemEventConstants.ALL_MASK, DCMTroubleEvent.class), //
+	DCM_OK(SystemEventConstants.DCM_OK_TEMPLATE, SystemEventConstants.ALL_MASK, DCMOkEvent.class), //
+	ENERGY_COST_LOW(SystemEventConstants.ENERGY_COST_LOW_TEMPLATE, SystemEventConstants.ALL_MASK, EnergyCostLowEvent.class), //
+	ENERGY_COST_MID(SystemEventConstants.ENERGY_COST_MEDIUM_TEMPLATE, SystemEventConstants.ALL_MASK,
 			EnergyCostMidEvent.class), //
-	ENERGY_COST_HIGH(SystemEventConstants.ENERGYCOSTHIGHTEMPLATE, SystemEventConstants.ALLMASK,
+	ENERGY_COST_HIGH(SystemEventConstants.ENERGY_COST_HIGH_TEMPLATE, SystemEventConstants.ALL_MASK,
 			EnergyCostHighEvent.class), //
-	ENERGY_COST_CRITICAL(SystemEventConstants.ENERGYCOSTCRITICALTEMPLATE, SystemEventConstants.ALLMASK,
+	ENERGY_COST_CRITICAL(SystemEventConstants.ENERGY_COST_CRITICAL_TEMPLATE, SystemEventConstants.ALL_MASK,
 			EnergyCostCriticalEvent.class), //
-	CAMERA_1_TRIGGER(SystemEventConstants.CAMERATRIGGER1TEMPLATE, SystemEventConstants.ALLMASK,
+	CAMERA_1_TRIGGER(SystemEventConstants.CAMERA_TRIGGER_1_TEMPLATE, SystemEventConstants.ALL_MASK,
 			Camera1TriggerEvent.class), //
-	CAMERA_2_TRIGGER(SystemEventConstants.CAMERATRIGGER2TEMPLATE, SystemEventConstants.ALLMASK,
+	CAMERA_2_TRIGGER(SystemEventConstants.CAMERA_TRIGGER_2_TEMPLATE, SystemEventConstants.ALL_MASK,
 			Camera2TriggerEvent.class), //
-	CAMERA_3_TRIGGER(SystemEventConstants.CAMERATRIGGER3TEMPLATE, SystemEventConstants.ALLMASK,
+	CAMERA_3_TRIGGER(SystemEventConstants.CAMERA_TRIGGER_3_TEMPLATE, SystemEventConstants.ALL_MASK,
 			Camera3TriggerEvent.class), //
-	CAMERA_4_TRIGGER(SystemEventConstants.CAMERATRIGGER4TEMPLATE, SystemEventConstants.ALLMASK,
+	CAMERA_4_TRIGGER(SystemEventConstants.CAMERA_TRIGGER_4_TEMPLATE, SystemEventConstants.ALL_MASK,
 			Camera4TriggerEvent.class), //
-	CAMERA_5_TRIGGER(SystemEventConstants.CAMERATRIGGER5TEMPLATE, SystemEventConstants.ALLMASK,
+	CAMERA_5_TRIGGER(SystemEventConstants.CAMERA_TRIGGER_5_TEMPLATE, SystemEventConstants.ALL_MASK,
 			Camera5TriggerEvent.class), //
-	CAMERA_6_TRIGGER(SystemEventConstants.CAMERATRIGGER6TEMPLATE, SystemEventConstants.ALLMASK,
+	CAMERA_6_TRIGGER(SystemEventConstants.CAMERA_TRIGGER_6_TEMPLATE, SystemEventConstants.ALL_MASK,
 			Camera6TriggerEvent.class);
 
 	private final int bitTemplate;
