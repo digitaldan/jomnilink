@@ -14,8 +14,8 @@ import com.digitaldan.jomnilinkII.MessageTypes.AudioSourceStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.EventLogData;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.ButtonEvent;
-import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
+import com.digitaldan.jomnilinkII.MessageTypes.systemevents.ButtonEvent;
+import com.digitaldan.jomnilinkII.MessageTypes.systemevents.SystemEvent;
 
 /*
  * Notes for NIO
