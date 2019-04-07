@@ -1,6 +1,7 @@
 package com.digitaldan.jomnilinkII.examples;
 
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.*;
+import com.digitaldan.jomnilinkII.MessageTypes.systemevents.UPBLinkEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +15,8 @@ import com.digitaldan.jomnilinkII.MessageTypes.AudioSourceStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.EventLogData;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.ButtonEvent;
-import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
+import com.digitaldan.jomnilinkII.MessageTypes.systemevents.ButtonEvent;
+import com.digitaldan.jomnilinkII.MessageTypes.systemevents.SystemEvent;
 
 /*
  * Notes for NIO
@@ -79,8 +80,12 @@ public class Main {
 
 				@Override
 				public void systemEventNotification(SystemEvent event) {
-					logger.info("Got SystemEvent tyoe {}", event.getType());
+					logger.info("Got SystemEvent type {}", event.getType());
 					switch (event.getType()) {
+					case UPB_LINK:
+						UPBLinkEvent linkEvent = (UPBLinkEvent) event;
+						logger.info("UPB Link command({}) for link({})", linkEvent.getLinkCommand(), linkEvent.getLinkNumber() );
+						break;
 					case BUTTON:
 						logger.info("ButtonEvent number {}", ((ButtonEvent) event).getButtonNumber());
 						break;

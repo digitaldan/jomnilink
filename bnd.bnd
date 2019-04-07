@@ -14,4 +14,4 @@ Import-Package:\
     com.digitaldan.jomnilinkII.MessageTypes,\
     com.digitaldan.jomnilinkII.MessageTypes.properties,\
     com.digitaldan.jomnilinkII.MessageTypes.statuses,\
-    com.digitaldan.jomnilinkII.MessageTypes.systemEvents\
+    com.digitaldan.jomnilinkII.MessageTypes.systemevents\

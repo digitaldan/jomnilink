@@ -83,7 +83,7 @@ import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.UserSettingStatus;
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.systemEvents.SystemEvent;
+import com.digitaldan.jomnilinkII.MessageTypes.systemevents.SystemEvent;
 
 public class Connection extends Thread {
 	private static final Logger logger = LoggerFactory.getLogger(Connection.class);
