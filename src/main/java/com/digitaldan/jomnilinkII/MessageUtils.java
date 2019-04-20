@@ -1,6 +1,10 @@
 
 package com.digitaldan.jomnilinkII;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * Copyright (C) 2009 Dan Cunningham
  *
@@ -42,6 +46,16 @@ public class MessageUtils {
             0x4A40, 0x4E00, 0x8EC1, 0x8F81, 0x4F40, 0x8D01, 0x4DC0, 0x4C80, 0x8C41, 0x4400, 0x84C1, 0x8581, 0x4540,
             0x8701, 0x47C0, 0x4680, 0x8641, 0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040, };
 
+    //Multiple Omni temperatures (when rounded) map to the same rounded fahrenheit temp. The Omni operates in whole
+    //temperatures for fahrenheit.  This creates a mapping of omni to (rounded) fahrenheight and then creates a reverse
+    //map that has the duplicates removed.
+    private final static Map<Integer,Integer> OMNI_TO_FAHRENHEIT_MAP = IntStream.rangeClosed(0, 255).boxed()
+            .collect(Collectors.toMap(i ->i, i -> (int) Math.round(-40+(i*.9))));
+
+    private final static Map<Integer, Integer> FAHRENHEIT_TO_OMNI_MAP = OMNI_TO_FAHRENHEIT_MAP.entrySet()
+                                                                        .stream()
+                    .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey,(oldValue, newValue) -> newValue));
+
     public static int crc16(byte[] bytes) {
         int crc = 0x0000;
         for (byte b : bytes) {
@@ -67,16 +81,13 @@ public class MessageUtils {
         return buf.toString();
     }
 
-    public static float omniToF(int temp) {
-        return (float) (Math.round((omniToC(temp) * (9f / 5) + 32) * 10) / 10.0);
-    }
+    public static float omniToF(int temp) { return OMNI_TO_FAHRENHEIT_MAP.get(temp); }
 
     public static float omniToC(int temp) {
         return (temp) * 0.5f - 40;
     }
 
-    public static int FtoOmni(float temp) {
-        return CToOmni(((temp - 32) * 5) / 9);
+    public static int FtoOmni(float temp) { return FAHRENHEIT_TO_OMNI_MAP.get(Math.round(temp));
     }
 
     public static int CToOmni(float temp) {
