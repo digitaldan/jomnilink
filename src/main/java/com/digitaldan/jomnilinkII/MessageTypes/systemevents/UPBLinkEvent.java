@@ -21,6 +21,7 @@ public class UPBLinkEvent extends SystemEvent {
 	public enum Command {
 		DEACTIVATED(0), ACTIVATED(1), SET(2), FADE_STOP(3);
 
+<<<<<<< HEAD
 		private static Map<Integer, Command> lookup = Arrays.stream(values()).collect(Collectors.toMap(Command::getCommandValue, Function.identity()));
 
 		private final int commandValue;
@@ -28,6 +29,13 @@ public class UPBLinkEvent extends SystemEvent {
 		private int getCommandValue() {
 			return commandValue;
 		}
+=======
+		private final int commandValue;
+		private int getCommandValue() {
+			return commandValue;
+		}
+		private static Map<Integer, Command> lookup = Arrays.stream(values()).collect(Collectors.toMap(Command::getCommandValue, Function.identity()));
+>>>>>>> 7f3777cec7d451c3960e7ba8141d7d301f4a0771
 
 		Command(int commandValue) {
 			this.commandValue = commandValue;
