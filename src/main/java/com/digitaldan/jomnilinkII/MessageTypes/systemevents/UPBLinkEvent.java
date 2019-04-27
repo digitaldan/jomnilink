@@ -14,8 +14,6 @@ public class UPBLinkEvent extends SystemEvent {
 	 *   0 = off (deactivate) 1 = on (activate)
 	 *   2 = set (store preset) 3 = fade stop
 	 * n = link number
-	 *
-	 * @param event
 	 */
 
 	public enum Command {

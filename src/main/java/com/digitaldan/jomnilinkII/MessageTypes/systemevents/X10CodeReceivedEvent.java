@@ -15,8 +15,6 @@ public class X10CodeReceivedEvent extends SystemEvent {
 	 *     0-15 = A-P
 	 * u = X-10 unitTemplate number
 	 *     0-15 = 1-16
-	 *
-	 * @param event
 	 */
 	public X10CodeReceivedEvent(int event) {
 		super(event, SystemEventType.X10_CODE_RECEIVED);

@@ -11,8 +11,6 @@ public class SwitchPressEvent extends SystemEvent {
 	 *	1=on
 	 *  2-11 = switch 1-10
 	 * u = unitTemplate number
-	 *
-	 * @param event
 	 */
 	public SwitchPressEvent(int event) {
 		super(event, SystemEventType.ALC_UPB_RADIORA_STARLITE_SWITCH_PRESS);
