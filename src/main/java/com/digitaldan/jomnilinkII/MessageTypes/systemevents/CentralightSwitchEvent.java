@@ -2,20 +2,18 @@ package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
 public class CentralightSwitchEvent extends SystemEvent {
 
-	/**
-	 * PCENTRALITE SWITCH
-	 * 0000 0001 1sss ssss
-	 * s= switch number
-	 *
-	 * @param event
-	 */
+    /**
+     * PCENTRALITE SWITCH
+     * 0000 0001 1sss ssss
+     * s= switch number
+     */
 
-	public CentralightSwitchEvent(int event) {
-		super(event, SystemEventType.CENTRALITE_SWITCH);
-	}
+    public CentralightSwitchEvent(int event) {
+        super(event, SystemEventType.CENTRALITE_SWITCH);
+    }
 
-	public int getSwitchNumber() {
-		//1111111 = 127 = 0x7f
-		return event & 0x7f;
-	}
+    public int getSwitchNumber() {
+        // 1111111 = 127 = 0x7f
+        return event & 0x7f;
+    }
 }

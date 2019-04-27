@@ -13,7 +13,6 @@ public class ComposeCodeReceivedEvent extends SystemEvent {
 	 *     0-15 = A-P
 	 * u = Compose unitTemplate number
 	 * 	   0-15 = 1-16
-	 * @param event
 	 */
 	public ComposeCodeReceivedEvent(int event) {
 		super(event, SystemEventType.COMPOSE_CODE_RECEIVED);

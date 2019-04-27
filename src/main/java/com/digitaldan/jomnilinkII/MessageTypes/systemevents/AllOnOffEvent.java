@@ -9,8 +9,6 @@ public class AllOnOffEvent extends SystemEvent {
 	 *   0 = off
 	 *   1 = on
 	 * a = area
-	 *
-	 * @param event
 	 */
 	public AllOnOffEvent(int event) {
 		super(event, SystemEventType.ALL_ON_OFF);
