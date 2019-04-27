@@ -4,7 +4,7 @@
 	<groupId>com.github.digitaldan</groupId>
 	<artifactId>jomnilink</artifactId>
 	<packaging>jar</packaging>
-	<version>1.3.5</version>
+	<version>1.3.6</version>
 	<name>jomnilink</name>
 	<url>https://github.com/digitaldan/jomnilink</url>
 	<description>jomnilink - A java library for connecting to HAI/Leviton Omni and Lumina home automation controllers using the HAI OmniLink II protocol.</description>
