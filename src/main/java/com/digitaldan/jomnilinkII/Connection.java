@@ -298,7 +298,7 @@ public class Connection extends Thread {
 	3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
 	     negotiated when the client and controller established the secure connection.
 	4.   Process the next block of data until all data has been processed.
-	
+
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
 		/* 1. */
@@ -518,7 +518,7 @@ public class Connection extends Thread {
 													.build();
 		Message msg = sendAndReceive(reqObjectProperties);
 		if (msg.getMessageType() != Message.MESG_TYPE_OBJ_PROP
-				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
+				|| msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
 		}
 		return msg;
@@ -607,7 +607,7 @@ public class Connection extends Thread {
 			}
 
 			if (msg.getMessageType() != Message.MESG_TYPE_OBJ_STATUS
-					&& msg.getMessageType() != Message.MESG_TYPE_EXT_OBJ_STATUS) {
+					|| msg.getMessageType() != Message.MESG_TYPE_EXT_OBJ_STATUS) {
 				throw new OmniInvalidResponseException(msg);
 			}
 			System.arraycopy(((ObjectStatus) msg).getStatuses(), 0, s, current - startObject, next - current + 1);
@@ -624,7 +624,7 @@ public class Connection extends Thread {
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(ReqAudioSourceStatus.builder().source(source).position(position).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_AUDIO_SOURCE_STATUS
-				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
+				|| msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
 		}
 		return msg;
@@ -652,7 +652,7 @@ public class Connection extends Thread {
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(UploadEventRecord.builder().eventNumber(number).direction(direction).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_EVENT_LOG_DATA
-				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
+				|| msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
 		}
 		return msg;
@@ -662,7 +662,7 @@ public class Connection extends Thread {
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(UploadNames.builder().objectType(objectType).objectNumber(objectNumber).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_NAME_DATA
-				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
+				|| msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
 		}
 		return msg;
