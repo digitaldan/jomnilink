@@ -298,7 +298,7 @@ public class Connection extends Thread {
 	3.   Encrypt the 16-byte block using the AES encryption algorithm and the 128-bit session key that was
 	     negotiated when the client and controller established the secure connection.
 	4.   Process the next block of data until all data has been processed.
-	
+
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
 		/* 1. */

@@ -2,3 +2,4 @@ build/
 target/
 .idea/
 jomnilink.iml
+.DS_Store
