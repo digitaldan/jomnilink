@@ -16,20 +16,18 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 
+/*
+ * OBJECT STATUS
+ *
+ * This message is sent by the HAI controller in reply to an REQUEST OBJECT
+ * STATUS message. The HAI controller reports the status for the specified
+ * object(s).
+ */
 @Value
 @NonFinal
 public class ObjectStatus implements Message {
-
 	private final int statusType;
 	private final Status[] statuses;
-
-	/*
-	 *
-	 * OBJECT STATUS
-	 *
-	 * This message is sent by the HAI controller in reply to an OBJECT STATUS
-	 * message. The HAI controller reports the status for the specified object(s).
-	 */
 
 	@Override
 	public int getMessageType() {

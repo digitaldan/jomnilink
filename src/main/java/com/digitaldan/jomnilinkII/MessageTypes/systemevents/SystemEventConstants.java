@@ -12,9 +12,8 @@ package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 /**
  * This file contains the bit masks, that when applied to a system event will
  * match a template pattern.
- * 
- * @author Dan Cunningham
  *
+ * @author Dan Cunningham
  */
 class SystemEventConstants {
 	static final int BUTTON_TEMPLATE = 0b0000_0000_0000_0000;
@@ -39,7 +38,7 @@ class SystemEventConstants {
 	static final int UPB_LINK_MASK = 0b1111_1100_0000_0000;
 
 	static final int ALL_ON_OFF_TEMPLATE = 0b0000_0011_1110_0000;
-	static final int ALL_ON_OFF_MASK = 0b111_1111_1111_00000;
+	static final int ALL_ON_OFF_MASK = 0b1111_1111_1110_00000;
 
 	static final int PHONE_LINE_DEAD_TEMPLATE = 0b0000_0011_0000_0000;
 	static final int PHONE_LINE_RING_TEMPLATE = 0b0000_0011_0000_0001;

@@ -13,29 +13,32 @@ import com.digitaldan.jomnilinkII.Message;
 
 import lombok.ToString;
 
+/*
+ * REQUEST ZONE READY STATUS
+ *
+ * This message is used to report the secure/not ready status of security zones.
+ * Any burglary or 24 hour zone that is not in the secure state will be reported
+ * as not ready. Auxiliary and temperature zones are always reported as secure.
+ *
+ *     Start character      0x21
+ *     Message length       0x01
+ *     Message Type         0x38
+ *     Data                 none
+ *     CRC 1                0x00
+ *     CRC 2                0x42
+ *
+ *     Expected Reply       ZONE READY STATUS
+ */
 @ToString
 public class ReqZoneReadyStatus implements Message {
 	private static ReqZoneReadyStatus INSTANCE = new ReqZoneReadyStatus();
-
-	private ReqZoneReadyStatus() {
-	}
 
 	public static ReqZoneReadyStatus getInstance() {
 		return INSTANCE;
 	}
 
-	/*
-	 * This message is used to report the secure/not ready status of security zones.
-	 * Any burglary or 24 hour zone that is not in the secure state will be reported
-	 * as not ready. Auxiliary and temperature zones are always reported as secure.
-	 * Start character 0x21 Message length 0x01 Message type 0x38 Data none CRC 1
-	 * 0x00 CRC 2 0x42 Expected reply: ZONE READY STATUS
-	 *
-	 */
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_ZONE_READY;
 	}
-
 }

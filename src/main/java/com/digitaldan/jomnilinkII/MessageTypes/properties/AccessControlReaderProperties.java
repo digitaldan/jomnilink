@@ -16,23 +16,32 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * ACCESS CONTROL READER PROPERTIES (Requires Firmware Version 3.0 or Later)
+ *
+ *     Data 4               lock status (0=locked, 1=unlocked)
+ *     Data 5               unlock timer (MSB) (seconds remaining)
+ *     Data 6               unlock timer (LSB)
+ *     Data 7               access granted/denied (0=granted, 1=denied)
+ *     Data 8               last user to access reader
+ *     Data 9-24            access control reader name
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class LockProperties extends ObjectProperties {
-	private final boolean locked;
+public class AccessControlReaderProperties extends ObjectProperties {
+	private final boolean lockStatus;
 	private final int unlockTimer;
 	private final boolean accessDenied;
 	private final int lastUser;
 
 	@Builder
-	private LockProperties(int number, boolean locked, int unlockTimer, boolean accessDenied, int lastUser,
-			String name) {
+	private AccessControlReaderProperties(int number, boolean lockStatus, int unlockTimer, boolean accessDenied,
+			int lastUser, String name) {
 		super(OBJ_TYPE_AREA, number, name);
-		this.locked = locked;
+		this.lockStatus = lockStatus;
 		this.unlockTimer = unlockTimer;
 		this.accessDenied = accessDenied;
 		this.lastUser = lastUser;
 	}
-
 }

@@ -16,11 +16,19 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * AUDIO ZONE PROPERTIES
+ *
+ *     Data 4               on/off (0-1)
+ *     Data 5               source (1-n)
+ *     Data 6               volume (0-100)
+ *     Data 7               mute (0-1)
+ *     Data 8-20            zone name
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AudioZoneProperties extends ObjectProperties {
-
 	private final boolean on;
 	private final int source;
 	private final int volume;
@@ -34,5 +42,4 @@ public class AudioZoneProperties extends ObjectProperties {
 		this.volume = volume;
 		this.mute = mute;
 	}
-
 }

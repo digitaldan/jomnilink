@@ -16,6 +16,28 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * AREA PROPERTIES
+ *
+ *     Data 4               area mode (0-255)
+ *     Data 5               area alarms (0-255)
+ *     Data 6               entry timer
+ *     Data 7               exit timer
+ *     Data 8               enabled (0-1)
+ *     Data 9               exit delay (0-255)
+ *     Data 10              entry delay (0-255)
+ *     Data 11-23           area name
+ *
+ * For description of area mode and area alarms, see AREA STATUS.
+ *
+ * The entry timer and exit timer is the number of seconds remaining for the
+ * respective timer. The exit delay and entry delay is the configuration setting
+ * for the respective delay.
+ *
+ * If AREA PROPERTIES are requested for an area that is configured in the HAI
+ * controller, the enabled byte will be set to 1; if an area is not configured
+ * in the HAI controller, the enabled byte will be set to 0.
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -40,5 +62,4 @@ public class AreaProperties extends ObjectProperties {
 		this.exitDelay = exitDelay;
 		this.entryDelay = entryDelay;
 	}
-
 }

@@ -13,28 +13,30 @@ import com.digitaldan.jomnilinkII.Message;
 
 import lombok.ToString;
 
+/*
+ * REQUEST SYSTEM FEATURES
+ *
+ * This message requests the HAI controller to report its enabled features.
+ *
+ *     Start character      0x21
+ *     Message length       0x01
+ *     Message Type         0x1C
+ *     Data                 none
+ *     CRC 1                0x00
+ *     CRC 2                0x59
+ *
+ *     Expected Reply       SYSTEM FEATURES
+ */
 @ToString
 public class ReqSystemFeatures implements Message {
 	private static ReqSystemFeatures INSTANCE = new ReqSystemFeatures();
-
-	private ReqSystemFeatures() {
-	}
 
 	public static ReqSystemFeatures getInstance() {
 		return INSTANCE;
 	}
 
-	/*
-	 * This message requests the HAI controller to report its enabled features.
-	 * Start character 0x21 Message length 0x01 Message type 0x1C Data none CRC 1
-	 * 0x00 CRC 2 0x59 Expected reply: SYSTEM FEATURES
-	 *
-	 *
-	 */
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_FEATURES;
 	}
-
 }

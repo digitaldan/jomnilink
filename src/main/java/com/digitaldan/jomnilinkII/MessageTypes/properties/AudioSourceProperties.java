@@ -13,8 +13,12 @@ import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 
 import lombok.Builder;
 
+/*
+ * AUDIO SOURCE PROPERTIES
+ *
+ *     Data 4-16            source name
+ */
 public class AudioSourceProperties extends ObjectProperties {
-
 	@Builder
 	private AudioSourceProperties(int number, String name) {
 		super(OBJ_TYPE_AUDIO_SOURCE, number, name);

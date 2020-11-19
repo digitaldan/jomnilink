@@ -9,11 +9,10 @@
  */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+/*
+ * DCM OK                    0000 0011 0000 1001
+ */
 public class DCMOkEvent extends SystemEvent {
-
-	/**
-	 * DCM OK 0000 0011 0000 1001
-	 */
 	public DCMOkEvent(int event) {
 		super(event, SystemEventType.DCM_OK);
 	}

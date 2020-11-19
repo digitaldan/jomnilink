@@ -15,7 +15,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Aes {
-
 	private SecretKeySpec spec;
 	private Cipher decipher;
 	private Cipher encipher;

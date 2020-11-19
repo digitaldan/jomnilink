@@ -13,29 +13,31 @@ import com.digitaldan.jomnilinkII.Message;
 
 import lombok.ToString;
 
+/*
+ * REQUEST SYSTEM FORMATS
+ *
+ * This message requests the HAI controller to report the configured temperature
+ * format, time format, and date format.
+ *
+ *     Start character      0x21
+ *     Message length       0x01
+ *     Message Type         0x28
+ *     Data                 none
+ *     CRC 1                0x01
+ *     CRC 2                0x8E
+ *
+ *     Expected Reply       SYSTEM FORMATS
+ */
 @ToString
 public class ReqSystemFormats implements Message {
-
 	private static ReqSystemFormats INSTANCE = new ReqSystemFormats();
-
-	private ReqSystemFormats() {
-	}
 
 	public static ReqSystemFormats getInstance() {
 		return INSTANCE;
 	}
 
-	/*
-	 * This message requests the HAI controller to report the configured temperature
-	 * format, time format, and date format. Start character 0x21 Message length
-	 * 0x01 Message type 0x28 Data none CRC 1 0x01 CRC 2 0x8E Expected reply: SYSTEM
-	 * FORMATS
-	 *
-	 */
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_FORMATS;
 	}
-
 }

@@ -9,11 +9,10 @@
  */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+/*
+ * DCM TROUBLE               0000 0011 0000 0110
+ */
 public class DCMTroubleEvent extends SystemEvent {
-
-	/**
-	 * DCM TROUBLE 0000 0011 0000 1000
-	 */
 	public DCMTroubleEvent(int event) {
 		super(event, SystemEventType.DCM_TROUBLE);
 	}

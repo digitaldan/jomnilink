@@ -13,29 +13,32 @@ import com.digitaldan.jomnilinkII.Message;
 
 import lombok.ToString;
 
+/*
+ * REQUEST SYSTEM STATUS
+ *
+ * This message requests the HAI controller to report its time, date, calculated
+ * time of sunrise and sunset, battery reading, alarm status for any area that
+ * is in alarm.
+ *
+ *     Start character      0x21
+ *     Message length       0x01
+ *     Message Type         0x18
+ *     Data                 none
+ *     CRC 1                0x01
+ *     CRC 2                0x9A
+ *
+ *     Expected Reply       SYSTEM STATUS
+ */
 @ToString
 public class ReqSystemStatus implements Message {
-
 	private static ReqSystemStatus INSTANCE = new ReqSystemStatus();
-
-	private ReqSystemStatus() {
-	}
 
 	public static ReqSystemStatus getInstance() {
 		return INSTANCE;
 	}
 
-	/*
-	 * This message requests the HAI controller to report its time, date, calculated
-	 * time of sunrise and sunset, battery reading, alarm status for any area that
-	 * is in alarm. Start character 0x21 Message length 0x01 Message type 0x18 Data
-	 * none CRC 1 0x01 CRC 2 0x9A Expected reply SYSTEM STATUS
-	 *
-	 */
-
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_REQ_SYS_STATUS;
 	}
-
 }

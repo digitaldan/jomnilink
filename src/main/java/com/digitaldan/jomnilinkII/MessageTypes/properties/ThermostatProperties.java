@@ -16,11 +16,52 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * THERMOSTAT PROPERTIES
+ *
+ *     Data 4               communicating (0-1)
+ *     Data 5               temperature
+ *     Data 6               heat setpoint
+ *     Data 7               cool setpoint
+ *     Data 8               mode
+ *     Data 9               fan (0-2)
+ *     Data 10              hold (0-2)
+ *     Data 11              thermostat type
+ *     Data 12-24           thermostat name
+ *     Data 25              humidity
+ *     Data 26              humidify setpoint
+ *     Data 27              dehumidify setpoint
+ *     Data 28              outdoor temperature
+ *     Data 29              heating/cooling/humidifying/dehumidifying status
+ *
+ * For description of communicating, temperature, heat and cool setpoints, mode,
+ * fan status, hold status, humidity, humidity setpoints, outdoor temperature,
+ * and heating/cooling/humidifying/dehumidifying status see THERMOSTAT STATUS.
+ *
+ * The temperatures are reported in the Omni temperature format.
+ *
+ * The available thermostat types are as follows:
+ *
+ * ------------------------------------
+ * | Thermostat Type |  Description   |
+ * |-----------------|----------------|
+ * | 0               | Not Used       |
+ * |-----------------|----------------|
+ * | 1               | Auto Heat/Cool |
+ * |-----------------|----------------|
+ * | 2               | Heat/Cool      |
+ * |-----------------|----------------|
+ * | 3               | Heat Only      |
+ * |-----------------|----------------|
+ * | 4               | Cool Only      |
+ * |-----------------|----------------|
+ * | 5               | Setpoint Only  |
+ * ------------------------------------
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ThermostatProperties extends ObjectProperties {
-
 	private final int status;
 	private final int temperature;
 	private final int heatSetpoint;

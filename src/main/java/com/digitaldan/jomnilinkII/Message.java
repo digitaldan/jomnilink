@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2009-2009-0211 Dan Cunningham
+ * Copyright (c) 2009-2020 Dan Cunningham
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,8 +15,8 @@ public interface Message {
 	public static int MESG_TYPE_NEG_ACK = 0x02;
 	public static int MESG_TYPE_END_OF_DATA = 0x03;
 	public static int MESG_TYPE_CLEAR_NAMES = 0x0B;
-	public static int MESG_TYPE_DOWNLOAD_NAMES = 0x0C;
-	public static int MESG_TYPE_UPLOAD_NAMES = 0x0D;
+	public static int MESG_TYPE_WRITE_NAME = 0x0C;
+	public static int MESG_TYPE_READ_NAME = 0x0D;
 	public static int MESG_TYPE_NAME_DATA = 0x0E;
 	public static int MESG_TYPE_CLEAR_VOICES = 0x0F;
 	public static int MESG_TYPE_DOWNLOAD_VOICES = 0x10;
@@ -39,7 +39,7 @@ public interface Message {
 	public static int MESG_TYPE_OBJ_PROP = 0x21;
 	public static int MESG_TYPE_REQ_OBJ_STATUS = 0x22;
 	public static int MESG_TYPE_OBJ_STATUS = 0x23;
-	public static int MESG_TYPE_UPLOAD_EVENT_LOG = 0x24;
+	public static int MESG_TYPE_READ_EVENT_RECORD = 0x24;
 	public static int MESG_TYPE_EVENT_LOG_DATA = 0x25;
 	public static int MESG_TYPE_REQ_SEC_CODE_VALID = 0x26;
 	public static int MESG_TYPE_SEC_CODE_VALID = 0x27;

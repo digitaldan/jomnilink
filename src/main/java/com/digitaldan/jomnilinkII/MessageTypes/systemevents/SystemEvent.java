@@ -40,7 +40,7 @@ public abstract class SystemEvent {
 				return (SystemEvent) st.getSystemEventClass().getDeclaredConstructor(int.class).newInstance(number);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				logger.warn("Could not create systemEvent from number " + number, e);
+				logger.warn("Could not create SystemEvent from number " + number, e);
 			}
 		}
 		return null;

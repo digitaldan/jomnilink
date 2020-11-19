@@ -9,13 +9,18 @@
  */
 package com.digitaldan.jomnilinkII;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class OmniInvalidResponseException extends Exception {
+	private final Logger logger = LoggerFactory.getLogger(OmniInvalidResponseException.class);
 
 	private Message response;
 
 	public OmniInvalidResponseException(Message response) {
 		super();
 		this.response = response;
+		logger.error("Invalid message type received: {}", response.toString());
 	}
 
 	public OmniInvalidResponseException(String message) {
@@ -25,5 +30,4 @@ public class OmniInvalidResponseException extends Exception {
 	public Message getInvalidResponse() {
 		return response;
 	}
-
 }

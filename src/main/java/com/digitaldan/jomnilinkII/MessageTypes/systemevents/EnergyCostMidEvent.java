@@ -9,11 +9,10 @@
  */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+/*
+ * ENERGY COST MID           0000 0011 0000 1011
+ */
 public class EnergyCostMidEvent extends SystemEvent {
-
-	/**
-	 * ENERGY COST MID 0000 0011 0000 1011
-	 */
 	public EnergyCostMidEvent(int event) {
 		super(event, SystemEventType.ENERGY_COST_MID);
 	}

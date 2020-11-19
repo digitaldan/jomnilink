@@ -13,13 +13,25 @@ import com.digitaldan.jomnilinkII.Message;
 
 import lombok.ToString;
 
+/*
+ * ACKNOWLEDGEMENT MESSAGES
+ *
+ * Acknowledgement messages are sent to acknowledge the receipt of another
+ * message. An ACKNOWLEDGE message is sent in response to another message to
+ * indicate that the message was received correctly and processed.
+ *
+ * ACKNOWLEDGE
+ *
+ *     Start character      0x21
+ *     Message length       0x01
+ *     Message Type         0x01
+ *     Data                 none
+ *     CRC 1                0xC0
+ *     CRC 2                0x50
+ */
 @ToString
 public class Acknowledge implements Message {
-
 	private static final Acknowledge INSTANCE = new Acknowledge();
-
-	private Acknowledge() {
-	}
 
 	public static Acknowledge getInstance() {
 		return INSTANCE;

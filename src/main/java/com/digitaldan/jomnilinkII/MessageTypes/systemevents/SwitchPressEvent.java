@@ -9,22 +9,25 @@
  */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+/*
+ * ALC, UPB, RADIO RA,       1111 ssss uuuu uuuu     s = switch
+ * OR STARLITE                                           0 = off
+ * SWITCH PRESS                                          1 = on
+ *                                                       2-11 = switch 1-10
+ *                                                   u = unit number
+ */
 public class SwitchPressEvent extends SystemEvent {
-
-	/**
-	 * ALC, UPB, RADIO RA, OR STARLITE SWITCH PRESS 1111 ssss uuuu uuuu s= switch
-	 * 0=off 1=on 2-11 = switch 1-10 u = unitTemplate number
-	 */
 	public SwitchPressEvent(int event) {
 		super(event, SystemEventType.ALC_UPB_RADIORA_STARLITE_SWITCH_PRESS);
 	}
 
 	public int getSwitchValue() {
+		// 0x0F = 15 = 1111
 		return event >> 8 & 0x0f;
 	}
 
 	public int getUnitNumber() {
+		// 0xFF = 255 = 11111111
 		return event & 0xff;
 	}
-
 }
