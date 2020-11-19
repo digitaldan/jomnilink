@@ -1,3 +1,12 @@
+/**
+ * Copyright (c) 2009-2020 Dan Cunningham
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package com.digitaldan.jomnilinkII.aes;
 //Cipher - an encryption template
 
@@ -45,7 +54,7 @@ public abstract class Cipher extends CryptoUtils {
 		this.keySize = keySize;
 	}
 
-	/// How big a key is.  Keyless ciphers use 0.  Variable-length-key ciphers
+	/// How big a key is. Keyless ciphers use 0. Variable-length-key ciphers
 	// also use 0.
 	public int keySize;
 

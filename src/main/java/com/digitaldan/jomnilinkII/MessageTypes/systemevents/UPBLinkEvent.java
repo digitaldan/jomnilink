@@ -1,3 +1,12 @@
+/**
+ * Copyright (c) 2009-2020 Dan Cunningham
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
 import java.util.Arrays;
@@ -8,12 +17,8 @@ import java.util.stream.Collectors;
 public class UPBLinkEvent extends SystemEvent {
 
 	/**
-	 * UPB LINK
-	 * 1111 11cc nnnn nnnn
-	 * c= link command
-	 *   0 = off (deactivate) 1 = on (activate)
-	 *   2 = set (store preset) 3 = fade stop
-	 * n = link number
+	 * UPB LINK 1111 11cc nnnn nnnn c= link command 0 = off (deactivate) 1 = on
+	 * (activate) 2 = set (store preset) 3 = fade stop n = link number
 	 */
 
 	public enum Command {
@@ -23,7 +28,8 @@ public class UPBLinkEvent extends SystemEvent {
 		private int getCommandValue() {
 			return commandValue;
 		}
-		private static Map<Integer, Command> lookup = Arrays.stream(values()).collect(Collectors.toMap(Command::getCommandValue, Function.identity()));
+		private static Map<Integer, Command> lookup = Arrays.stream(values())
+				.collect(Collectors.toMap(Command::getCommandValue, Function.identity()));
 
 		Command(int commandValue) {
 			this.commandValue = commandValue;
