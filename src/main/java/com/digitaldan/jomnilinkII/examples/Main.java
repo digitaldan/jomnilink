@@ -1,3 +1,12 @@
+/**
+* Copyright (c) 2009-2020 Dan Cunningham
+*
+* This program and the accompanying materials are made available under the
+* terms of the Eclipse Public License 2.0 which is available at
+* http://www.eclipse.org/legal/epl-2.0
+*
+* SPDX-License-Identifier: EPL-2.0
+*/
 package com.digitaldan.jomnilinkII.examples;
 
 import com.digitaldan.jomnilinkII.MessageTypes.statuses.*;
@@ -47,33 +56,33 @@ public class Main {
 				@Override
 				public void objectStatusNotification(ObjectStatus s) {
 					switch (s.getStatusType()) {
-					case Message.OBJ_TYPE_AREA:
-						logger.info("STATUS_AREA changed");
-						break;
-					case Message.OBJ_TYPE_AUDIO_ZONE:
-						logger.info("STATUS_AUDIO_ZONE changed");
-						break;
-					case Message.OBJ_TYPE_AUX_SENSOR:
-						logger.info("STATUS_AUX changed");
-						break;
-					case Message.OBJ_TYPE_EXP:
-						logger.info("STATUS_EXP changed");
-						break;
-					case Message.OBJ_TYPE_MESG:
-						logger.info("STATUS_MESG changed");
-						break;
-					case Message.OBJ_TYPE_THERMO:
-						logger.info("STATUS_THERMO changed");
-						break;
-					case Message.OBJ_TYPE_UNIT:
-						logger.info("STATUS_UNIT changed");
-						break;
-					case Message.OBJ_TYPE_ZONE:
-						logger.info("STATUS_ZONE changed");
-						break;
-					default:
-						logger.info("Unknown type " + s.getStatusType());
-						break;
+						case Message.OBJ_TYPE_AREA :
+							logger.info("STATUS_AREA changed");
+							break;
+						case Message.OBJ_TYPE_AUDIO_ZONE :
+							logger.info("STATUS_AUDIO_ZONE changed");
+							break;
+						case Message.OBJ_TYPE_AUX_SENSOR :
+							logger.info("STATUS_AUX changed");
+							break;
+						case Message.OBJ_TYPE_EXP :
+							logger.info("STATUS_EXP changed");
+							break;
+						case Message.OBJ_TYPE_MESG :
+							logger.info("STATUS_MESG changed");
+							break;
+						case Message.OBJ_TYPE_THERMO :
+							logger.info("STATUS_THERMO changed");
+							break;
+						case Message.OBJ_TYPE_UNIT :
+							logger.info("STATUS_UNIT changed");
+							break;
+						case Message.OBJ_TYPE_ZONE :
+							logger.info("STATUS_ZONE changed");
+							break;
+						default :
+							logger.info("Unknown type " + s.getStatusType());
+							break;
 					}
 					logger.info(s.toString());
 				}
@@ -82,18 +91,19 @@ public class Main {
 				public void systemEventNotification(SystemEvent event) {
 					logger.info("Got SystemEvent type {}", event.getType());
 					switch (event.getType()) {
-					case UPB_LINK:
-						UPBLinkEvent linkEvent = (UPBLinkEvent) event;
-						logger.info("UPB Link command({}) for link({})", linkEvent.getLinkCommand(), linkEvent.getLinkNumber() );
-						break;
-					case BUTTON:
-						logger.info("ButtonEvent number {}", ((ButtonEvent) event).getButtonNumber());
-						break;
-					case PHONE_LINE_OFF_HOOK:
-						logger.info("PHONE_LINE_OFF_HOOK event");
-						break;
-					default:
-						break;
+						case UPB_LINK :
+							UPBLinkEvent linkEvent = (UPBLinkEvent) event;
+							logger.info("UPB Link command({}) for link({})", linkEvent.getLinkCommand(),
+									linkEvent.getLinkNumber());
+							break;
+						case BUTTON :
+							logger.info("ButtonEvent number {}", ((ButtonEvent) event).getButtonNumber());
+							break;
+						case PHONE_LINE_OFF_HOOK :
+							logger.info("PHONE_LINE_OFF_HOOK event");
+							break;
+						default :
+							break;
 					}
 
 				}
@@ -106,7 +116,7 @@ public class Main {
 					System.exit(-1);
 				}
 			});
-			//			c.debug = true;
+			// c.debug = true;
 			c.enableNotifications();
 			logger.info(c.reqSystemInformation().toString());
 			logger.info(c.reqSystemStatus().toString());
@@ -124,7 +134,7 @@ public class Main {
 			int max_audio_sources = c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_SOURCE).getCapacity();
 			int max_locks = c.reqObjectTypeCapacities(Message.OBJ_TYPE_CONTROL_READER).getCapacity();
 
-			//Aux sensors returns error, They are considered zones by HAI
+			// Aux sensors returns error, They are considered zones by HAI
 			// logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUX_SENSOR).toString());
 			logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_SOURCE).toString());
 			logger.info(c.reqObjectTypeCapacities(Message.OBJ_TYPE_AUDIO_ZONE).toString());
@@ -179,9 +189,9 @@ public class Main {
 				objnum = ((ObjectProperties) m).getNumber();
 			}
 			objnum = 0;
-			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_CONTROL_READER, objnum, 1, ObjectProperties.FILTER_1_NAMED,
-					ObjectProperties.FILTER_2_NONE, ObjectProperties.FILTER_3_NONE))
-					.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
+			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_CONTROL_READER, objnum, 1,
+					ObjectProperties.FILTER_1_NAMED, ObjectProperties.FILTER_2_NONE, ObjectProperties.FILTER_3_NONE))
+							.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
 				logger.info(m.toString());
 				objnum = ((ObjectProperties) m).getNumber();
 			}

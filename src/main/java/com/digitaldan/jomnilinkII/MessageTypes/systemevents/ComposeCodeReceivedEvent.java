@@ -1,18 +1,20 @@
+/**
+* Copyright (c) 2009-2020 Dan Cunningham
+*
+* This program and the accompanying materials are made available under the
+* terms of the Eclipse Public License 2.0 which is available at
+* http://www.eclipse.org/legal/epl-2.0
+*
+* SPDX-License-Identifier: EPL-2.0
+*/
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
 public class ComposeCodeReceivedEvent extends SystemEvent {
 
 	/**
-	 * COMPOSE CODE RECEIVED
-	 * 0111 ssss hhhh uuuu
-	 * s= state
-	 * 0 = off
-	 * 1 = on
-	 *     2-13 = scene A-L
-	 * h = Compose house code
-	 *     0-15 = A-P
-	 * u = Compose unitTemplate number
-	 * 	   0-15 = 1-16
+	 * COMPOSE CODE RECEIVED 0111 ssss hhhh uuuu s= state 0 = off 1 = on 2-13 =
+	 * scene A-L h = Compose house code 0-15 = A-P u = Compose unitTemplate number
+	 * 0-15 = 1-16
 	 */
 	public ComposeCodeReceivedEvent(int event) {
 		super(event, SystemEventType.COMPOSE_CODE_RECEIVED);

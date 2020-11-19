@@ -1,3 +1,12 @@
+/**
+* Copyright (c) 2009-2020 Dan Cunningham
+*
+* This program and the accompanying materials are made available under the
+* terms of the Eclipse Public License 2.0 which is available at
+* http://www.eclipse.org/legal/epl-2.0
+*
+* SPDX-License-Identifier: EPL-2.0
+*/
 package com.digitaldan.jomnilinkII.aes;
 
 //AesCipher - the AES encryption method
@@ -50,10 +59,10 @@ public class AesCipher extends BlockCipher {
 
 	// Constants, variables, and auxillary routines.
 
-	// Key size in bytes.  Valid values are 16, 24, and 32.
+	// Key size in bytes. Valid values are 16, 24, and 32.
 	public static final int KEY_SIZE = 16;
 
-	// Block size in bytes.  Valid values are 16, 24, and 32.
+	// Block size in bytes. Valid values are 16, 24, and 32.
 	public static final int BLOCK_SIZE = 16;
 
 	private static final int[] alog = new int[256];
@@ -75,11 +84,11 @@ public class AesCipher extends BlockCipher {
 	private static final int[] U4 = new int[256];
 	private static final byte[] rcon = new byte[30];
 
-	static private final int[][][] shifts = new int[][][] { { { 0, 0 }, { 1, 3 }, { 2, 2 }, { 3, 1 } },
-			{ { 0, 0 }, { 1, 5 }, { 2, 4 }, { 3, 3 } }, { { 0, 0 }, { 1, 7 }, { 3, 5 }, { 4, 4 } } };
+	static private final int[][][] shifts = new int[][][]{{{0, 0}, {1, 3}, {2, 2}, {3, 1}},
+			{{0, 0}, {1, 5}, {2, 4}, {3, 3}}, {{0, 0}, {1, 7}, {3, 5}, {4, 4}}};
 
-	private static final char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
-			'E', 'F' };
+	private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
+			'F'};
 
 	// Static initializer - to intialise S-boxes and T-boxes
 	static {
@@ -99,10 +108,10 @@ public class AesCipher extends BlockCipher {
 		for (i = 1; i < 255; ++i) {
 			log[alog[i]] = i;
 		}
-		byte[][] A = new byte[][] { { 1, 1, 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 1, 0, 0 }, { 0, 0, 1, 1, 1, 1, 1, 0 },
-				{ 0, 0, 0, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1, 1, 1, 1 }, { 1, 1, 0, 0, 0, 1, 1, 1 },
-				{ 1, 1, 1, 0, 0, 0, 1, 1 }, { 1, 1, 1, 1, 0, 0, 0, 1 } };
-		byte[] B = new byte[] { 0, 1, 1, 0, 0, 0, 1, 1 };
+		byte[][] A = new byte[][]{{1, 1, 1, 1, 1, 0, 0, 0}, {0, 1, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 1, 0},
+				{0, 0, 0, 1, 1, 1, 1, 1}, {1, 0, 0, 0, 1, 1, 1, 1}, {1, 1, 0, 0, 0, 1, 1, 1}, {1, 1, 1, 0, 0, 0, 1, 1},
+				{1, 1, 1, 1, 0, 0, 0, 1}};
+		byte[] B = new byte[]{0, 1, 1, 0, 0, 0, 1, 1};
 
 		// Substitution box based on F^{-1}(x).
 		int t;
@@ -114,7 +123,7 @@ public class AesCipher extends BlockCipher {
 				box[i][t] = (byte) ((j >>> (7 - t)) & 0x01);
 			}
 		}
-		// Affine transform:  box[i] <- B + A*box[i].
+		// Affine transform: box[i] <- B + A*box[i].
 		byte[][] cox = new byte[256][8];
 		for (i = 0; i < 256; ++i) {
 			for (t = 0; t < 8; ++t) {
@@ -133,7 +142,7 @@ public class AesCipher extends BlockCipher {
 			Si[S[i] & 0xFF] = (byte) i;
 		}
 		// T-boxes.
-		byte[][] G = new byte[][] { { 2, 1, 1, 3 }, { 3, 2, 1, 1 }, { 1, 3, 2, 1 }, { 1, 1, 3, 2 } };
+		byte[][] G = new byte[][]{{2, 1, 1, 3}, {3, 2, 1, 1}, {1, 3, 2, 1}, {1, 1, 3, 2}};
 		byte[][] AA = new byte[4][8];
 		for (i = 0; i < 4; ++i) {
 			for (j = 0; j < 4; ++j) {
@@ -227,17 +236,17 @@ public class AesCipher extends BlockCipher {
 	}
 
 	/// Return the number of rounds for a given Rijndael's key and block sizes.
-	// @param keySize    The size of the user key material in bytes.
-	// @param blockSize  The desired block size in bytes.
+	// @param keySize The size of the user key material in bytes.
+	// @param blockSize The desired block size in bytes.
 	// @return The number of rounds for a given Rijndael's key and block sizes.
 	public static int getRounds(int keySize, int blockSize) {
 		switch (keySize) {
-		case 16:
-			return blockSize == 16 ? 10 : (blockSize == 24 ? 12 : 14);
-		case 24:
-			return blockSize != 32 ? 12 : 14;
-		default: // 32 bytes = 256 bits
-			return 14;
+			case 16 :
+				return blockSize == 16 ? 10 : (blockSize == 24 ? 12 : 14);
+			case 24 :
+				return blockSize != 32 ? 12 : 14;
+			default : // 32 bytes = 256 bits
+				return 14;
 		}
 	}
 
@@ -396,9 +405,9 @@ public class AesCipher extends BlockCipher {
 		byte[] decipherText = new byte[16];
 
 		BlockCipher aesa = new AesCipher("0123456789");
-		byte[] clearText1 = { (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+		byte[] clearText1 = {(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				(byte) 0x00 };
+				(byte) 0x00};
 		System.out.println("cleartext: " + toStringBlock(clearText1));
 		aesa.encrypt(clearText1, cipherText);
 		System.out.println("encrypted: " + toStringBlock(cipherText));
@@ -408,9 +417,9 @@ public class AesCipher extends BlockCipher {
 		System.out.println();
 
 		BlockCipher aesb = new AesCipher("abcdefghijklmnopqrstuvwxyz");
-		byte[] clearText2 = { (byte) 0x00, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05, (byte) 0x06,
+		byte[] clearText2 = {(byte) 0x00, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05, (byte) 0x06,
 				(byte) 0x07, (byte) 0x08, (byte) 0x09, (byte) 0x0a, (byte) 0x0b, (byte) 0x0c, (byte) 0x0d, (byte) 0x0e,
-				(byte) 0x0f };
+				(byte) 0x0f};
 		System.out.println("cleartext: " + toStringBlock(clearText2));
 		aesb.encrypt(clearText2, cipherText);
 		System.out.println("encrypted: " + toStringBlock(cipherText));
