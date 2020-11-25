@@ -207,23 +207,21 @@ public class Main {
 				logger.info(m.toString());
 				audioZoneNum = ((ObjectProperties) m).getNumber();
 			}
-			int expNum = 8;
-			// Expansion enclosures return error for properties request
-			// while ((m = c.reqObjectProperties(Message.OBJ_TYPE_EXP, expNum, 1,
-			// ObjectProperties.FILTER_1_NONE,
-			// ObjectProperties.FILTER_2_NONE, ObjectProperties.FILTER_3_NONE))
-			// .getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-			// logger.info(m.toString());
-			// expNum = ((ObjectProperties) m).getNumber();
+			// int expNum = 8;
+			// // Expansion enclosures return error for properties request
+			// while ((m = c.reqObjectProperties(Message.OBJ_TYPE_EXP, expNum, 1, ObjectProperties.FILTER_1_NONE,
+			// 		ObjectProperties.FILTER_2_NONE, ObjectProperties.FILTER_3_NONE))
+			// 				.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
+			// 	logger.info(m.toString());
+			// 	expNum = ((ObjectProperties) m).getNumber();
 			// }
-			int consoleNum = 16;
-			// Consoles return error for properties request
-			// while ((m = c.reqObjectProperties(Message.OBJ_TYPE_CONSOLE, consoleNum, 1,
-			// ObjectProperties.FILTER_1_NONE,
-			// ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_NONE))
-			// .getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
-			// logger.info(m.toString());
-			// consoleNum = ((ObjectProperties) m).getNumber();
+			// int consoleNum = 16;
+			// // Consoles return error for properties request
+			// while ((m = c.reqObjectProperties(Message.OBJ_TYPE_CONSOLE, consoleNum, 1, ObjectProperties.FILTER_1_NONE,
+			// 		ObjectProperties.FILTER_2_AREA_ALL, ObjectProperties.FILTER_3_NONE))
+			// 				.getMessageType() == Message.MESG_TYPE_OBJ_PROP) {
+			// 	logger.info(m.toString());
+			// 	consoleNum = ((ObjectProperties) m).getNumber();
 			// }
 			int userSettingNum = 0;
 			while ((m = c.reqObjectProperties(Message.OBJ_TYPE_USER_SETTING, userSettingNum, 1,
@@ -324,18 +322,18 @@ public class Main {
 					logger.info(audiozsExt[i].toString());
 				}
 			}
-			if (expNum > 0) {
-				ObjectStatus status = c.reqObjectStatus(Message.OBJ_TYPE_EXP, 1, expNum);
-				ExpansionStatus[] exps = (ExpansionStatus[]) status.getStatuses();
-				for (int i = 0; i < exps.length; i++) {
-					logger.info(exps[i].toString());
-				}
-				status = c.reqObjectStatus(Message.OBJ_TYPE_EXP, 1, expNum, true);
-				ExtendedExpansionStatus[] expsExt = (ExtendedExpansionStatus[]) status.getStatuses();
-				for (int i = 0; i < expsExt.length; i++) {
-					logger.info(expsExt[i].toString());
-				}
-			}
+			// if (expNum > 0) {
+			// 	ObjectStatus status = c.reqObjectStatus(Message.OBJ_TYPE_EXP, 1, expNum);
+			// 	ExpansionStatus[] exps = (ExpansionStatus[]) status.getStatuses();
+			// 	for (int i = 0; i < exps.length; i++) {
+			// 		logger.info(exps[i].toString());
+			// 	}
+			// 	status = c.reqObjectStatus(Message.OBJ_TYPE_EXP, 1, expNum, true);
+			// 	ExtendedExpansionStatus[] expsExt = (ExtendedExpansionStatus[]) status.getStatuses();
+			// 	for (int i = 0; i < expsExt.length; i++) {
+			// 		logger.info(expsExt[i].toString());
+			// 	}
+			// }
 			if (userSettingNum > 0) {
 				ObjectStatus status = c.reqObjectStatus(Message.OBJ_TYPE_USER_SETTING, 1, userSettingNum);
 				UserSettingStatus[] userSettings = (UserSettingStatus[]) status.getStatuses();
