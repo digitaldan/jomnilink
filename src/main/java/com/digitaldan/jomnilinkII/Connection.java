@@ -175,7 +175,7 @@ public class Connection extends Thread {
 		disconnectListeners.add(listener);
 	}
 
-	public void removeDisconnecListener(DisconnectListener listener) {
+	public void removeDisconnectListener(DisconnectListener listener) {
 		disconnectListeners.remove(listener);
 	}
 
