@@ -17,20 +17,18 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * EXTENDED OBJECT STATUS (Requires Firmware Version 3.0 or Later)
+ *
+ * This message is sent by the HAI controller in reply to an REQUEST EXTENDED
+ * OBJECT STATUS message. The HAI controller reports the status for the
+ * specified object(s).
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ExtendedObjectStatus extends ObjectStatus implements Message {
-
 	private final int recordLength;
-
-	/*
-	 *
-	 * OBJECT STATUS
-	 *
-	 * This message is sent by the HAI controller in reply to an OBJECT STATUS
-	 * message. The HAI controller reports the status for the specified object(s).
-	 */
 
 	@Override
 	public int getMessageType() {
@@ -42,5 +40,4 @@ public class ExtendedObjectStatus extends ObjectStatus implements Message {
 		super(statusType, statuses);
 		this.recordLength = recordLength;
 	}
-
 }

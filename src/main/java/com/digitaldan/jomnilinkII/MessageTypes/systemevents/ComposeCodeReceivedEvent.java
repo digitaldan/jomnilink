@@ -9,13 +9,17 @@
  */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+/*
+ * COMPOSE CODE RECEIVED     0111 ssss hhhh uuuu     s = state
+ *                                                       0 = off
+ *                                                       1 = on
+ *                                                       2-13 = scene A-L
+ *                                                   h = compose house code
+ *                                                       0-15 = A-P
+ *                                                   u = compose unit number
+ *                                                       0-15 = 1-16
+ */
 public class ComposeCodeReceivedEvent extends SystemEvent {
-
-	/**
-	 * COMPOSE CODE RECEIVED 0111 ssss hhhh uuuu s= state 0 = off 1 = on 2-13 =
-	 * scene A-L h = Compose house code 0-15 = A-P u = Compose unitTemplate number
-	 * 0-15 = 1-16
-	 */
 	public ComposeCodeReceivedEvent(int event) {
 		super(event, SystemEventType.COMPOSE_CODE_RECEIVED);
 	}

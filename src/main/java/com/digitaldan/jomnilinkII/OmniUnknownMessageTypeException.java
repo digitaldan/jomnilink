@@ -10,7 +10,6 @@
 package com.digitaldan.jomnilinkII;
 
 public class OmniUnknownMessageTypeException extends Exception {
-
 	private int type;
 
 	public OmniUnknownMessageTypeException(int type) {
@@ -25,5 +24,4 @@ public class OmniUnknownMessageTypeException extends Exception {
 	public int getUnknowMessageType() {
 		return type;
 	}
-
 }

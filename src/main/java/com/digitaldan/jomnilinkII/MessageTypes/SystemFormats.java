@@ -16,29 +16,47 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
+/*
+ * SYSTEM FORMATS
+ *
+ * This message is sent by the HAI controller in reply to a REQUEST SYSTEM
+ * FORMATS message. The controller reports the configured temperature format,
+ * time format, and date format.
+ *
+ *     Start character      0x21
+ *     Message length       0x04
+ *     Message Type         0x29
+ *     Data 1               temperature format (1-2)
+ *     Data 2               time format (1-2)
+ *     Data 3               date format (1-2)
+ *     CRC 1                varies
+ *     CRC 2                varies
+ *
+ * The temperature format byte is shown below.
+ *
+ *     1 = F
+ *     2 = C
+ *
+ * The time format byte is shown below.
+ *
+ *     1 = 12 HR
+ *     2 = 24 HR
+ *
+ * The date format byte is shown below.
+ *
+ *     1 = MMDD
+ *     2 = DDMM
+ */
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemFormats implements Message {
-
 	private final int tempFormat;
 	private final int timeFormat;
 	private final int dateFormat;
-
-	/*
-	 * This message is sent by the HAI controller in reply to a REQUEST SYSTEM
-	 * FORMATS message. The controller reports the configured temperature format,
-	 * time format, and date format. Start character 0x21 Message length 0x04
-	 * Message type 0x29 Data 1 temperature format (1-2) Data 2 time format (1-2)
-	 * Data 3 date format (1-2) CRC 1 varies CRC 2 varies The temperature format
-	 * byte is shown below. 1=F 2=C The time format byte is shown below. 1 = 12 HR 2
-	 * = 24 HR The date format byte is shown below. 1 = MMDD 2 = DDMM
-	 *
-	 */
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_SYS_FORMATS;
 	}
-
 }

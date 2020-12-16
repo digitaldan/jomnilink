@@ -13,11 +13,14 @@ import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 
 import lombok.Builder;
 
+/*
+ * MESSAGE PROPERTIES
+ *
+ *     Data 4-19            message name
+ */
 public class MessageProperties extends ObjectProperties {
-
 	@Builder
 	private MessageProperties(int number, String name) {
 		super(OBJ_TYPE_MESG, number, name);
 	}
-
 }

@@ -16,6 +16,55 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * ZONE PROPERTIES
+ *
+ *     Data 4               unit state
+ *     Data 5               unit time (MSB)
+ *     Data 6               unit time (LSB)
+ *     Data 7               unit type (0-255)
+ *     Data 8-20            unit name
+ *
+ * For description of unit status, see UNIT STATUS.
+ *
+ * The unit time is the number of seconds remaining for the last command.
+ *
+ * The available unit types are as follows:
+ *
+ * ----------------------------
+ * | Unit Type | Description  |
+ * |-----------|--------------|
+ * | 1         | Standard     |
+ * |-----------|--------------|
+ * | 2         | Extended     |
+ * |-----------|--------------|
+ * | 3         | Compose      |
+ * |-----------|--------------|
+ * | 4         | UPB          |
+ * |-----------|--------------|
+ * | 5         | HLC Room     |
+ * |-----------|--------------|
+ * | 6         | HLC Load     |
+ * |-----------|--------------|
+ * | 7         | Lumina Mode  |
+ * |-----------|--------------|
+ * | 8         | RadioRA      |
+ * |-----------|--------------|
+ * | 9         | CentraLite   |
+ * |-----------|--------------|
+ * | 10        | ViziaRF Room |
+ * |-----------|--------------|
+ * | 11        | ViziaRF Load |
+ * |-----------|--------------|
+ * | 12        | Flag         |
+ * |-----------|--------------|
+ * | 13        | Output       |
+ * |-----------|--------------|
+ * | 14        | Audio Zone   |
+ * |-----------|--------------|
+ * | 15        | Audio Source |
+ * ----------------------------
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -46,5 +95,4 @@ public class UnitProperties extends ObjectProperties {
 		this.time = time;
 		this.unitType = unitType;
 	}
-
 }

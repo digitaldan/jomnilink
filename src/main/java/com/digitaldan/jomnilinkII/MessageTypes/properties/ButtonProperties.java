@@ -13,11 +13,14 @@ import com.digitaldan.jomnilinkII.MessageTypes.ObjectProperties;
 
 import lombok.Builder;
 
+/*
+ * BUTTON PROPERTIES
+ *
+ *     Data 4-16            button name
+ */
 public class ButtonProperties extends ObjectProperties {
-
 	@Builder
 	private ButtonProperties(int number, String name) {
 		super(OBJ_TYPE_BUTTON, number, name);
 	}
-
 }

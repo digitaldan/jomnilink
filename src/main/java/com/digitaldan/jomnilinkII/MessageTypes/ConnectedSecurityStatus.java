@@ -17,20 +17,30 @@ import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 
+/*
+ * CONNECTED SECURITY SYSTEM STATUS
+ *
+ * This message is sent in response to a REQUEST CONNECTED SECURITY SYSTEM
+ * STATUS message.
+ *
+ *     Start character      0x21
+ *     Message length       number of data bytes + 1
+ *     Message Type         0x2E
+ *     Data 1               mode in partition 1
+ *     Data 2               status of partition 1
+ *     Data 3               mode in partition 2
+ *     Data 4               status of partition 2
+ *     ...
+ *     Data 15              mode in partition 8
+ *     Data 16              status of partition 8
+ *     CRC 1                varies
+ *     CRC 2                varies
+ */
 @Value
 @Builder
 public class ConnectedSecurityStatus implements Message {
-
 	@Singular
 	private final List<Partition> partitions;
-	/*
-	 * CONNECTED SECURITY SYSTEM STATUS This message is sent in response to a
-	 * REQUEST CONNECTED SECURITY SYSTEM STATUS message. Start character 0x21
-	 * Message length number of data bytes + 1 Message Type 0x2E Data 1 mode in
-	 * partition 1 Data 2 status of partition 1 Data 3 mode in partition 2 Data 4
-	 * status of partition 2 ... Data 15 mode in partition 8 Data 16 status of
-	 * partition 8 CRC 1 varies CRC 2 varies
-	 */
 
 	@Override
 	public int getMessageType() {
@@ -47,5 +57,4 @@ public class ConnectedSecurityStatus implements Message {
 			this.status = status;
 		}
 	}
-
 }

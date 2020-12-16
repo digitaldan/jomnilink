@@ -10,7 +10,6 @@
 package com.digitaldan.jomnilinkII;
 
 public class OmniNotConnectedException extends Exception {
-
 	private Exception exception;
 
 	public OmniNotConnectedException(Exception exception) {

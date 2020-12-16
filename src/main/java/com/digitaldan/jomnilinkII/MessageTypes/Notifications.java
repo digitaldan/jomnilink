@@ -15,10 +15,27 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+/*
+ * ENABLE NOTIFICATIONS
+ *
+ * The ENABLE NOTIFICATIONS message requests the HAI controller to send event
+ * notifications as they occur. If the ENABLE NOTIFICATIONS feature is disabled,
+ * the HAI controller will not send event data.
+ *
+ *     Start character      0x21
+ *     Message length       0x02
+ *     Message Type         0x15
+ *     Data 1               enable byte (0=disable, 1=enable)
+ *     CRC 1                varies
+ *     CRC 2                varies
+ *
+ *     Expected Reply       ACKNOWLEDGE
+ *
+ * NOTE notifiations that come back have a SEQ of 00
+ */
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Notifications implements Message {
-
 	private final static Notifications ENABLED = new Notifications(true);
 	private final static Notifications DISABLED = new Notifications(false);
 
@@ -30,26 +47,10 @@ public class Notifications implements Message {
 		return DISABLED;
 	}
 
-	/*
-	 * ENABLE NOTIFICATIONS
-	 *
-	 * The ENABLE NOTIFICATIONS message requests the HAI controller to send event
-	 * notifications as they occur. If the ENABLE NOTIFICATIONS feature is disabled,
-	 * the HAI controller will not send event data.
-	 *
-	 * Start character 0x21 Message length 0x02 Message type 0x15 Data 1 enable byte
-	 * (0=disable, 1=enable) CRC 1 varies CRC 2 varies
-	 *
-	 * Expected reply ACKNOWLEDGE
-	 *
-	 * NOTE notifiations that come back have a SEQ of 00
-	 *
-	 */
 	private final boolean enabled;
 
 	@Override
 	public int getMessageType() {
 		return MESG_TYPE_ENABLE_NOTIFICATIONS;
 	}
-
 }

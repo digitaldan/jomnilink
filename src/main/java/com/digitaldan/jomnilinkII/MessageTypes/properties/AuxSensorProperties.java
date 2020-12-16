@@ -16,11 +16,44 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+/*
+ * AUXILIARY SENSOR PROPERTIES
+ *
+ *     Data 4               output status
+ *     Data 5               current temperature or humidity
+ *     Data 6               low setpoint
+ *     Data 7               high setpoint
+ *     Data 8               sensor type
+ *     Data 9-24            sensor name
+ *
+ * The temperatures are reported in the Omni temperature format.
+ *
+ * The available sensor types are as follows:
+ *
+ * ----------------------------------------------------
+ * | Sensor Type |            Description             |
+ * |-------------|------------------------------------|
+ * | 80          | Programmable Energy Saver Module   |
+ * |-------------|------------------------------------|
+ * | 81          | Outdoor Temperature                |
+ * |-------------|------------------------------------|
+ * | 82          | Temperature                        |
+ * |-------------|------------------------------------|
+ * | 83          | Temperature Alarm                  |
+ * |-------------|------------------------------------|
+ * | 84          | Humidity                           |
+ * |-------------|------------------------------------|
+ * | 85          | Extended Range Outdoor Temperature |
+ * |-------------|------------------------------------|
+ * | 86          | Extended Range Temperature         |
+ * |-------------|------------------------------------|
+ * | 87          | Extended Range Temperature Alarm   |
+ * ----------------------------------------------------
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AuxSensorProperties extends ObjectProperties {
-
 	public static final int SENSOR_TYPE_PROGRAMMABLE_ENERGY_SAVER_MODULE = 80;
 	public static final int SENSOR_TYPE_OUTDOOR_TEMPERATURE = 81;
 	public static final int SENSOR_TYPE_TEMPERATURE = 82;
@@ -46,5 +79,4 @@ public class AuxSensorProperties extends ObjectProperties {
 		this.highSetpoint = highSetpoint;
 		this.sensorType = sensorType;
 	}
-
 }

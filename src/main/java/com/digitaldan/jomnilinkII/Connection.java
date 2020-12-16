@@ -28,52 +28,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.digitaldan.jomnilinkII.MessageTypes.ActivateKeypadEmergency;
-import com.digitaldan.jomnilinkII.MessageTypes.CommandMessage;
-import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityCommand;
-import com.digitaldan.jomnilinkII.MessageTypes.ConnectedSecurityStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.DownloadNames;
-import com.digitaldan.jomnilinkII.MessageTypes.ExtendedObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.Notifications;
-import com.digitaldan.jomnilinkII.MessageTypes.ObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ObjectTypeCapacities;
-import com.digitaldan.jomnilinkII.MessageTypes.OtherEventNotifications;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqAudioSourceStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqConnectedSecurityStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqExtendedObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectProperties;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqObjectTypeCapacities;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSecurityCodeValidation;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSystemFeatures;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSystemFormats;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSystemInformation;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSystemStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqSystemTroubles;
-import com.digitaldan.jomnilinkII.MessageTypes.ReqZoneReadyStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.SecurityCodeValidation;
-import com.digitaldan.jomnilinkII.MessageTypes.SetTimeCommand;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemFeatures;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemFormats;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemInformation;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.SystemTroubles;
-import com.digitaldan.jomnilinkII.MessageTypes.UploadEventRecord;
-import com.digitaldan.jomnilinkII.MessageTypes.UploadNames;
-import com.digitaldan.jomnilinkII.MessageTypes.ZoneReadyStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AccessControlReaderLockStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AccessControlReaderStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AreaStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AudioZoneStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.AuxSensorStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ExpansionStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ExtendedThermostatStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.MessageStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.Status;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ThermostatStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.UnitStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.UserSettingStatus;
-import com.digitaldan.jomnilinkII.MessageTypes.statuses.ZoneStatus;
+import com.digitaldan.jomnilinkII.MessageTypes.*;
+import com.digitaldan.jomnilinkII.MessageTypes.statuses.*;
 import com.digitaldan.jomnilinkII.MessageTypes.systemevents.SystemEvent;
 
 public class Connection extends Thread {
@@ -219,13 +175,12 @@ public class Connection extends Thread {
 		disconnectListeners.add(listener);
 	}
 
-	public void removeDisconnecListener(DisconnectListener listener) {
+	public void removeDisconnectListener(DisconnectListener listener) {
 		disconnectListeners.remove(listener);
 	}
 
 	public Message sendAndReceive(Message message)
 			throws IOException, OmniNotConnectedException, OmniUnknownMessageTypeException {
-
 		synchronized (writeLock) {
 			try {
 				if (!connected) {
@@ -237,12 +192,12 @@ public class Connection extends Thread {
 					// Throw exception if poll times out.
 					throw new IOException("Response not returned from Omni within 30 seconds");
 				}
-				// if an error occurs on our other thread it saves the exception
+				// If an error occurs on our other thread it saves the exception
 				if (!connected) {
 					throw new OmniNotConnectedException(lastError());
 				}
 
-				// used to ping after a certain amount of time
+				// Used to ping after a certain amount of time
 				lastTXMessageTime = System.currentTimeMillis();
 				return MessageFactory.fromBytes(omniPacket.data());
 			} catch (InterruptedException ex) {
@@ -278,42 +233,49 @@ public class Connection extends Thread {
 	}
 
 	/*
-	 * The following procedure is used to encrypt Omni-Link II application data: 1.
-	 * Process data in 128-bit (16-byte) blocks. If available data does not fill a
-	 * 16-byte block, the data is left-justified and padded on the right with zeros
-	 * to fill the block. 2. Modify the first two bytes of the 16-byte encryption
-	 * block by performing a logical XOR operation with the two bytes of the
-	 * “message sequence number” in the HAI header (i.e., XOR the first byte of the
-	 * encryption block with the MSB of the message sequence number, and XOR the
-	 * second byte of the encryption block with the LSB of the message sequence
-	 * number). 3. Encrypt the 16-byte block using the AES encryption algorithm and
-	 * the 128-bit session key that was negotiated when the client and controller
-	 * established the secure connection. 4. Process the next block of data until
-	 * all data has been processed.
-	 *
+	 * The following procedure is used to encrypt Omni-Link II application data:
 	 */
 	private void sendBytesEncrypted(OmniPacket p) throws IOException {
-		/* 1. */
+		/*
+		 * 1. Process data in 128-bit (16-byte) blocks. If available data does not fill
+		 * a 16-byte block, the data is left-justified and padded on the right with
+		 * zeros to fill the block.
+		 */
 		logger.trace("TX: {}", bytesToString(p.data()));
 		int txlength = (p.data().length + 15) & ~0xF;
 		byte[] paddedData = new byte[txlength];
-
 		System.arraycopy(p.data(), 0, paddedData, 0, p.data().length);
 		for (int i = p.data().length; i < txlength; i++) {
 			paddedData[i] = 0x00;
 		}
-		/* 2 */
+
+		/*
+		 * 2. Modify the first two bytes of the 16-byte encryption block by performing a
+		 * logical XOR operation with the two bytes of the “message sequence number” in
+		 * the HAI header (i.e., XOR the first byte of the encryption block with the MSB
+		 * of the message sequence number, and XOR the second byte of the encryption
+		 * block with the LSB of the message sequence number).
+		 */
 		for (int i = 0; i < (txlength / 16); i++) {
 			paddedData[0 + (16 * i)] ^= (tx >> 8) & 0xFF;
 			paddedData[1 + (16 * i)] ^= (tx) & 0xFF;
 		}
-		/* 3 */
+
+		/*
+		 * 3. Encrypt the 16-byte block using the AES encryption algorithm and the
+		 * 128-bit session key that was negotiated when the client and controller
+		 * established the secure connection.
+		 */
 		byte[] encData;
 		try {
 			encData = aes.encrypt(paddedData);
 		} catch (Exception e) {
 			throw new IOException(e.getMessage());
 		}
+
+		/*
+		 * 4. Process the next block of data until all data has been processed.
+		 */
 		sendBytes(new OmniPacket(p.type(), encData));
 	}
 
@@ -348,7 +310,6 @@ public class Connection extends Thread {
 		}
 		logger.trace("Data Dec {}", bytesToString(decData));
 		return new OmniPacket(p.seq, p.type(), decData);
-
 	}
 
 	private OmniPacket readBytesEncryptedExtended() throws IOException, SocketTimeoutException {
@@ -417,7 +378,6 @@ public class Connection extends Thread {
 		logger.trace("RX: {} Data still available after read {}", bytesToString(decData), is.available());
 
 		return new OmniPacket(seq, type, decData);
-
 	}
 
 	private OmniPacket readBytes() throws IOException, SocketTimeoutException {
@@ -528,24 +488,28 @@ public class Connection extends Thread {
 			OmniUnknownMessageTypeException {
 		Status[] s = null;
 		switch (objectType) {
+			case Message.OBJ_TYPE_ZONE : {
+				if (extended) {
+					s = new ExtendedZoneStatus[endObject - startObject + 1];
+				} else {
+					s = new ZoneStatus[endObject - startObject + 1];
+				}
+			}
+				break;
+			case Message.OBJ_TYPE_UNIT : {
+				if (extended) {
+					s = new ExtendedUnitStatus[endObject - startObject + 1];
+				} else {
+					s = new UnitStatus[endObject - startObject + 1];
+				}
+			}
+				break;
 			case Message.OBJ_TYPE_AREA : {
-				s = new AreaStatus[endObject - startObject + 1];
-			}
-				break;
-			case Message.OBJ_TYPE_AUDIO_ZONE : {
-				s = new AudioZoneStatus[endObject - startObject + 1];
-			}
-				break;
-			case Message.OBJ_TYPE_AUX_SENSOR : {
-				s = new AuxSensorStatus[endObject - startObject + 1];
-			}
-				break;
-			case Message.OBJ_TYPE_EXP : {
-				s = new ExpansionStatus[endObject - startObject + 1];
-			}
-				break;
-			case Message.OBJ_TYPE_MESG : {
-				s = new MessageStatus[endObject - startObject + 1];
+				if (extended) {
+					s = new ExtendedAreaStatus[endObject - startObject + 1];
+				} else {
+					s = new AreaStatus[endObject - startObject + 1];
+				}
 			}
 				break;
 			case Message.OBJ_TYPE_THERMO : {
@@ -556,24 +520,60 @@ public class Connection extends Thread {
 				}
 			}
 				break;
-			case Message.OBJ_TYPE_UNIT : {
-				s = new UnitStatus[endObject - startObject + 1];
+			case Message.OBJ_TYPE_MESG : {
+				if (extended) {
+					s = new ExtendedMessageStatus[endObject - startObject + 1];
+				} else {
+					s = new MessageStatus[endObject - startObject + 1];
+				}
 			}
 				break;
-			case Message.OBJ_TYPE_ZONE : {
-				s = new ZoneStatus[endObject - startObject + 1];
+			case Message.OBJ_TYPE_AUX_SENSOR : {
+				if (extended) {
+					s = new ExtendedAuxSensorStatus[endObject - startObject + 1];
+				} else {
+					s = new AuxSensorStatus[endObject - startObject + 1];
+				}
+			}
+				break;
+			case Message.OBJ_TYPE_AUDIO_ZONE : {
+				if (extended) {
+					s = new ExtendedAudioZoneStatus[endObject - startObject + 1];
+				} else {
+					s = new AudioZoneStatus[endObject - startObject + 1];
+				}
+			}
+				break;
+			case Message.OBJ_TYPE_EXP : {
+				if (extended) {
+					s = new ExtendedExpansionStatus[endObject - startObject + 1];
+				} else {
+					s = new ExpansionStatus[endObject - startObject + 1];
+				}
 			}
 				break;
 			case Message.OBJ_TYPE_USER_SETTING : {
-				s = new UserSettingStatus[endObject - startObject + 1];
+				if (extended) {
+					s = new ExtendedUserSettingStatus[endObject - startObject + 1];
+				} else {
+					s = new UserSettingStatus[endObject - startObject + 1];
+				}
 			}
 				break;
 			case Message.OBJ_TYPE_CONTROL_READER : {
-				s = new AccessControlReaderStatus[endObject - startObject + 1];
+				if (extended) {
+					s = new ExtendedAccessControlReaderStatus[endObject - startObject + 1];
+				} else {
+					s = new AccessControlReaderStatus[endObject - startObject + 1];
+				}
 			}
 				break;
 			case Message.OBJ_TYPE_CONTROL_LOCK : {
-				s = new AccessControlReaderLockStatus[endObject - startObject + 1];
+				if (extended) {
+					s = new ExtendedAccessControlReaderLockStatus[endObject - startObject + 1];
+				} else {
+					s = new AccessControlReaderLockStatus[endObject - startObject + 1];
+				}
 			}
 				break;
 			default :
@@ -638,9 +638,9 @@ public class Connection extends Thread {
 		return (ConnectedSecurityStatus) msg;
 	}
 
-	public Message uploadEventLogData(int number, int direction) throws IOException, OmniNotConnectedException,
+	public Message readEventRecord(int number, int direction) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(UploadEventRecord.builder().eventNumber(number).direction(direction).build());
+		Message msg = sendAndReceive(ReadEventRecord.builder().eventNumber(number).direction(direction).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_EVENT_LOG_DATA
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
@@ -648,9 +648,9 @@ public class Connection extends Thread {
 		return msg;
 	}
 
-	public Message uploadNames(int objectType, int objectNumber) throws IOException, OmniNotConnectedException,
+	public Message readName(int objectType, int objectNumber) throws IOException, OmniNotConnectedException,
 			OmniInvalidResponseException, OmniUnknownMessageTypeException {
-		Message msg = sendAndReceive(UploadNames.builder().objectType(objectType).objectNumber(objectNumber).build());
+		Message msg = sendAndReceive(ReadName.builder().objectType(objectType).objectNumber(objectNumber).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_NAME_DATA
 				&& msg.getMessageType() != Message.MESG_TYPE_END_OF_DATA) {
 			throw new OmniInvalidResponseException(msg);
@@ -658,10 +658,10 @@ public class Connection extends Thread {
 		return msg;
 	}
 
-	public void downloadNames(int objectType, int objectNumber, String name) throws IOException,
-			OmniNotConnectedException, OmniInvalidResponseException, OmniUnknownMessageTypeException {
+	public void writeName(int objectType, int objectNumber, String name) throws IOException, OmniNotConnectedException,
+			OmniInvalidResponseException, OmniUnknownMessageTypeException {
 		Message msg = sendAndReceive(
-				DownloadNames.builder().objectType(objectType).objectNumber(objectNumber).name(name).build());
+				WriteName.builder().objectType(objectType).objectNumber(objectNumber).name(name).build());
 		if (msg.getMessageType() != Message.MESG_TYPE_ACK) {
 			throw new OmniInvalidResponseException(msg);
 		}

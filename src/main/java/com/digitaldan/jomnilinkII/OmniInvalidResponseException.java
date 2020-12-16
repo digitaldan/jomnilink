@@ -10,7 +10,6 @@
 package com.digitaldan.jomnilinkII;
 
 public class OmniInvalidResponseException extends Exception {
-
 	private Message response;
 
 	public OmniInvalidResponseException(Message response) {
@@ -25,5 +24,4 @@ public class OmniInvalidResponseException extends Exception {
 	public Message getInvalidResponse() {
 		return response;
 	}
-
 }

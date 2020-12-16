@@ -9,16 +9,19 @@
  */
 package com.digitaldan.jomnilinkII.MessageTypes.systemevents;
 
+/*
+ * ALL ON/OFF                0000 0011 111s aaaa     s = state
+ *                                                       0 = off
+ *                                                       1 = on
+ *                                                   a = area
+ */
 public class AllOnOffEvent extends SystemEvent {
-
-	/**
-	 * ALL ON/OFF 0000 0011 111s aaaa s= state 0 = off 1 = on a = area
-	 */
 	public AllOnOffEvent(int event) {
 		super(event, SystemEventType.ALL_ON_OFF);
 	}
 
 	public int getAllOnOffState() {
+		// 0x01 = 1 = 1
 		return event >> 4 & 0x01;
 	}
 
@@ -27,6 +30,7 @@ public class AllOnOffEvent extends SystemEvent {
 	}
 
 	public int getArea() {
+		// 0x0F = 15 = 1111
 		return event & 0x0f;
 	}
 }
