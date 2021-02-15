@@ -2,24 +2,25 @@
 
 [![TravisCI Build Status](https://travis-ci.org/digitaldan/jomnilink.svg?branch=master)](https://travis-ci.org/digitaldan/jomnilink)
 
-# Download
+## Download
 
-## Snapshots
+### Snapshots
 
-https://oss.sonatype.org/content/repositories/snapshots/com/github/digitaldan/jomnilink/
+<https://oss.sonatype.org/content/repositories/snapshots/com/github/digitaldan/jomnilink/>
 
-## Releases
+### Releases
 
-https://repo1.maven.org/maven2/com/github/digitaldan/jomnilink/
+<https://repo1.maven.org/maven2/com/github/digitaldan/jomnilink/>
 
-# Building
+## Building
 
-## Basic jar
+### Basic jar
+
 ```
 mvn clean package
 ```
 
-## Jar with logging dependencies
+### Jar with logging dependencies
 
 ```
 mvn clean compile assembly:single
@@ -28,5 +29,5 @@ mvn clean compile assembly:single
 ## Crude example usage
 
 ```
-java -cp ./target/jomnilink-1.4.0-jar-with-dependencies.jar com.digitaldan.jomnilinkII.examples.Main 192.168.0.1 4369 1234567890abcdef1234567890abcdef
+java -cp ./target/jomnilink-1.4.1-jar-with-dependencies.jar com.digitaldan.jomnilinkII.examples.Main 192.168.0.1 4369 1234567890abcdef1234567890abcdef
 ```

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2009-2020 Dan Cunningham
+ * Copyright (c) 2009-2021 Dan Cunningham
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,9 +35,11 @@ public class MessageUtils {
 			0x4A40, 0x4E00, 0x8EC1, 0x8F81, 0x4F40, 0x8D01, 0x4DC0, 0x4C80, 0x8C41, 0x4400, 0x84C1, 0x8581, 0x4540,
 			0x8701, 0x47C0, 0x4680, 0x8641, 0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040,};
 
-	/* Multiple Omni temperatures (when rounded) map to the same rounded fahrenheit temp.
-	 * The Omni operates in whole temperatures for fahrenheit.
-	 * This creates a mapping of omni to (rounded) fahrenheight and then creates a reverse map that has the duplicates removed.
+	/*
+	 * Multiple Omni temperatures (when rounded) map to the same rounded fahrenheit
+	 * temp. The Omni operates in whole temperatures for fahrenheit. This creates a
+	 * mapping of omni to (rounded) fahrenheight and then creates a reverse map that
+	 * has the duplicates removed.
 	 */
 	private final static Map<Integer, Float> OMNI_TO_FAHRENHEIT_MAP = IntStream.rangeClosed(0, 255).boxed()
 			.collect(Collectors.toMap(i -> i, i -> (float) Math.round(-40 + (i * .9))));
