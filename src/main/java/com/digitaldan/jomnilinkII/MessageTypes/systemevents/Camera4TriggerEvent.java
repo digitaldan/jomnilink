@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2009-2020 Dan Cunningham
+ * Copyright (c) 2009-2021 Dan Cunningham
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
