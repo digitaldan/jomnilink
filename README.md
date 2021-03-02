@@ -29,5 +29,5 @@ mvn clean compile assembly:single
 ## Crude example usage
 
 ```
-java -cp ./target/jomnilink-1.4.1-jar-with-dependencies.jar com.digitaldan.jomnilinkII.examples.Main 192.168.0.1 4369 1234567890abcdef1234567890abcdef
+java -cp ./target/jomnilink-1.4.2-jar-with-dependencies.jar com.digitaldan.jomnilinkII.examples.Main 192.168.0.1 4369 1234567890abcdef1234567890abcdef
 ```

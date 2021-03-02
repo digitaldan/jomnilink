@@ -427,7 +427,7 @@ public class CommandMessage implements Message {
 	public final static int CMD_SECURITY_OMNI_NIGHT_MODE = 50;
 	public final static int CMD_SECURITY_OMNI_AWAY_MODE = 51;
 	public final static int CMD_SECURITY_OMNI_VACATION_MODE = 52;
-	public final static int CMD_SECURITY_OMNI_DAY_INSTANCE_MODE = 53;
+	public final static int CMD_SECURITY_OMNI_DAY_INSTANT_MODE = 53;
 	public final static int CMD_SECURITY_OMNI_NIGHT_DELAYED_MODE = 54;
 	public final static int CMD_SECURITY_BYPASS_ZONE = 4;
 	public final static int CMD_SECURITY_RESTORE_ZONE = 5;
@@ -449,9 +449,11 @@ public class CommandMessage implements Message {
 	public final static int CMD_THERMO_SET_COOL_POINT = 67;
 	public final static int CMD_THERMO_SET_SYSTEM_MODE = 68;
 	public final static int CMD_THERMO_SET_FAN_MODE = 69;
+	public final static int CMD_THERMO_SET_HOLD_MODE = 70;
 	public final static int CMD_THERMO_RAISE_LOWER_HEAT = 71;
 	public final static int CMD_THERMO_RAISE_LOWER_COOL = 72;
-	public final static int CMD_THERMO_SET_HOLD_MODE = 70;
+	public final static int CMD_THERMO_SET_HUMDIFY_POINT = 73;
+	public final static int CMD_THERMO_SET_DEHUMIDIFY_POINT = 74;
 
 	public final static int CMD_MESSAGE_SHOW_MESSAGE_WITH_BEEP_AND_LED = 80;
 	public final static int CMD_MESSAGE_SHOW_MESSAGE_WITH_BEEP_OR_LED = 86;
@@ -463,6 +465,9 @@ public class CommandMessage implements Message {
 
 	public final static int CMD_CONSOLE_ENABLE_DISABLE_BEEPER = 102;
 	public final static int CMD_CONSOLE_BEEP = 103;
+
+	public final static int CMD_UNLOCK_DOOR = 105;
+	public final static int CMD_LOCK_DOOR = 106;
 
 	public final static int CMD_AUDIO_ZONE_SET_ON_AND_MUTE = 112;
 	public final static int CMD_AUDIO_ZONE_SET_VOLUME = 113;
